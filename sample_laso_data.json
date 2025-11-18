@@ -1,0 +1,405 @@
+{
+  "normalizedData": {
+    "ho_ten": "Nguyễn Văn A",
+    "gioi_tinh": "Nam",
+    "duong_lich": {
+      "year": "1990",
+      "month": "5",
+      "day": "15"
+    },
+    "lunar": {
+      "can": "Canh",
+      "chi": "Ngọ",
+      "month": "4",
+      "day": "22"
+    },
+    "can_chi_thang": "Tân Tỵ",
+    "can_chi_ngay": "Nhâm Thìn",
+    "gio_am_sinh_am": "7-9",
+    "gio_am_sinh_chi_am": "Thìn",
+    "can_chi_nam_xem": "Quý Mão",
+    "nam_xem": "2023",
+    "tuoi": "33"
+  },
+  "laSo": {
+    "info": {
+      "am_duong": "Dương Nam",
+      "ket_luan": ["Thuận hành"],
+      "menh": "Lộ Bàng Thổ",
+      "cuc": "Thổ Ngũ Cục",
+      "cuc_menh_relation": "Cục sinh Mệnh",
+      "chu_menh": "Tử Vi",
+      "chu_than": "Thiên Phủ"
+    },
+    "palaces": {
+      "Tý": {
+        "can_chi_cung": "Nhâm.Tý",
+        "cung_chuc_nang": "QUAN LỘC",
+        "dai_van": "22-31",
+        "chinh_tinh": [
+          {
+            "name": "Thiên Phủ",
+            "class": "sao-thien-phu",
+            "bright": "V"
+          }
+        ],
+        "phu_tinh_cat": [
+          {
+            "name": "Văn Xương",
+            "class": "sao-van-xuong",
+            "bright": "M"
+          },
+          {
+            "name": "Hóa Lộc",
+            "class": "sao-hoa-loc"
+          }
+        ],
+        "phu_tinh_sat": [
+          {
+            "name": "Thiên Khống",
+            "class": "sao-thien-khong"
+          }
+        ],
+        "special": [
+          {
+            "name": "Tuần",
+            "class": "sao-tuan"
+          }
+        ],
+        "luu": [
+          {
+            "name": "Lộc Tồn",
+            "class": "sao-loc-ton"
+          }
+        ],
+        "vong_tuoi_chi": "22",
+        "dv_chuc_nang": "PHÚC ĐỨC",
+        "vong_trang_sinh": "Trường Sinh",
+        "thang_am": "4"
+      },
+      "Sửu": {
+        "can_chi_cung": "Quý.Sửu",
+        "cung_chuc_nang": "NÔ BỘC",
+        "dai_van": "32-41",
+        "chinh_tinh": [],
+        "phu_tinh_cat": [
+          {
+            "name": "Thiên Khôi",
+            "class": "sao-thien-khoi"
+          }
+        ],
+        "phu_tinh_sat": [
+          {
+            "name": "Địa Kiếp",
+            "class": "sao-ia-kiep"
+          }
+        ],
+        "special": [],
+        "luu": [],
+        "vong_tuoi_chi": "32",
+        "dv_chuc_nang": "QUAN LỘC",
+        "vong_trang_sinh": "Mộ",
+        "thang_am": "5"
+      },
+      "Dần": {
+        "can_chi_cung": "Giáp.Dần",
+        "cung_chuc_nang": "MỆNH",
+        "dai_van": "42-51",
+        "chinh_tinh": [
+          {
+            "name": "Tử Vi",
+            "class": "sao-tu-vi",
+            "bright": "Đ"
+          },
+          {
+            "name": "Thiên Phủ",
+            "class": "sao-thien-phu",
+            "bright": "V"
+          }
+        ],
+        "phu_tinh_cat": [
+          {
+            "name": "Hóa Quyền",
+            "class": "sao-hoa-quyen"
+          },
+          {
+            "name": "Thiên Quý",
+            "class": "sao-thien-quy"
+          }
+        ],
+        "phu_tinh_sat": [
+          {
+            "name": "Thiên Hình",
+            "class": "sao-thien-hinh"
+          }
+        ],
+        "special": [],
+        "luu": [
+          {
+            "name": "Tầu Thư",
+            "class": "sao-tau-thu"
+          }
+        ],
+        "vong_tuoi_chi": "42",
+        "dv_chuc_nang": "MỆNH",
+        "vong_trang_sinh": "Đế Vượng",
+        "thang_am": "6"
+      },
+      "Mão": {
+        "can_chi_cung": "Ất.Mão",
+        "cung_chuc_nang": "PHỤ MẪU",
+        "dai_van": "52-61",
+        "chinh_tinh": [
+          {
+            "name": "Thái Dương",
+            "class": "sao-thai-duong",
+            "bright": "M"
+          }
+        ],
+        "phu_tinh_cat": [
+          {
+            "name": "Hóa Khoa",
+            "class": "sao-hoa-khoa"
+          }
+        ],
+        "phu_tinh_sat": [],
+        "special": [],
+        "luu": [],
+        "vong_tuoi_chi": "52",
+        "dv_chuc_nang": "PHỤ MẪU",
+        "vong_trang_sinh": "Suy",
+        "thang_am": "7"
+      },
+      "Thìn": {
+        "can_chi_cung": "Bính.Thìn",
+        "cung_chuc_nang": "PHÚC ĐỨC",
+        "dai_van": "62-71",
+        "chinh_tinh": [
+          {
+            "name": "Vũ Khúc",
+            "class": "sao-vu-khuc",
+            "bright": "V"
+          }
+        ],
+        "phu_tinh_cat": [],
+        "phu_tinh_sat": [
+          {
+            "name": "Thái Tuế",
+            "class": "sao-thai-tue"
+          }
+        ],
+        "special": [
+          {
+            "name": "Triệt",
+            "class": "sao-triet"
+          }
+        ],
+        "luu": [],
+        "vong_tuoi_chi": "62",
+        "dv_chuc_nang": "THẦN",
+        "vong_trang_sinh": "Bệnh",
+        "thang_am": "8"
+      },
+      "Tỵ": {
+        "can_chi_cung": "Đinh.Tỵ",
+        "cung_chuc_nang": "ĐIỀN TRẠCH",
+        "dai_van": "72-81",
+        "chinh_tinh": [
+          {
+            "name": "Thái Âm",
+            "class": "sao-thai-am",
+            "bright": "Đ"
+          }
+        ],
+        "phu_tinh_cat": [
+          {
+            "name": "Thiên Tướng",
+            "class": "sao-thien-tuong"
+          }
+        ],
+        "phu_tinh_sat": [],
+        "special": [],
+        "luu": [],
+        "vong_tuoi_chi": "72",
+        "dv_chuc_nang": "ĐIỀN TRẠCH",
+        "vong_trang_sinh": "Tử",
+        "thang_am": "9"
+      },
+      "Ngọ": {
+        "can_chi_cung": "Mậu.Ngọ",
+        "cung_chuc_nang": "NAM NỮ",
+        "dai_van": "82-91",
+        "chinh_tinh": [
+          {
+            "name": "Tham Lang",
+            "class": "sao-tham-lang",
+            "bright": "M"
+          }
+        ],
+        "phu_tinh_cat": [
+          {
+            "name": "Hồng Loan",
+            "class": "sao-hong-loan"
+          }
+        ],
+        "phu_tinh_sat": [
+          {
+            "name": "Thiên Ma",
+            "class": "sao-thien-ma"
+          }
+        ],
+        "special": [],
+        "luu": [],
+        "vong_tuoi_chi": "82",
+        "dv_chuc_nang": "NAM NỮ",
+        "vong_trang_sinh": "Mộ",
+        "thang_am": "10"
+      },
+      "Mùi": {
+        "can_chi_cung": "Kỷ.Mùi",
+        "cung_chuc_nang": "TẬT ÁCH",
+        "dai_van": "2-11",
+        "chinh_tinh": [
+          {
+            "name": "Cự Môn",
+            "class": "sao-cu-mon",
+            "bright": "B"
+          }
+        ],
+        "phu_tinh_cat": [],
+        "phu_tinh_sat": [
+          {
+            "name": "Thiên Khối",
+            "class": "sao-thien-khoi"
+          }
+        ],
+        "special": [],
+        "luu": [],
+        "vong_tuoi_chi": "2",
+        "dv_chuc_nang": "TẬT ÁCH",
+        "vong_trang_sinh": "Tuyệt",
+        "thang_am": "11"
+      },
+      "Thân": {
+        "can_chi_cung": "Canh.Thân",
+        "cung_chuc_nang": "THIÊN DI",
+        "dai_van": "12-21",
+        "chinh_tinh": [
+          {
+            "name": "Thiên Tướng",
+            "class": "sao-thien-tuong",
+            "bright": "M"
+          }
+        ],
+        "phu_tinh_cat": [
+          {
+            "name": "Văn Khúc",
+            "class": "sao-van-khuc"
+          }
+        ],
+        "phu_tinh_sat": [],
+        "special": [
+          {
+            "name": "Triệt",
+            "class": "sao-triet"
+          }
+        ],
+        "luu": [],
+        "vong_tuoi_chi": "12",
+        "dv_chuc_nang": "THIÊN DI",
+        "vong_trang_sinh": "Thai",
+        "thang_am": "12"
+      },
+      "Dậu": {
+        "can_chi_cung": "Tân.Dậu",
+        "cung_chuc_nang": "BẠCH BẢN",
+        "dai_van": "92-101",
+        "chinh_tinh": [
+          {
+            "name": "Thất Sát",
+            "class": "sao-that-sat",
+            "bright": "Đ"
+          }
+        ],
+        "phu_tinh_cat": [
+          {
+            "name": "Thiên Uy",
+            "class": "sao-thien-uy"
+          }
+        ],
+        "phu_tinh_sat": [
+          {
+            "name": "Hỏa Tinh",
+            "class": "sao-hoa-tinh"
+          }
+        ],
+        "special": [],
+        "luu": [],
+        "vong_tuoi_chi": "92",
+        "dv_chuc_nang": "TÀI BẠCH",
+        "vong_trang_sinh": "Dưỡng",
+        "thang_am": "1"
+      },
+      "Tuất": {
+        "can_chi_cung": "Nhâm.Tuất",
+        "cung_chuc_nang": "TÀI BẠCH",
+        "dai_van": "102-111",
+        "chinh_tinh": [
+          {
+            "name": "Thiên Lương",
+            "class": "sao-thien-luong",
+            "bright": "M"
+          }
+        ],
+        "phu_tinh_cat": [
+          {
+            "name": "Thiên Khôi",
+            "class": "sao-thien-khoi"
+          }
+        ],
+        "phu_tinh_sat": [],
+        "special": [],
+        "luu": [],
+        "vong_tuoi_chi": "102",
+        "dv_chuc_nang": "QUAN LỘC",
+        "vong_trang_sinh": "Trường Sinh",
+        "thang_am": "2"
+      },
+      "Hợi": {
+        "can_chi_cung": "Quý.Hợi",
+        "cung_chuc_nang": "THIÊN QUAN",
+        "dai_van": "112-121",
+        "chinh_tinh": [
+          {
+            "name": "Liêm Trinh",
+            "class": "sao-liem-trinh",
+            "bright": "H"
+          },
+          {
+            "name": "Phá Quân",
+            "class": "sao-pha-quan",
+            "bright": "B"
+          }
+        ],
+        "phu_tinh_cat": [],
+        "phu_tinh_sat": [
+          {
+            "name": "Linh Tinh",
+            "class": "sao-linh-tinh"
+          }
+        ],
+        "special": [
+          {
+            "name": "Tuần",
+            "class": "sao-tuan"
+          }
+        ],
+        "luu": [],
+        "vong_tuoi_chi": "112",
+        "dv_chuc_nang": "THIÊN QUAN",
+        "vong_trang_sinh": "Mộ",
+        "thang_am": "3"
+      }
+    }
+  }
+}

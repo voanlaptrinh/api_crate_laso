@@ -1,0 +1,77 @@
+{
+    "summary": {
+        "total_stars": 111,
+        "stars_with_ngu_hanh": 111
+    },
+    "sample_palace": {
+        "Tý": {
+            "ten_cung": "Tý",
+            "dv_chuc_nang": "ĐV.PHỤ",
+            "vong_tuoi_chi": "Dần",
+            "ln_chuc_nang": "LN.THÊ",
+            "thang_am": 5,
+            "can_chi_cung": "Mậu.Tý",
+            "cung_chuc_nang": "QUAN LỘC",
+            "dai_van": 42,
+            "chinh_tinh": [
+                {
+                    "name": "Thất Sát",
+                    "bright": "M",
+                    "class": "la-chinh-tinh sao-that-sat",
+                    "cung": "Tý",
+                    "hanh": "Kim"
+                }
+            ],
+            "phu_tinh_cat": [],
+            "phu_tinh_sat": [
+                {
+                    "name": "Tướng Quân",
+                    "bright": null,
+                    "class": "la-phu-tinh-sat sao-tuong-quan",
+                    "cung": "Tý",
+                    "hanh": "Hỏa"
+                },
+                {
+                    "name": "Tuế Phá",
+                    "bright": null,
+                    "class": "la-phu-tinh-sat sao-tue-pha",
+                    "cung": "Tý",
+                    "hanh": "Hỏa"
+                },
+                {
+                    "name": "Thiên Khốc",
+                    "bright": null,
+                    "class": "la-phu-tinh-sat sao-thien-khoc",
+                    "cung": "Tý",
+                    "hanh": "Kim"
+                },
+                {
+                    "name": "Thiên Hư",
+                    "bright": null,
+                    "class": "la-phu-tinh-sat sao-thien-hu",
+                    "cung": "Tý",
+                    "hanh": "Hỏa"
+                },
+                {
+                    "name": "Đẩu Quân",
+                    "bright": null,
+                    "class": "la-phu-tinh-sat sao-au-quan",
+                    "cung": "Tý",
+                    "hanh": "Hỏa"
+                },
+                {
+                    "name": "L.Bạch Hổ",
+                    "bright": null,
+                    "class": "la-phu-tinh-sat sao-lbach-ho",
+                    "cung": "Tý",
+                    "hanh": "Kim"
+                }
+            ],
+            "phu_tinh": [],
+            "vong_trang_sinh": "Đế Vượng",
+            "special": [],
+            "luu": [],
+            "do_sang_sao": []
+        }
+    }
+}

@@ -1,0 +1,1069 @@
+<?php
+
+/**
+ * Template PHP thuần để hiển thị lá số.
+ * File này nhận vào 2 biến: $laSo và $normalizedData.
+ */
+
+// Hàm PHP thuần thay thế cho \Illuminate\Support\Str::slug()
+
+
+// --- Bắt đầu khối logic tính toán (chuyển từ @php) ---
+
+// Bản đồ chứa thông tin vị trí và hướng của tất cả các đường biên
+$borderMap = [
+    'ngo-ty' => ['top' => '12.5%', 'left' => '25%', 'orientation' => 'vertical'],
+    'mui-ngo' => ['top' => '25%', 'left' => '50%', 'orientation' => 'vertical'],
+    'mui-than' => ['top' => '12.5%', 'left' => '75%', 'orientation' => 'vertical'],
+    'dau-than' => ['top' => '24.3%', 'left' => '87.5%', 'orientation' => 'horizontal'],
+    'dau-tuat' => ['top' => '50%', 'left' => '87.5%', 'orientation' => 'horizontal'],
+    'hoi-tuat' => ['top' => '74.4%', 'left' => '87.5%', 'orientation' => 'horizontal'],
+    'hoi-ty' => ['top' => '87.5%', 'left' => '75%', 'orientation' => 'vertical'],
+    'suu-ty' => ['top' => '75%', 'left' => '50%', 'orientation' => 'vertical'],
+    'dan-suu' => ['top' => '87.5%', 'left' => '25%', 'orientation' => 'vertical'],
+    'dan-mao' => ['top' => '74.4%', 'left' => '12.5%', 'orientation' => 'horizontal'],
+    'mao-thin' => ['top' => '50%', 'left' => '12.5%', 'orientation' => 'horizontal'],
+    'thin-ty' => ['top' => '24.3%', 'left' => '12.5%', 'orientation' => 'horizontal'],
+];
+
+// 1. Quét lá số để tìm cung chứa Tuần/Triệt
+$tuanPalaces = [];
+$trietPalaces = [];
+if (isset($laSo['palaces']) && is_array($laSo['palaces'])) {
+    foreach ($laSo['palaces'] as $chi => $cung) {
+        if (isset($cung['special']) && is_array($cung['special'])) {
+            foreach ($cung['special'] as $sao) {
+                if ($sao['name'] === 'Tuần') {
+                    $tuanPalaces[] = $chi;
+                }
+                if ($sao['name'] === 'Triệt') {
+                    $trietPalaces[] = $chi;
+                }
+            }
+        }
+    }
+}
+
+// 2. Tạo khóa vị trí cho Tuần và Triệt
+$tuanKey = null;
+if (count($tuanPalaces) === 2) {
+    sort($tuanPalaces);
+    $tuanKey = slugify($tuanPalaces[0]) . '-' . slugify($tuanPalaces[1]);
+}
+$trietKey = null;
+if (count($trietPalaces) === 2) {
+    sort($trietPalaces);
+    $trietKey = slugify($trietPalaces[0]) . '-' . slugify($trietPalaces[1]);
+}
+
+// 3. Xây dựng mảng render cuối cùng
+$finalPositions = [];
+if ($tuanKey && $trietKey && $tuanKey === $trietKey) {
+    // Trường hợp TRÙNG NHAU
+    if (isset($borderMap[$tuanKey])) {
+        $finalPositions['Triệt - Tuần'] = $borderMap[$tuanKey];
+    }
+} else {
+    // Trường hợp KHÁC NHAU
+    if ($tuanKey && isset($borderMap[$tuanKey])) {
+        $finalPositions['Tuần'] = $borderMap[$tuanKey];
+    }
+    if ($trietKey && isset($borderMap[$trietKey])) {
+        $finalPositions['Triệt'] = $borderMap[$trietKey];
+    }
+}
+
+// --- LOGIC TÍNH TOÁN TỌA ĐỘ TAM HỢP MỆNH - QUAN - TÀI ---
+$gridOrderForCalc = [
+    'Tỵ',
+    'Ngọ',
+    'Mùi',
+    'Thân',
+    'Thìn',
+    null,
+    null,
+    'Dậu',
+    'Mão',
+    null,
+    null,
+    'Tuất',
+    'Dần',
+    'Sửu',
+    'Tý',
+    'Hợi',
+];
+$tamHopPalaces = [];
+$tamHopAnchorPoints = [];
+
+if (isset($laSo['palaces']) && is_array($laSo['palaces'])) {
+    // Bước 1: Tìm Chi của 3 cung Mệnh, Quan, Tài
+    foreach ($laSo['palaces'] as $chi => $cung) {
+        $cungName = $cung['cung_chuc_nang'];
+        if (str_contains($cungName, 'MỆNH')) {
+            $tamHopPalaces['MỆNH'] = $chi;
+        } elseif ($cungName === 'QUAN LỘC') {
+            $tamHopPalaces['QUAN LỘC'] = $chi;
+        } elseif ($cungName === 'TÀI BẠCH') {
+            $tamHopPalaces['TÀI BẠCH'] = $chi;
+        }
+    }
+
+    if (count($tamHopPalaces) === 3) {
+        foreach ($tamHopPalaces as $cungName => $chi) {
+            $index = array_search($chi, $gridOrderForCalc);
+            if ($index !== false) {
+                $point = [];
+                $row = (int) floor($index / 4);
+                $col = (int) ($index % 4);
+
+                // Tính điểm trung tâm đơn giản
+                if ($row === 0) {
+                    // Cung ở hàng trên
+                    $point['y'] = 25;
+                    if ($col === 0 || $col === 3) {
+                        // Góc
+                        $point['x'] = $col === 0 ? 25 : 75;
+                    } else {
+                        // Cạnh
+                        $point['x'] = $col * 25 + 12.5;
+                    }
+                } elseif ($row === 3) {
+                    // Cung ở hàng dưới
+                    $point['y'] = 75;
+                    if ($col === 0 || $col === 3) {
+                        // Góc
+                        $point['x'] = $col === 0 ? 25 : 75;
+                    } else {
+                        // Cạnh
+                        $point['x'] = $col * 25 + 12.5;
+                    }
+                } elseif ($col === 0) {
+                    // Cung ở cột trái
+                    $point['x'] = 25;
+                    $point['y'] = $row * 25 + 12.5;
+                } elseif ($col === 3) {
+                    // Cung ở cột phải
+                    $point['x'] = 75;
+                    $point['y'] = $row * 25 + 12.5;
+                }
+
+                if (!empty($point)) {
+                    $tamHopAnchorPoints[$cungName] = $point;
+                }
+            }
+        }
+    }
+}
+?>
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lá Số Tử Vi</title>
+    <style>
+        /* Toàn bộ CSS của bạn được sao chép y hệt vào đây */
+        .laso-container {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            grid-template-rows: repeat(4, minmax(0, 1fr));
+            border: 2px solid #333;
+            aspect-ratio: 1 / 1;
+            max-width: 1000px;
+            height: 1300px;
+            margin: auto;
+            font-family: sans-serif;
+            position: relative;
+            /* Quan trọng: Để định vị Tuần/Triệt và SVG */
+            background-image: url('https://phongthuydaicat.vn/assets/images/la_so.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* === CSS MỚI: Dành cho lớp phủ SVG để vẽ đường kẻ === */
+        .laso-overlay-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            /* Nằm trên các cung nhưng dưới các marker */
+            pointer-events: none;
+            /* Quan trọng: để không cản trở việc click/select text bên dưới */
+        }
+
+        .cung {
+            border: 1px solid #ccc;
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            font-size: 11px;
+            line-height: 1.4;
+            position: relative;
+            padding-top: 15px
+        }
+
+        /* Sửa lại CSS cho .dia-ban */
+        .dia-ban {
+            grid-column: span 2 / span 2;
+            grid-row: span 2 / span 2;
+            border: 1px solid #999;
+            padding: 1rem;
+            display: flex;
+            /* Bật Flexbox */
+            flex-direction: column;
+            /* Xếp các khối con theo chiều dọc */
+            justify-content: center;
+            /* Căn giữa các khối con theo chiều dọc */
+            align-items: center;
+            /* Căn giữa các khối con theo chiều ngang */
+            text-align: center;
+            background-color: #fff;
+            /* Các thuộc tính background image của bạn */
+            position: relative;
+            overflow: hidden;
+            background-image: url('https://phongthuydaicat.vn/assets/images/time2.svg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* CSS MỚI cho các khối con trong dia-ban */
+        .dia-ban-title {
+            font-size: 36px;
+            font-weight: bold;
+            color: #740010;
+            margin-bottom: 10px;
+            margin-top: 10px;
+        }
+
+        .dia-ban-brand {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            /* Khoảng cách giữa logo và chữ */
+            margin-bottom: 20px;
+            /* Khoảng cách với khối thông tin bên dưới */
+        }
+
+        .brand-logo {
+            width: 50px;
+            height: 50px;
+        }
+
+        .brand-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: #740010;
+            line-height: 1.2;
+            text-align: left;
+            /* Căn chữ trong khối này sang trái */
+        }
+
+        .dia-ban-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-size: 15px;
+            /* Giảm kích thước chữ một chút cho gọn */
+            width: 100%;
+            max-width: 460px;
+            margin-left: 20px;
+            margin-right: 20px;
+            /* Giới hạn chiều rộng để không bị quá dài */
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            padding-top: 5px;
+            width: 400px;
+            /* Giảm padding để các dòng gần nhau hơn */
+        }
+
+        .info-label {
+            flex: 0 0 100px;
+            /* Chiều rộng cố định cho nhãn */
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .info-value {
+            flex: 1;
+            /* Chiếm phần còn lại */
+            text-align: left;
+        }
+
+        .cung-header {
+            display: flex;
+            /* Bật Flexbox */
+            justify-content: space-between;
+            /* Giữ lại để đẩy các nhóm ra xa nhau */
+            align-items: center;
+            /* Căn các item theo chiều dọc cho đẹp */
+            padding: 4px 6px;
+            /* Thêm padding nhỏ */
+            font-weight: bold;
+        }
+
+        .cung-header .header-left {
+            /* Đặt chiều rộng tối thiểu để không bị co lại quá mức */
+            min-width: 40px;
+            text-align: left;
+            /* Căn chữ sang trái */
+        }
+
+        .cung-header .cung-name {
+            /* Cho phép phần tử này co giãn để chiếm hết không gian trống */
+            flex-grow: 1;
+            text-align: center;
+            /* Căn chữ của chính nó ra giữa */
+            font-size: 14px;
+            /* Làm cho tên cung to và rõ hơn */
+            color: #000000ff;
+            /* Màu đỏ đậm cho nổi bật */
+            margin: 0 5px;
+            /* Tạo khoảng cách nhỏ với 2 bên */
+        }
+
+        .cung-header .header-right {
+            /* Đặt chiều rộng tối thiểu để cân bằng với bên trái */
+            min-width: 40px;
+            text-align: right;
+            /* Căn chữ sang phải */
+        }
+
+        .cung-name {
+            font-weight: 700;
+            color: #dc2626;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .cung-content {
+            flex-grow: 1;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.25rem;
+            margin-top: 0.25rem;
+        }
+
+        .chinh-tinh div {
+
+            padding: 0;
+            margin: 0;
+            font-weight: 700;
+        }
+
+
+        .luu-tinh div {
+            color: #c2410c;
+            font-style: italic;
+        }
+
+        .cung {
+            position: relative;
+        }
+
+        .vong-tuoi-chi {
+            position: absolute;
+            bottom: 1.8rem;
+            left: 0.5rem;
+            font-weight: 600;
+            font-size: 10px;
+            color: #4b5563;
+        }
+
+        .chinh-tinh span,
+        .phu-tinh-cat span,
+        .phu-tinh-sat span,
+        .special-sao span,
+        .luu-tinh span {
+            font-size: 9px;
+            margin-left: 2px;
+            vertical-align: super;
+        }
+
+        /* .do-sang-M {
+            color: #1d4ed8;
+        }
+
+        .do-sang-V {
+            color: #059669;
+        }
+
+        .do-sang-D {
+            color: #d97706;
+        }
+
+        .do-sang-H {
+            color: #7f1d1d;
+        } */
+
+        .cung-footer {
+            margin-top: auto;
+            padding-top: 0.25rem;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 12px;
+            color: #4b5563;
+        }
+
+        @media (max-width: 768px) {
+            .laso-container {
+                max-width: 100%;
+                font-size: 9px;
+            }
+
+            .cung {
+                padding: 0.25rem;
+                font-size: 9px;
+            }
+
+            .dia-ban {
+                padding: 0.5rem;
+            }
+        }
+
+        .sao-thien-co,
+        .sao-thien-luong {
+            color: #3E8C22;
+        }
+
+        .sao-tu-vi,
+        .sao-thien-phu {
+            color: #DB8A42
+        }
+
+        .sao-pha-quan,
+        .sao-thai-m,
+        .sao-tham-lang,
+        .sao-thien-tuong,
+        .sao-cu-mon,
+        .sao-thien-ong,
+        .sao-thien-y,
+        .sao-thien-dieu,
+        .sao-hong-loan,
+        .sao-thieu-m,
+        .sao-van-khuc,
+        .sao-long-tri,
+        .sao-tam-thai,
+        .sao-thien-su,
+        .sao-luu-ha,
+        .sao-lthien-hu,
+        .sao-bac-si,
+        .sao-thien-khoc,
+        .sao-thien-hu,
+        .sao-luc-sy,
+        .sao-lthien-khoc,
+        .sao-thanh-long,
+        .sao-long-uc,
+        .sao-hoa-ky,
+        .sao-thien-hy,
+        .sao-huu-bat,
+        .sao-hoa-quyen {
+            color: #328EAF;
+        }
+
+        .sao-liem-trinh,
+        .sao-thai-duong {
+            color: #DD3A3A
+        }
+
+        .sao-vu-khuc,
+        .sao-that-sat,
+        .sao-truc-phu,
+        .sao-hoa-cai,
+        .sao-a-la,
+        .sao-ia-vong,
+        .sao-tu-phu,
+        .sao-kinh-duong,
+        .sao-thai-phu,
+        .sao-lbach-ho,
+        .sao-bach-ho,
+        .sao-la-la,
+        .sao-lnvan-tinh,
+        .sao-thien-la,
+        .sao-lkinh-duong,
+        .sao-van-xuong,
+        .sao-tau-thu,
+        .sao-tuong-tinh {
+            color: #9C9C9C
+        }
+
+        .sao-thien-viet,
+        .sao-ia-khong,
+        .sao-ia-kiep,
+        .sao-pha-toai,
+        .sao-phi-liem,
+        .sao-au-quan,
+        .sao-lthai-tue,
+        .sao-hy-than,
+        .sao-thai-tue,
+        .sao-thieu-duong,
+        .sao-thien-khong,
+        .sao-hoa-tinh,
+        .sao-thien-ma,
+        .sao-ai-hao,
+        .sao-linh-tinh,
+        .sao-phuc-binh,
+        .sao-van-tinh,
+        .sao-thien-quan,
+        .sao-quan-phu,
+        .sao-kiep-sat,
+        .sao-nguyet-uc,
+        .sao-lthien-ma,
+        .sao-tue-pha,
+        .sao-tieu-hao,
+        .sao-thai-duong,
+        .sao-thien-khoi,
+        .sao-thien-giai,
+        .sao-thien-hinh,
+        .sao-ieu-khach {
+            color: #DD3A3A
+        }
+
+        .sao-ia-khong,
+        .sao-ia-kiep,
+        .sao-hoa-tinh,
+        .sao-linh-tinh,
+        .sao-thien-khoi,
+        .sao-lloc-ton,
+        .sao-lkinh-duong,
+        .sao-bat-toa {
+            font-weight: 600;
+        }
+
+        .sao-thien-phuc,
+        .sao-quoc-n,
+        .sao-benh-phu,
+        .sao-phong-cao,
+        .sao-co-than,
+        .sao-thien-thuong,
+        .sao-thien-tru,
+        .sao-thien-tho,
+        .sao-thien-tai,
+        .sao-ta-phu,
+        .sao-loc-ton,
+        .sao-thien-quy,
+        .sao-ia-giai,
+        .sao-thien-uc,
+        .sao-phuc-uc,
+        .sao-lloc-ton,
+        .sao-qua-tu,
+        .sao-phuong-cac,
+        .sao-hoa-loc {
+            color: #DB8A42;
+        }
+
+        .sao-ltang-mon,
+        .sao-tang-mon,
+        .sao-n-quang,
+        .sao-tuong-quan,
+        .sao-ao-hoa,
+        .sao-uong-phu,
+        .sao-giai-than,
+        .sao-bat-toa {
+            color: #3E8C22
+        }
+
+        .tieu-han-ty-5 {
+            position: absolute;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            bottom: -55px;
+            right: 0px;
+        }
+
+        .tieu-han-ngo-6 {
+            position: absolute;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            bottom: -55px;
+            right: 162px;
+        }
+
+        .tieu-han-mui-7 {
+            position: absolute;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            bottom: -55px;
+            right: 156px;
+        }
+
+        .tieu-han-than-8 {
+            position: absolute;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            bottom: -55px;
+            left: -50px;
+        }
+
+        .tieu-han-dau-9 {
+            position: absolute;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            bottom: 50%;
+            left: -50px;
+        }
+
+        .tieu-han-tuat-10 {
+            position: absolute;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            bottom: 50%;
+            left: -50px;
+        }
+
+        .tieu-han-hoi-11 {
+            position: absolute;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            top: -93%;
+            left: -50px;
+        }
+
+        .la-chinh-tinh {
+
+            text-align: center;
+            font-size: 20px !important;
+        }
+
+        .chinh-tinh {
+
+            padding-bottom: 5px;
+            height: 50px;
+        }
+
+        .tieu-han-ty-0 {
+            position: absolute;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            top: -300px;
+            right: 144px;
+        }
+
+        .tieu-han-suu-1 {
+            position: absolute;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            top: -300px;
+            right: 144px;
+
+        }
+
+        .tieu-han-dan-2 {
+            position: absolute;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            top: -93%;
+            right: 0;
+        }
+
+        .tieu-han-mao-3 {
+            position: absolute;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            top: -50%;
+            right: 0;
+        }
+
+        .tieu-han-thin-4 {
+            position: absolute;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            top: -50%;
+            right: 0;
+        }
+
+        .vong-tuoi-chi {
+            font-size: 14px
+        }
+
+        .dia-ban {
+            position: relative;
+            padding: 45px;
+            overflow: hidden;
+            background-image: url('https://phongthuydaicat.vn/assets/images/time2.svg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .dia-ban>* {
+            position: relative;
+            z-index: 2;
+        }
+
+        .vong-tuoi-chi {
+            z-index: 2;
+        }
+
+        .title-dia-ban {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .sao-triet,
+        .sao-tuan {
+            background: black;
+            color: white;
+        }
+
+        .tuan-triet-marker {
+            position: absolute;
+            background-color: black;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        .tuan-triet-marker.marker-vertical {
+            transform: translate(-50%, -50%);
+        }
+
+        .tuan-triet-marker.marker-horizontal {
+            transform: translate(-50%, 0);
+        }
+
+        .laso-footer-legend {
+            max-width: 1000px;
+            /* Cùng chiều rộng với container chính */
+            margin: 0 auto 20px auto;
+            /* Canh giữa và tạo khoảng cách dưới */
+            padding-top: 10px;
+            padding-bottom: 10px;
+            border: 2px solid #333;
+            border-top: none;
+            /* Bỏ border trên để liền với container */
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: sans-serif;
+            font-size: 14px;
+        }
+
+        .legend-items {
+            display: flex;
+            flex-wrap: wrap;
+            /* Cho phép xuống dòng nếu không đủ chỗ */
+            gap: 15px;
+            /* Khoảng cách giữa các mục chú thích */
+        }
+
+        .legend-item strong {
+            font-weight: bold;
+        }
+
+        .legend-item .color-do {
+            color: #c0392b;
+            /* Màu đỏ cam */
+        }
+
+        .legend-item .color-xanh {
+            color: #2980b9;
+            /* Màu xanh dương */
+        }
+
+        .chart-id {
+            color: #555;
+            font-size: 13px;
+        }
+
+        .text-indigo-700 {
+            color: #740010;
+        }
+
+        .info-label {
+            color: #111111;
+            font-weight: 600;
+
+        }
+
+        .info-row {
+            padding-top: 10px;
+        }
+
+        .info-value {
+            color: #740010;
+            font-weight: 700;
+        }
+
+        .cung-fotter-left {
+            float: left;
+        }
+
+        .cung-fotter-center {
+            float: center;
+        }
+        .tyj-class, .ngo-class{
+            color: #DD3A3A;
+        }
+        .mui-class, .tuat-class, .suu-class, .thin-class{
+            color: #DB8A42;
+        }
+        .than-class, .dau-class{
+            color: #9C9C9C;
+        }
+        .ty-class, .hoi-class{
+            color: #328EAF;
+        }
+        .dan-class, .mao-class{
+            color: #3E8C22;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid py-3">
+        <div class="laso-container">
+            <?php
+            $gridOrder = [
+                'Tỵ',
+                'Ngọ',
+                'Mùi',
+                'Thân',
+                'Thìn',
+                null,
+                null,
+                'Dậu',
+                'Mão',
+                null,
+                null,
+                'Tuất',
+                'Dần',
+                'Sửu',
+                'Tý',
+                'Hợi',
+            ];
+            $diaBanRendered = false;
+            ?>
+
+            <?php foreach ($gridOrder as $chi): ?>
+                <?php if ($chi && isset($laSo['palaces'][$chi])): ?>
+                    <?php
+                    $cung = $laSo['palaces'][$chi];
+                    $canCung = explode('.', $cung['can_chi_cung'] ?? '..')[0];
+                    $canInitial = mb_substr($canCung, 0, 1);
+                    $chiClassMap = [
+                        'Tý'    => 'ty-class',
+                        'Sửu'   => 'suu-class',
+                        'Dần'   => 'dan-class',
+                        'Mão'   => 'mao-class',
+                        'Thìn'  => 'thin-class',
+                        'Tỵ'    => 'tyj-class', // Dùng tyj để tránh trùng với Tý
+                        'Ngọ'   => 'ngo-class',
+                        'Mùi'   => 'mui-class',
+                        'Thân'  => 'than-class',
+                        'Dậu'   => 'dau-class',
+                        'Tuất'  => 'tuat-class',
+                        'Hợi'   => 'hoi-class',
+                    ];
+
+                    // Lấy ra class tương ứng với $chi. Dùng ?? '' để phòng trường hợp $chi không tồn tại
+                    $chiClass = $chiClassMap[$chi] ?? '';
+                    ?>
+                    <div class="cung">
+                        <div class="cung-header" style="font-size: 14px">
+                            <span class="header-left text-muted fw-bold <?= htmlspecialchars($chiClass) ?>"><?= htmlspecialchars($canInitial . '.' . $chi) ?></span>
+                            <span class="cung-name"><?= htmlspecialchars($cung['cung_chuc_nang'] ?? '') ?></span>
+                            <span class="header-right fw-bold text-primary"><?= htmlspecialchars($cung['dai_van'] ?? '') ?> </span>
+                        </div>
+                        <div class="chinh-tinh text-center">
+                            <?php foreach ($cung['chinh_tinh'] as $sao): ?>
+                                <div class="<?= htmlspecialchars($sao['class'] ?? '') ?>">
+                                    <?= htmlspecialchars($sao['name'] ?? '') ?><?php if (!empty($sao['bright'])): ?>(<?= htmlspecialchars($sao['bright']) ?>)<?php endif; ?>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <div class="cung-content">
+                            <div style="font-size: 14px">
+                                <div class="phu-tinh-cat mt-1">
+                                    <?php foreach ($cung['phu_tinh_cat'] as $sao): ?>
+                                        <div class="<?= htmlspecialchars($sao['class'] ?? '') ?>"><?= htmlspecialchars($sao['name'] ?? '') ?><?php if (!empty($sao['bright'])): ?><span class="do-sang-<?= htmlspecialchars($sao['bright']) ?>">(<?= htmlspecialchars($sao['bright']) ?>)</span><?php endif; ?></div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                            <div class="" style="font-size: 14px">
+                                <div class="phu-tinh-sat">
+                                    <?php foreach ($cung['phu_tinh_sat'] as $sao): ?>
+                                        <div class="<?= htmlspecialchars($sao['class'] ?? '') ?>"><?= htmlspecialchars($sao['name'] ?? '') ?><?php if (!empty($sao['bright'])): ?><span class="do-sang-<?= htmlspecialchars($sao['bright']) ?>">(<?= htmlspecialchars($sao['bright']) ?>)</span><?php endif; ?></div>
+                                    <?php endforeach; ?>
+                                </div>
+                                <div class="special-sao mt-1">
+                                    <?php foreach ($cung['special'] as $sao): ?>
+                                        <?php if (!in_array($sao['name'], ['Tuần', 'Triệt'])): ?>
+                                            <div class="<?= htmlspecialchars($sao['class'] ?? '') ?>"><?= htmlspecialchars($sao['name'] ?? '') ?><?php if (!empty($sao['bright'])): ?><span class="do-sang-<?= htmlspecialchars($sao['bright']) ?>">(<?= htmlspecialchars($sao['bright']) ?>)</span><?php endif; ?></div>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                </div>
+                                <div class="luu-tinh mt-1">
+                                    <?php foreach ($cung['luu'] as $sao): ?>
+                                        <div class="<?= htmlspecialchars($sao['class'] ?? '') ?>"><?= htmlspecialchars($sao['name'] ?? '') ?><?php if (!empty($sao['bright'])): ?><span class="do-sang-<?= htmlspecialchars($sao['bright']) ?>">(<?= htmlspecialchars($sao['bright']) ?>)</span><?php endif; ?></div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        </div>
+                        <?php
+                        $chiIndex = array_search($chi, ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi']);
+                        ?>
+                        <div class="d-flex justify-content-between tieu-han-<?= slugify($chi) ?>-<?= $chiIndex ?>">
+                            <?php if (!empty($cung['vong_tuoi_chi'])): ?>
+                                <div class="vong-tuoi-chi"><?= htmlspecialchars($cung['vong_tuoi_chi']) ?></div>
+                            <?php endif; ?>
+                        </div>
+                        <div class="cung-footer">
+                            <span class="text-primary fw-semibold cung-fotter-left"><?= htmlspecialchars($cung['dv_chuc_nang'] ?? '') ?></span>
+                            <span class="text-dark fw-bold cung-fotter-center" style="font-weight: 700; color:#000000"><?= htmlspecialchars($cung['vong_trang_sinh'] ?? '') ?></span>
+                            <span class="text-success fw-semibold cung-fotter-right"> Th.<?= htmlspecialchars($cung['thang_am'] ?? '') ?></span>
+                        </div>
+                    </div>
+                <?php elseif (is_null($chi) && !$diaBanRendered): ?>
+                    <?php $diaBanRendered = true; ?>
+                    <div class="dia-ban">
+                        <!-- 1. TIÊU ĐỀ CHÍNH -->
+
+
+                        <!-- 2. KHỐI LOGO VÀ SLOGAN -->
+                        <!-- <div class="dia-ban-brand">
+                            <img src="https://phongthuydaicat.vn/assets/images/logo-ime-licham.svg" alt="Logo" class="brand-logo">
+                            <div class="brand-text">
+                                TỬ VI ĐẠI CÁT <br> DẪN LỐI CÁT TƯỜNG
+                            </div>
+                        </div>
+                        <div style="color: #111111; font-weight: 600; padding-bottom: 8px; font-size: 14px;">
+                            TRANG TỬ VI CỔ HỌC CHÍNH THỐNG VIỆT NAM
+                        </div>
+                        <div style="color: #740010; font-weight: 600; padding-bottom: 8px;">
+                            https://www.xemlicham.com/
+                        </div> -->
+                        <h2 class="dia-ban-title">LÁ SỐ TỬ VI</h2>
+                        <!-- 3. KHỐI THÔNG TIN CÁ NHÂN -->
+                        <div class="dia-ban-info">
+                            <div class="info-row">
+                                <span class="info-label">Họ và tên:</span>
+                                <span class="info-value"><?= htmlspecialchars($normalizedData['ho_ten'] ?? '') ?> (<?= htmlspecialchars($normalizedData['gioi_tinh'] ?? '') ?>)</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Năm:</span>
+                                <span class="info-value"><?= htmlspecialchars($normalizedData['duong_lich']['year'] ?? '') ?>
+
+                                </span>
+                                <span style="text-align: left;  flex: 1; color: #740010;font-weight: 700;">
+                                    <?= htmlspecialchars($normalizedData['lunar']['can'] ?? '') ?> <?= htmlspecialchars($normalizedData['lunar']['chi'] ?? '') ?>
+                                </span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Tháng:</span>
+                                <span class="info-value"><?= htmlspecialchars($normalizedData['duong_lich']['month'] ?? '') ?>
+                                    (<?= htmlspecialchars($normalizedData['lunar']['month'] ?? '') ?>)
+                                </span>
+                                <span style="text-align: left;  flex: 1; color: #740010;font-weight: 700;"><?= htmlspecialchars($normalizedData['can_chi_thang'] ?? '') ?></span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Ngày:</span>
+                                <span class="info-value"><?= htmlspecialchars($normalizedData['duong_lich']['day'] ?? '') ?>
+                                    (<?= htmlspecialchars($normalizedData['lunar']['day'] ?? '') ?>)
+                                </span>
+                                <span style="text-align: left;  flex: 1; color: #740010;font-weight: 700;"><?= htmlspecialchars($normalizedData['can_chi_ngay'] ?? '') ?></span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Giờ:</span>
+                                <span class="info-value"><?= htmlspecialchars($normalizedData['gio_am_sinh_am'] ?? '') ?> </span>
+                                <span style="text-align: left; flex: 1; color: #740010;font-weight: 700;"> <?= htmlspecialchars($normalizedData['gio_am_sinh_chi_am'] ?? '') ?></span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Năm xem:</span>
+                                <span class="info-value"><?= htmlspecialchars($normalizedData['can_chi_nam_xem'] ?? '') ?> (<?= htmlspecialchars($normalizedData['nam_xem'] ?? '') ?>) </span>
+                                <span style="text-align: left; flex: 1; color: #740010;font-weight: 700;"> <?= htmlspecialchars($normalizedData['tuoi'] ?? '') ?> tuổi</span>
+                            </div>
+
+
+                            <div class="info-row">
+                                <span class="info-label">Âm Dương:</span>
+                                <span class="info-value"><?= htmlspecialchars($laSo['info']['am_duong'] ?? '') ?> <br>
+                                    <?= htmlspecialchars($laSo['info']['ket_luan'][0] ?? '') ?></span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Bản Mệnh:</span>
+                                <span class="info-value"><?= htmlspecialchars($laSo['info']['menh'] ?? '') ?></span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Cục:</span>
+                                <span class="info-value">
+                                    <div> <?= htmlspecialchars($laSo['info']['cuc'] ?? '') ?> </div>
+
+                                    <div style="padding-top: 6px;"> <?= htmlspecialchars($laSo['info']['cuc_menh_relation'] ?? '') ?></div>
+                                </span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Chủ Mệnh:</span>
+                                <span class="info-value"><?= htmlspecialchars($laSo['info']['chu_menh'] ?? '') ?></span>
+                            </div>
+
+                            <div class="info-row">
+                                <span class="info-label">Chủ Thân:</span>
+                                <span class="info-value"><?= htmlspecialchars($laSo['info']['chu_than'] ?? '') ?></span>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+            <?php endforeach; ?>
+
+            <?php foreach ($finalPositions as $saoName => $position): ?>
+                <div class="tuan-triet-marker marker-<?= htmlspecialchars($position['orientation']) ?>" style="top: <?= htmlspecialchars($position['top']) ?>; left: <?= htmlspecialchars($position['left']) ?>;">
+                    <?= htmlspecialchars($saoName) ?>
+                </div>
+            <?php endforeach; ?>
+
+            <?php if (!empty($tamHopAnchorPoints['MỆNH']) && !empty($tamHopAnchorPoints['QUAN LỘC']) && !empty($tamHopAnchorPoints['TÀI BẠCH'])): ?>
+                <svg class="laso-overlay-svg">
+                    <line x1="<?= htmlspecialchars($tamHopAnchorPoints['MỆNH']['x']) ?>%" y1="<?= htmlspecialchars($tamHopAnchorPoints['MỆNH']['y']) ?>%"
+                        x2="<?= htmlspecialchars($tamHopAnchorPoints['TÀI BẠCH']['x']) ?>%" y2="<?= htmlspecialchars($tamHopAnchorPoints['TÀI BẠCH']['y']) ?>%"
+                        stroke="rgba(206, 206, 206, 0.9)" stroke-width="2" />
+                    <line x1="<?= htmlspecialchars($tamHopAnchorPoints['MỆNH']['x']) ?>%" y1="<?= htmlspecialchars($tamHopAnchorPoints['MỆNH']['y']) ?>%"
+                        x2="<?= htmlspecialchars($tamHopAnchorPoints['QUAN LỘC']['x']) ?>%" y2="<?= htmlspecialchars($tamHopAnchorPoints['QUAN LỘC']['y']) ?>%"
+                        stroke="rgba(206, 206, 206, 0.9)" stroke-width="2" />
+                </svg>
+            <?php endif; ?>
+        </div>
+        <div class="laso-footer-legend">
+            <div style="padding-right: 10px; padding-left: 10px;">
+                <div class="legend-items">
+                    <span class="legend-item"><strong class="color-do">M:</strong> Miếu</span>
+                    <span class="legend-item"><strong class="color-do">V:</strong> Vượng</span>
+                    <span class="legend-item"><strong class="color-do">Đ:</strong> Đắc</span>
+                    <span class="legend-item"><strong class="color-do">B:</strong> Bình hòa</span>
+                    <span class="legend-item"><strong class="color-do">H:</strong> Hãm</span>
+                    <span class="legend-item"><strong class="color-xanh">ĐV:</strong> Đại vận</span>
+                    <span class="legend-item"><strong class="color-xanh">LN:</strong> Lưu niên</span>
+                    <span class="legend-item"><strong class="color-xanh">NL:</strong> Lưu nguyệt</span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
