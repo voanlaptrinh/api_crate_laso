@@ -259,8 +259,11 @@ function createImageIfNotExists($templateFile, $prefix, $dataHash, $outputDir, $
         chmod($outputPngFile, 0755);
         return generate_public_url($fileName);
     } catch (Exception $e) {
-        error_log("Lỗi tạo ảnh từ {$templateFile}: " . $e->getMessage());
-        return null;
+        send_json_response([
+        'success' => true,
+        'message' => 'Lấy dữ liệu lá số thành công nhưng không thể tạo ảnh.',
+        'error_image_generation' => $e->getMessage(),
+    ]);
     }
 }
 
