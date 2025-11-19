@@ -1,5 +1,8 @@
 <?php
 // File: api/store_laso.php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 // --- Cài đặt cơ bản ---
 header("Content-Type: application/json; charset=UTF-8");
