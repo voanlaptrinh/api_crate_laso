@@ -60,17 +60,17 @@ class TuViHelper
 
         // Cache bảng độ sáng để dùng nhiều lần
         // $this->brightnessTable = config('tuvi_data.sao_brightness');
-        $this->brightnessTable = require __DIR__ . '/../data/sao_brightness.php';
-        $this->data_nap_am = require __DIR__ . '/../data/nap_am.php';
-        $this->data_theo_chi_nam = require __DIR__ . '/../data/theo_chi_nam.php';
-        $this->data_loc_ton = require __DIR__ . '/../data/loc_ton.php';
-        $this->data_vong_trang_sinh = require __DIR__ . '/../data/vong_trang_sinh.php';
-        $this->data_chu_menh_than = require __DIR__ . '/../data/chu_menh_than.php';
-        $this->data_thien_tru = require __DIR__ . '/../data/thien_tru.php';
-        $this->data_thien_quan_phuc = require __DIR__ . '/../data/thien_quan_phuc.php';
-        $this->data_triet = require __DIR__ . '/../data/triet.php';
-        $this->data_tuan_khong_vong = require __DIR__ . '/../data/tuan_khong_vong.php';
-        $this->data_sao_ngu_hanh = require __DIR__ . '/../data/sao_ngu_hanh.php';
+        $this->brightnessTable = require ROOT_PATH . '/data/sao_brightness.php';
+        $this->data_nap_am = require ROOT_PATH . '/data/nap_am.php';
+        $this->data_theo_chi_nam = require ROOT_PATH . '/data/theo_chi_nam.php';
+        $this->data_loc_ton = require ROOT_PATH . '/data/loc_ton.php';
+        $this->data_vong_trang_sinh = require ROOT_PATH . '/data/vong_trang_sinh.php';
+        $this->data_chu_menh_than = require ROOT_PATH . '/data/chu_menh_than.php';
+        $this->data_thien_tru = require ROOT_PATH . '/data/thien_tru.php';
+        $this->data_thien_quan_phuc = require ROOT_PATH . '/data/thien_quan_phuc.php';
+        $this->data_triet = require ROOT_PATH . '/data/triet.php';
+        $this->data_tuan_khong_vong = require ROOT_PATH . '/data/tuan_khong_vong.php';
+        $this->data_sao_ngu_hanh = require ROOT_PATH . '/data/sao_ngu_hanh.php';
     }
 
 
