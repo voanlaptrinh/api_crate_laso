@@ -16,7 +16,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 // Tải các helper của bạn
 require_once __DIR__ . '/laso/helpers/CustomLunarConverterHelper.php';
 require_once __DIR__ . '/laso/helpers/TuViHelper.php';
-require_once __DIR__ . '/laso/helpers/slugify.php'; 
+require_once __DIR__ . '/laso/helpers/slugify.php';
 // BƯỚC 2: SỬ DỤNG CLASS BROWSERSHOT
 use Spatie\Browsershot\Browsershot;
 
@@ -147,7 +147,7 @@ try {
     $canChiNgay = TuViHelper::canchiNgayByJD($jd);
     $canChiNamXem = TuViHelper::canchiNam($validated['nam_xem']);
 
- $birthHour = (int)$validated['dl_gio']; // Lấy giờ dương lịch số nguyên đã được validate
+    $birthHour = (int)$validated['dl_gio']; // Lấy giờ dương lịch số nguyên đã được validate
     $zodiacHourRangeString = '';
 
     if ($birthHour >= 23 || $birthHour < 1) { // 23:00 - 00:59
@@ -232,12 +232,20 @@ function createImageIfNotExists($templateFile, $prefix, $dataHash, $outputDir, $
 {
     $fileName = "{$prefix}_{$dataHash}.png";
     $outputPngFile = $outputDir . '/' . $fileName;
-
     if (file_exists($outputPngFile)) {
+
+        // Gán mặc định khi ảnh đã có
+        $GLOBALS['render_time'] = [
+            'ms' => 0,
+            'seconds' => 0,
+            'created' => false
+        ];
+
         return generate_public_url($fileName);
     }
 
     try {
+        $start = microtime(true);
         // Render HTML từ template trong scope tách biệt
         $html = renderTemplateIsolated($templateFile, $templateData);
 
@@ -258,13 +266,22 @@ function createImageIfNotExists($templateFile, $prefix, $dataHash, $outputDir, $
         }
 
         chmod($outputPngFile, 0755);
+        $end = microtime(true);
+        $duration = $end - $start;
+
+        // Lưu vào biến global để lấy ra bên ngoài
+        $GLOBALS['render_time'] = [
+            'ms' => round($duration * 1000, 2),
+            'seconds' => round($duration, 2),
+            'created' => true
+        ];
         return generate_public_url($fileName);
     } catch (Exception $e) {
         send_json_response([
-        'success' => true,
-        'message' => 'Lấy dữ liệu lá số thành công nhưng không thể tạo ảnh.',
-        'error_image_generation' => $e->getMessage(),
-    ]);
+            'success' => true,
+            'message' => 'Lấy dữ liệu lá số thành công nhưng không thể tạo ảnh.',
+            'error_image_generation' => $e->getMessage(),
+        ]);
     }
 }
 
@@ -276,7 +293,7 @@ $imageUrl = createImageIfNotExists(
     $outputDir,
     ['normalizedData' => $normalizedData, 'laSo' => $laSo]
 );
-
+$time = $GLOBALS['render_time'];
 
 
 // --- DỌN DẸP FILE CŨ ---
@@ -286,11 +303,11 @@ cleanupOldImages();
 send_json_response([
     'success' => true,
     'message' => 'Tạo lá số thành công.',
+    'create' => $time['created'] ? 'có tạo mới' : 'đã tồn tại',
+    'time_create' => "Thời gian: {$time['ms']} ms ({$time['seconds']}s)",
     'data' => [
         'input_summary' => $normalizedData,
         'laso_details' => $laSo,
         'image_url' => $imageUrl,
     ]
 ], 200);
-
-
