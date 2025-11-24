@@ -1,12 +1,12 @@
 <?php
 
+
 /**
  * Template PHP thuần để hiển thị lá số.
  * File này nhận vào 2 biến: $laSo và $normalizedData.
  */
 
 // Hàm PHP thuần thay thế cho \Illuminate\Support\Str::slug()
-
 
 // --- Bắt đầu khối logic tính toán (chuyển từ @php) ---
 
@@ -170,12 +170,12 @@ if (isset($laSo['palaces']) && is_array($laSo['palaces'])) {
             border: 2px solid #333;
             aspect-ratio: 1 / 1;
             max-width: 1000px;
-            height: 1300px;
+            height: 1280px;
             margin: auto;
             font-family: sans-serif;
             position: relative;
             /* Quan trọng: Để định vị Tuần/Triệt và SVG */
-            background-image: url('https://phongthuydaicat.vn/assets/images/la_so.png');
+            /* background-image: url('https://phonglich.com/icons/la_so.png'); */
             background-size: cover;
             background-position: center;
         }
@@ -223,7 +223,7 @@ if (isset($laSo['palaces']) && is_array($laSo['palaces'])) {
             /* Các thuộc tính background image của bạn */
             position: relative;
             overflow: hidden;
-            background-image: url('https://phongthuydaicat.vn/assets/images/time2.svg');
+            background-image: url('https://phonglich.com/icons/dia_ban.svg');
             background-size: cover;
             background-position: center;
         }
@@ -269,9 +269,9 @@ if (isset($laSo['palaces']) && is_array($laSo['palaces'])) {
             font-size: 15px;
             /* Giảm kích thước chữ một chút cho gọn */
             width: 100%;
-            max-width: 460px;
-            margin-left: 20px;
-            margin-right: 20px;
+            max-width: 450px;
+            margin-left: 70px;
+            margin-right: 25px;
             /* Giới hạn chiều rộng để không bị quá dài */
         }
 
@@ -433,17 +433,19 @@ if (isset($laSo['palaces']) && is_array($laSo['palaces'])) {
 
         .sao-thien-co,
         .sao-thien-luong {
-            color: #3E8C22;
+            color: #00621D;
         }
 
         .sao-tu-vi,
-        .sao-thien-phu {
-            color: #DB8A42
+        .sao-thien-phu,
+        .sao-an-quang,
+        .sao-thien-uc {
+            color: #8F3200
         }
 
         .sao-pha-quan,
         .sao-thai-m,
-        .sao-tham-lang,
+
         .sao-thien-tuong,
         .sao-cu-mon,
         .sao-thien-ong,
@@ -464,21 +466,28 @@ if (isset($laSo['palaces']) && is_array($laSo['palaces'])) {
         .sao-lthien-khoc,
         .sao-thanh-long,
         .sao-long-uc,
+        .sao-thai-am,
         .sao-hoa-ky,
         .sao-thien-hy,
+        .sao-thien-dong,
         .sao-huu-bat,
-        .sao-hoa-quyen {
-            color: #328EAF;
+        .sao-hoa-quyen,
+        .sao-hoa-khoa,
+
+        .sao-dao-hoa {
+            color: #015F88;
         }
 
         .sao-liem-trinh,
-        .sao-thai-duong {
-            color: #DD3A3A
+        .sao-truc-phu,
+        .sao-thai-duong,
+        .sao-dieu-khach {
+            color: #AE0202
         }
 
         .sao-vu-khuc,
         .sao-that-sat,
-        .sao-truc-phu,
+
         .sao-hoa-cai,
         .sao-a-la,
         .sao-ia-vong,
@@ -494,7 +503,7 @@ if (isset($laSo['palaces']) && is_array($laSo['palaces'])) {
         .sao-van-xuong,
         .sao-tau-thu,
         .sao-tuong-tinh {
-            color: #9C9C9C
+            color: #515151
         }
 
         .sao-thien-viet,
@@ -526,7 +535,7 @@ if (isset($laSo['palaces']) && is_array($laSo['palaces'])) {
         .sao-thien-giai,
         .sao-thien-hinh,
         .sao-ieu-khach {
-            color: #DD3A3A
+            color: #AE0202
         }
 
         .sao-ia-khong,
@@ -557,20 +566,21 @@ if (isset($laSo['palaces']) && is_array($laSo['palaces'])) {
         .sao-phuc-uc,
         .sao-lloc-ton,
         .sao-qua-tu,
-        .sao-phuong-cac,
-        .sao-hoa-loc {
-            color: #DB8A42;
+        .sao-phuong-cac {
+            color: #8F3200;
         }
 
         .sao-ltang-mon,
         .sao-tang-mon,
+        .sao-tham-lang,
         .sao-n-quang,
         .sao-tuong-quan,
         .sao-ao-hoa,
         .sao-uong-phu,
+        .sao-hoa-loc,
         .sao-giai-than,
         .sao-bat-toa {
-            color: #3E8C22
+            color: #00621D
         }
 
         .tieu-han-ty-5 {
@@ -702,7 +712,7 @@ if (isset($laSo['palaces']) && is_array($laSo['palaces'])) {
             position: relative;
             padding: 45px;
             overflow: hidden;
-            background-image: url('https://phongthuydaicat.vn/assets/images/time2.svg');
+            background-image: url('https://phonglich.com/icons/dia_ban.svg');
             background-size: cover;
             background-position: center;
         }
@@ -757,9 +767,9 @@ if (isset($laSo['palaces']) && is_array($laSo['palaces'])) {
             border-top: none;
             /* Bỏ border trên để liền với container */
             background-color: #fff;
-            display: flex;
+            /* display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: center; */
             font-family: sans-serif;
             font-size: 14px;
         }
@@ -817,20 +827,32 @@ if (isset($laSo['palaces']) && is_array($laSo['palaces'])) {
         .cung-fotter-center {
             float: center;
         }
-        .tyj-class, .ngo-class{
-            color: #DD3A3A;
+
+        .tyj-class,
+        .ngo-class {
+            color: #AE0202;
         }
-        .mui-class, .tuat-class, .suu-class, .thin-class{
-            color: #DB8A42;
+
+        .mui-class,
+        .tuat-class,
+        .suu-class,
+        .thin-class {
+            color: #8F3200;
         }
-        .than-class, .dau-class{
-            color: #9C9C9C;
+
+        .than-class,
+        .dau-class {
+            color: #515151;
         }
-        .ty-class, .hoi-class{
-            color: #328EAF;
+
+        .ty-class,
+        .hoi-class {
+            color: #015F88;
         }
-        .dan-class, .mao-class{
-            color: #3E8C22;
+
+        .dan-class,
+        .mao-class {
+            color: #00621D;
         }
     </style>
 </head>
@@ -947,16 +969,16 @@ if (isset($laSo['palaces']) && is_array($laSo['palaces'])) {
 
                         <!-- 2. KHỐI LOGO VÀ SLOGAN -->
                         <!-- <div class="dia-ban-brand">
-                            <img src="https://phongthuydaicat.vn/assets/images/logo-ime-licham.svg" alt="Logo" class="brand-logo">
+                             <img src="https://phonglich.com/icons/logo-ime.svg" alt="Logo" class="brand-logo">
                             <div class="brand-text">
                                 TỬ VI ĐẠI CÁT <br> DẪN LỐI CÁT TƯỜNG
                             </div>
-                        </div>
-                        <div style="color: #111111; font-weight: 600; padding-bottom: 8px; font-size: 14px;">
+                        </div> -->
+                        <!-- <div style="color: #111111; font-weight: 600; padding-bottom: 8px; font-size: 14px;">
                             TRANG TỬ VI CỔ HỌC CHÍNH THỐNG VIỆT NAM
                         </div>
                         <div style="color: #740010; font-weight: 600; padding-bottom: 8px;">
-                            https://www.xemlicham.com/
+                           https://phonglich.com
                         </div> -->
                         <h2 class="dia-ban-title">LÁ SỐ TỬ VI</h2>
                         <!-- 3. KHỐI THÔNG TIN CÁ NHÂN -->
@@ -1027,6 +1049,9 @@ if (isset($laSo['palaces']) && is_array($laSo['palaces'])) {
                                 <span class="info-value"><?= htmlspecialchars($laSo['info']['chu_than'] ?? '') ?></span>
                             </div>
                         </div>
+                        <div style="color: #111111; font-weight: 600; padding-bottom: 8px; font-size: 16px; padding-top: 30px;">
+                            Bản quyền © PhongLich.com
+                        </div>
                     </div>
                 <?php endif; ?>
             <?php endforeach; ?>
@@ -1049,7 +1074,9 @@ if (isset($laSo['palaces']) && is_array($laSo['palaces'])) {
             <?php endif; ?>
         </div>
         <div class="laso-footer-legend">
-            <div style="padding-right: 10px; padding-left: 10px;">
+            <div style="padding-right: 10px; padding-left: 10px;  display: flex;
+    justify-content: space-between;
+    align-items: center;">
                 <div class="legend-items">
                     <span class="legend-item"><strong class="color-do">M:</strong> Miếu</span>
                     <span class="legend-item"><strong class="color-do">V:</strong> Vượng</span>
@@ -1060,9 +1087,16 @@ if (isset($laSo['palaces']) && is_array($laSo['palaces'])) {
                     <span class="legend-item"><strong class="color-xanh">LN:</strong> Lưu niên</span>
                     <span class="legend-item"><strong class="color-xanh">NL:</strong> Lưu nguyệt</span>
                 </div>
-
+                <div class="legend-items box-xem-ngay">
+                    <span class="legend-item"><strong style="color: #515151; background: #515151; color: white; padding: 2px 6px; border-radius: 3px;">Kim</strong></span>
+                    <span class="legend-item"><strong style="color: #00621D; background: #00621D; color: white; padding: 2px 6px; border-radius: 3px;">Mộc</strong></span>
+                    <span class="legend-item"><strong style="color: #015F88; background: #015F88; color: white; padding: 2px 6px; border-radius: 3px;">Thủy</strong></span>
+                    <span class="legend-item"><strong style="color: #AE0202; background: #AE0202; color: white; padding: 2px 6px; border-radius: 3px;">Hỏa</strong></span>
+                    <span class="legend-item"><strong style="color: #8F3200; background: #8F3200; color: white; padding: 2px 6px; border-radius: 3px;">Thổ</strong></span>
+                </div>
             </div>
         </div>
+
     </div>
 </body>
 

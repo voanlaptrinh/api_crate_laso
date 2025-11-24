@@ -44,6 +44,7 @@ class CustomLunarConverterHelper
         }
         
         $chiGio = self::getChiGio($hour);
+        $chiGioDisplay = self::getChiGioDisplay($hour);
 
         return [
             'year'     => $lunarYear,
@@ -52,6 +53,7 @@ class CustomLunarConverterHelper
             'can'      => self::getCan($lunarYear), // Can/Chi được tính dựa trên NĂM ÂM LỊCH đã tính được
             'chi'      => self::getChi($lunarYear),
             'hour_chi' => $chiGio,
+            'hour_chi_display' => $chiGioDisplay,
             'is_leap'  => ($lunarLeap == 1),
         ];
     }
@@ -74,6 +76,29 @@ class CustomLunarConverterHelper
         // Công thức tính cho các giờ còn lại (0h - 22h)
         return $chi[floor(($hour + 1) / 2)];
     }
+
+    /**
+     * Lấy tên Chi của giờ sinh có phân biệt Tý sớm/muộn cho hiển thị.
+     *
+     * @param int $hour
+     * @return string
+     */
+    public static function getChiGioDisplay(int $hour): string
+    {
+        $chi = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
+
+        // Trường hợp đặc biệt cho giờ Tý
+        if ($hour == 23) {
+            return 'Tý sớm'; // 23:00-23:59
+        } elseif ($hour == 0) {
+            return 'Tý muộn'; // 00:00-00:59
+        }
+
+        // Công thức tính cho các giờ còn lại (1h - 22h)
+        return $chi[floor(($hour + 1) / 2)];
+    }
+
+  
 
     // --- CÁC HÀM TÍNH TOÁN PHỤ TRỢ (PRIVATE) - GIỮ NGUYÊN KHÔNG THAY ĐỔI ---
 

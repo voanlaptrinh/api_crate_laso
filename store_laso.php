@@ -118,6 +118,7 @@ $validated = [
     'dl_nam'    => (int) $input['dl_nam'],
     'dl_gio'    => (int) $input['dl_gio'],
     'dl_phut'   => (int) $input['dl_phut'],
+    'app_name'  => $input['app_name'] ?? 'phongthuydaicat',
     'location'  => $input['location'] ?? null,
 ];
 
@@ -187,7 +188,7 @@ try {
         'duong_lich_str' => $originalDuongLich->format('H:i') . ' ngày ' . $originalDuongLich->format('d/m/Y'),
         'duong_lich_hieu_chinh_str' => ($originalDuongLich != $duongLich) ? '(Giờ hiệu chỉnh: ' . $duongLich->format('H:i d/m/Y') . ')' : '',
         'am_lich_str' => "Giờ {$amLich['hour_chi']}, ngày {$amLich['day']}/{$amLich['month']}/{$amLich['year']} (Năm {$amLich['can']} {$amLich['chi']})",
-        'gio_am_sinh_chi_am' => $amLich['hour_chi'],
+        'gio_am_sinh_chi_am' => $amLich['hour_chi_display'],
         'gio_am_sinh_am' => $zodiacHourRangeString,
         'can_chi_thang' => $canChiMonth,
         'can_chi_ngay' => $canChiNgay,
@@ -230,53 +231,74 @@ function renderTemplateIsolated($templatePath, $variables = [])
 // Hàm tạo ảnh (dùng chung)
 function createImageIfNotExists($templateFile, $prefix, $dataHash, $outputDir, $templateData = [])
 {
-    $fileName = "{$prefix}_{$dataHash}.png";
-    $outputPngFile = $outputDir . '/' . $fileName;
-    if (file_exists($outputPngFile)) {
+    // ============================
+    // 1. Tự động đổi template theo app
+    // ============================
+    $app = $templateData['app_name'] ?? 'phongthuydaicat';
 
-        // Gán mặc định khi ảnh đã có
+    $templateMap = [
+        'phongthuydaicat' => 'laso_display.phtml',
+        'phonglich'       => 'laso_display_phonglich.phtml',
+    ];
+
+    // Nếu app có trong map thì đổi template
+    if (isset($templateMap[$app])) {
+        $templateFile = __DIR__ . '/templates/' . $templateMap[$app];
+    }
+    // ============================
+    // 2. Tạo folder cho từng app
+    // ============================
+    $appDir = rtrim($outputDir, '/') . '/' . $app;
+
+    if (!is_dir($appDir)) {
+        mkdir($appDir, 0775, true);
+    }
+
+    // ============================
+    // 3. Tạo đường dẫn file
+    // ============================
+    $fileName = "{$prefix}_{$dataHash}.png";
+    $outputPngFile = $appDir . '/' . $fileName;
+
+    // Nếu file đã có → trả về URL ngay
+    if (file_exists($outputPngFile)) {
         $GLOBALS['render_time'] = [
-            'ms' => 0,
+            'ms'      => 0,
             'seconds' => 0,
             'created' => false
         ];
-
-        return generate_public_url($fileName);
+        return generate_public_url($app . '/' . $fileName);
     }
 
     try {
         $start = microtime(true);
-        // Render HTML từ template trong scope tách biệt
+
         $html = renderTemplateIsolated($templateFile, $templateData);
 
-        if (!is_dir($outputDir)) {
-            mkdir($outputDir, 0775, true);
-        }
-
+        // Render Browsershot
         Browsershot::html($html)
             ->timeout(60000)
             ->windowSize(1100, 1350)
             ->setNodeModulePath(__DIR__ . '/../')
-            ->setChromePath('/var/www/.cache/puppeteer/chrome/linux-139.0.7258.68/chrome-linux64/chrome')
             ->addChromiumArguments(['no-sandbox', 'disable-setuid-sandbox'])
             ->save($outputPngFile);
 
-        if (!file_exists($outputPngFile)) {
-            throw new Exception("Không thể tạo file ảnh từ template {$templateFile}");
-        }
-
         chmod($outputPngFile, 0755);
-        $end = microtime(true);
-        $duration = $end - $start;
 
-        // Lưu vào biến global để lấy ra bên ngoài
+        // Thời gian render
+        $duration = microtime(true) - $start;
+
         $GLOBALS['render_time'] = [
-            'ms' => round($duration * 1000, 2),
+            'ms'      => round($duration * 1000, 2),
             'seconds' => round($duration, 2),
             'created' => true
         ];
-        return generate_public_url($fileName);
+
+        // URL đúng
+        return generate_public_url($app . '/' . $fileName);
+
     } catch (Exception $e) {
+
         send_json_response([
             'success' => true,
             'message' => 'Lấy dữ liệu lá số thành công nhưng không thể tạo ảnh.',
@@ -285,13 +307,14 @@ function createImageIfNotExists($templateFile, $prefix, $dataHash, $outputDir, $
     }
 }
 
+
 // --- TẠO ẢNH CHÍNH ---
 $imageUrl = createImageIfNotExists(
     __DIR__ . '/templates/laso_display.phtml',
     'laso',
     $dataHash,
     $outputDir,
-    ['normalizedData' => $normalizedData, 'laSo' => $laSo]
+    ['normalizedData' => $normalizedData, 'laSo' => $laSo, 'app_name' => $validated['app_name']]
 );
 $time = $GLOBALS['render_time'];
 
