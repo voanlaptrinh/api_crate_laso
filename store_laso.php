@@ -280,6 +280,7 @@ function createImageIfNotExists($templateFile, $prefix, $dataHash, $outputDir, $
             ->timeout(60000)
             ->windowSize(1100, 1350)
             ->setNodeModulePath(__DIR__ . '/../')
+            ->setChromePath('/var/www/.cache/puppeteer/chrome/linux-139.0.7258.68/chrome-linux64/chrome')
             ->addChromiumArguments(['no-sandbox', 'disable-setuid-sandbox'])
             ->save($outputPngFile);
 
