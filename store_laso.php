@@ -274,11 +274,10 @@ function createImageIfNotExists($templateFile, $prefix, $dataHash, $outputDir, $
         $start = microtime(true);
 
         $html = renderTemplateIsolated($templateFile, $templateData);
-
         // Render Browsershot
-        Browsershot::html($html)
+        Browsershot::html(html: $html)
             ->timeout(60000)
-            ->windowSize(1100, 1350)
+            ->windowSize(1200, 1450)
             ->setNodeModulePath(__DIR__ . '/../')
             ->setChromePath('/var/www/.cache/puppeteer/chrome/linux-139.0.7258.68/chrome-linux64/chrome')
             ->addChromiumArguments(['no-sandbox', 'disable-setuid-sandbox'])
