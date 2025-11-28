@@ -910,17 +910,17 @@ function createLasoImageWithGD($outputFile, $templateData)
     // Tạo borderMap cho Tuần/Triệt markers (theo template)
     $borderMap = [
         'ngo-ty' => ['top' => 12.5, 'left' => 25, 'orientation' => 'vertical'],
-        'mui-ngo' => ['top' => 25, 'left' => 50, 'orientation' => 'vertical'],
+        'mui-ngo' => ['top' => 12.5, 'left' => 50, 'orientation' => 'vertical'],
         'mui-than' => ['top' => 12.5, 'left' => 75, 'orientation' => 'vertical'],
-        'dau-than' => ['top' => 24.3, 'left' => 87.5, 'orientation' => 'horizontal'],
+        'dau-than' => ['top' => 25, 'left' => 87.5, 'orientation' => 'horizontal'],
         'dau-tuat' => ['top' => 50, 'left' => 87.5, 'orientation' => 'horizontal'],
-        'hoi-tuat' => ['top' => 74.4, 'left' => 87.5, 'orientation' => 'horizontal'],
+        'hoi-tuat' => ['top' => 75, 'left' => 87.5, 'orientation' => 'horizontal'],
         'hoi-ty' => ['top' => 87.5, 'left' => 75, 'orientation' => 'vertical'],
-        'suu-ty' => ['top' => 75, 'left' => 50, 'orientation' => 'vertical'],
+        'suu-ty' => ['top' => 87.5, 'left' => 50, 'orientation' => 'vertical'],
         'dan-suu' => ['top' => 87.5, 'left' => 25, 'orientation' => 'vertical'],
-        'dan-mao' => ['top' => 74.4, 'left' => 12.5, 'orientation' => 'horizontal'],
+        'dan-mao' => ['top' => 75, 'left' => 12.5, 'orientation' => 'horizontal'],
         'mao-thin' => ['top' => 50, 'left' => 12.5, 'orientation' => 'horizontal'],
-        'thin-ty' => ['top' => 25.7, 'left' => 12.5, 'orientation' => 'horizontal']
+        'thin-ty' => ['top' => 25, 'left' => 12.5, 'orientation' => 'horizontal']
     ];
 
     // Hàm slugify cho palace names (inline version)
