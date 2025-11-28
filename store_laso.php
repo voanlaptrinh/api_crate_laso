@@ -17,8 +17,8 @@ require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/laso/helpers/CustomLunarConverterHelper.php';
 require_once __DIR__ . '/laso/helpers/TuViHelper.php';
 require_once __DIR__ . '/laso/helpers/slugify.php';
-// BƯỚC 2: SỬ DỤNG CLASS BROWSERSHOT
-use Spatie\Browsershot\Browsershot;
+// BƯỚC 2: SỬ DỤNG PHP GD LIBRARY CHO TẠO ẢNH
+// Không cần import thư viện bên ngoài, GD đã có sẵn trong PHP
 
 // --- Hàm tiện ích để gửi response ---
 function send_json_response($data, $statusCode = 200)
@@ -217,18 +217,9 @@ $imageUrl = null;
 $dataHash = md5(json_encode($validated));
 $outputDir = __DIR__ . '/public/storage';
 
-// Hàm render template trong scope riêng (isolation)
-function renderTemplateIsolated($templatePath, $variables = [])
-{
-    return (function ($__templatePath, $__vars) {
-        extract($__vars, EXTR_SKIP);
-        ob_start();
-        include $__templatePath;
-        return ob_get_clean();
-    })($templatePath, $variables);
-}
+// Hàm render template không còn cần thiết khi dùng GD library
 
-// Hàm tạo ảnh (dùng chung)
+// Hàm tạo ảnh bằng GD Library
 function createImageIfNotExists($templateFile, $prefix, $dataHash, $outputDir, $templateData = [])
 {
     // ============================
@@ -236,15 +227,6 @@ function createImageIfNotExists($templateFile, $prefix, $dataHash, $outputDir, $
     // ============================
     $app = $templateData['app_name'] ?? 'phongthuydaicat';
 
-    $templateMap = [
-        'phongthuydaicat' => 'laso_display.phtml',
-        'phonglich'       => 'laso_display_phonglich.phtml',
-    ];
-
-    // Nếu app có trong map thì đổi template
-    if (isset($templateMap[$app])) {
-        $templateFile = __DIR__ . '/templates/' . $templateMap[$app];
-    }
     // ============================
     // 2. Tạo folder cho từng app
     // ============================
@@ -273,15 +255,8 @@ function createImageIfNotExists($templateFile, $prefix, $dataHash, $outputDir, $
     try {
         $start = microtime(true);
 
-        $html = renderTemplateIsolated($templateFile, $templateData);
-        // Render Browsershot
-        Browsershot::html(html: $html)
-            ->timeout(60000)
-            ->windowSize(1200, 1450)
-            ->setNodeModulePath(__DIR__ . '/../')
-            ->setChromePath('/var/www/.cache/puppeteer/chrome/linux-139.0.7258.68/chrome-linux64/chrome')
-            ->addChromiumArguments(['no-sandbox', 'disable-setuid-sandbox'])
-            ->save($outputPngFile);
+        // Tạo ảnh bằng GD Library
+        createLasoImageWithGD($outputPngFile, $templateData);
 
         chmod($outputPngFile, 0755);
 
@@ -305,6 +280,735 @@ function createImageIfNotExists($templateFile, $prefix, $dataHash, $outputDir, $
             'error_image_generation' => $e->getMessage(),
         ]);
     }
+}
+
+// Hàm helper để vẽ text với font UTF-8
+function drawText($image, $size, $x, $y, $text, $color, $fontPath = null) {
+    // Chuyển đổi text sang UTF-8 nếu cần
+    if (!mb_check_encoding($text, 'UTF-8')) {
+        $text = mb_convert_encoding($text, 'UTF-8', 'auto');
+    }
+
+    // Nếu có font TTF, sử dụng imagettftext cho UTF-8
+    if ($fontPath && file_exists($fontPath)) {
+        $fontSize = $size + 6; // Tăng size cho TTF font
+        return imagettftext($image, $fontSize, 0, intval($x), intval($y + $fontSize), $color, $fontPath, $text);
+    }
+
+    // Fallback cuối cùng: chuyển về ASCII
+    $asciiText = transliterateToAscii($text);
+    return imagestring($image, $size, intval($x), intval($y), $asciiText, $color);
+}
+
+// Hàm chuyển đổi tiếng Việt sang ASCII
+function transliterateToAscii($text) {
+    $vietnamese = [
+        'à', 'á', 'ạ', 'ả', 'ã', 'â', 'ầ', 'ấ', 'ậ', 'ẩ', 'ẫ', 'ă', 'ằ', 'ắ', 'ặ', 'ẳ', 'ẵ',
+        'è', 'é', 'ẹ', 'ẻ', 'ẽ', 'ê', 'ề', 'ế', 'ệ', 'ể', 'ễ',
+        'ì', 'í', 'ị', 'ỉ', 'ĩ',
+        'ò', 'ó', 'ọ', 'ỏ', 'õ', 'ô', 'ồ', 'ố', 'ộ', 'ổ', 'ỗ', 'ơ', 'ờ', 'ớ', 'ợ', 'ở', 'ỡ',
+        'ù', 'ú', 'ụ', 'ủ', 'ũ', 'ư', 'ừ', 'ứ', 'ự', 'ử', 'ữ',
+        'ỳ', 'ý', 'ỵ', 'ỷ', 'ỹ',
+        'đ',
+        'À', 'Á', 'Ạ', 'Ả', 'Ã', 'Â', 'Ầ', 'Ấ', 'Ậ', 'Ẩ', 'Ẫ', 'Ă', 'Ằ', 'Ắ', 'Ặ', 'Ẳ', 'Ẵ',
+        'È', 'É', 'Ẹ', 'Ẻ', 'Ẽ', 'Ê', 'Ề', 'Ế', 'Ệ', 'Ể', 'Ễ',
+        'Ì', 'Í', 'Ị', 'Ỉ', 'Ĩ',
+        'Ò', 'Ó', 'Ọ', 'Ỏ', 'Õ', 'Ô', 'Ồ', 'Ố', 'Ộ', 'Ổ', 'Ỗ', 'Ơ', 'Ờ', 'Ớ', 'Ợ', 'Ở', 'Ỡ',
+        'Ù', 'Ú', 'Ụ', 'Ủ', 'Ũ', 'Ư', 'Ừ', 'Ứ', 'Ự', 'Ử', 'Ữ',
+        'Ỳ', 'Ý', 'Ỵ', 'Ỷ', 'Ỹ',
+        'Đ'
+    ];
+
+    $ascii = [
+        'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a',
+        'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e',
+        'i', 'i', 'i', 'i', 'i',
+        'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o',
+        'u', 'u', 'u', 'u', 'u', 'u', 'u', 'u', 'u', 'u', 'u',
+        'y', 'y', 'y', 'y', 'y',
+        'd',
+        'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A',
+        'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E',
+        'I', 'I', 'I', 'I', 'I',
+        'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
+        'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U',
+        'Y', 'Y', 'Y', 'Y', 'Y',
+        'D'
+    ];
+
+    return str_replace($vietnamese, $ascii, $text);
+}
+
+// Hàm tạo ảnh lá số bằng GD Library (load ảnh có sẵn và vẽ content lên)
+function createLasoImageWithGD($outputFile, $templateData)
+{
+    $normalizedData = $templateData['normalizedData'] ?? [];
+    $laSo = $templateData['laSo'] ?? [];
+    $app_name = $templateData['app_name'] ?? 'phongthuydaicat';
+
+    // Đường dẫn đến ảnh template có sẵn
+    $templateImagePath = __DIR__ . '/public/images/La_so.png';
+
+    // Kiểm tra xem file template có tồn tại không
+    if (!file_exists($templateImagePath)) {
+        throw new Exception("Template image not found: $templateImagePath");
+    }
+
+    // Load ảnh template có sẵn
+    $image = imagecreatefrompng($templateImagePath);
+    if ($image === false) {
+        throw new Exception("Cannot load template image: $templateImagePath");
+    }
+
+    // Lấy kích thước ảnh
+    $width = imagesx($image);
+    $height = imagesy($image);
+
+    // Font path (thử nhiều font khác nhau)
+    $possibleFonts = [
+        __DIR__ . '/fonts/arial.ttf',
+        __DIR__ . '/fonts/DejaVuSans.ttf',
+        __DIR__ . '/fonts/NotoSans-Regular.ttf',
+        __DIR__ . '/fonts/Roboto-Regular.ttf',
+        // Font hệ thống Windows
+        'C:/Windows/Fonts/arial.ttf',
+        'C:/Windows/Fonts/calibri.ttf',
+        'C:/Windows/Fonts/tahoma.ttf',
+    ];
+
+    $fontPath = null;
+    foreach ($possibleFonts as $font) {
+        if (file_exists($font)) {
+            $fontPath = $font;
+            break;
+        }
+    }
+
+    // Định nghĩa màu sắc chính xác theo template phonglich CSS
+    $white = imagecolorallocate($image, 255, 255, 255);
+    $black = imagecolorallocate($image, 0, 0, 0);
+
+    // Border và background colors
+    $borderColor = imagecolorallocate($image, 51, 51, 51);     // #333 - border chính
+    $lightgray = imagecolorallocate($image, 204, 204, 204);    // #ccc - border cung
+    $footerBorderGray = imagecolorallocate($image, 229, 231, 235); // #e5e7eb - border footer
+    $centerBg = imagecolorallocate($image, 243, 229, 171);     // #f3e5ab - màu be/vàng nhạt cho ô trung tâm giống trong hình
+
+    // Màu Ngũ Hành chính xác theo template phonglich CSS
+    $kimColor = imagecolorallocate($image, 81, 81, 81);        // #515151 - Kim (Xám)
+    $mocColor = imagecolorallocate($image, 0, 98, 29);         // #00621D - Mộc (Xanh lá)
+    $thuyColor = imagecolorallocate($image, 1, 95, 136);       // #015F88 - Thủy (Xanh dương)
+    $hoaColor = imagecolorallocate($image, 174, 2, 2);         // #AE0202 - Hỏa (Đỏ)
+    $thoColor = imagecolorallocate($image, 143, 50, 0);        // #8F3200 - Thổ (Nâu cam)
+
+    // Màu text theo template
+    $darkred = imagecolorallocate($image, 116, 0, 16);         // #740010 - tiêu đề chính
+    $textGray = imagecolorallocate($image, 75, 85, 99);        // #4b5563 - text phụ
+    $orangeText = imagecolorallocate($image, 194, 65, 12);     // #c2410c - lưu tinh
+
+    // Không cần vẽ lại khung - sử dụng ảnh có sẵn
+    // Tính toán vị trí các cell dựa trên ảnh template La_so.png
+    // Template có margin và grid không bắt đầu từ (0,0)
+    $gridMargin = 2; // Giảm margin để content rộng hơn
+    $gridWidth = $width - (2 * $gridMargin); // Kích thước grid theo chiều ngang
+    $gridHeight = $height - (2 * $gridMargin) - 100; // Trừ 100px cho footer legend
+    $cellWidth = intval($gridWidth / 4); // Chiều rộng mỗi cell
+    $cellHeight = intval($gridHeight / 4); // Chiều cao mỗi cell - có thể cao hơn chiều rộng
+    $startX = $gridMargin;
+    $startY = $gridMargin;
+
+    // Thứ tự các cung trong grid 4x4
+    $gridOrder = [
+        'Tỵ', 'Ngọ', 'Mùi', 'Thân',
+        'Thìn', null, null, 'Dậu',
+        'Mão', null, null, 'Tuất',
+        'Dần', 'Sửu', 'Tý', 'Hợi',
+    ];
+
+    // Map màu cho các chi (theo template phonglich)
+    $chiColorMap = [
+        'Tý' => $thuyColor,    // ty-class - Thủy
+        'Sửu' => $thoColor,    // suu-class - Thổ
+        'Dần' => $mocColor,    // dan-class - Mộc
+        'Mão' => $mocColor,    // mao-class - Mộc
+        'Thìn' => $thoColor,   // thin-class - Thổ
+        'Tỵ' => $hoaColor,     // tyj-class - Hỏa
+        'Ngọ' => $hoaColor,    // ngo-class - Hỏa
+        'Mùi' => $thoColor,    // mui-class - Thổ
+        'Thân' => $kimColor,   // than-class - Kim
+        'Dậu' => $kimColor,    // dau-class - Kim
+        'Tuất' => $thoColor,   // tuat-class - Thổ
+        'Hợi' => $thuyColor,   // hoi-class - Thủy
+    ];
+
+    // Hàm lấy màu cho sao theo class
+    function getSaoColor($className, $kimColor, $mocColor, $thuyColor, $hoaColor, $thoColor, $black) {
+        if (strpos($className, 'sao-thien-co') !== false || strpos($className, 'sao-thien-luong') !== false ||
+            strpos($className, 'sao-ltang-mon') !== false || strpos($className, 'sao-tang-mon') !== false ||
+            strpos($className, 'sao-tham-lang') !== false || strpos($className, 'sao-n-quang') !== false ||
+            strpos($className, 'sao-tuong-quan') !== false || strpos($className, 'sao-ao-hoa') !== false ||
+            strpos($className, 'sao-uong-phu') !== false || strpos($className, 'sao-hoa-loc') !== false ||
+            strpos($className, 'sao-giai-than') !== false || strpos($className, 'sao-bat-toa') !== false) {
+            return $mocColor; // Màu xanh lá - #00621D
+        }
+
+        if (strpos($className, 'sao-tu-vi') !== false || strpos($className, 'sao-thien-phu') !== false ||
+            strpos($className, 'sao-an-quang') !== false || strpos($className, 'sao-thien-uc') !== false ||
+            strpos($className, 'sao-thien-phuc') !== false || strpos($className, 'sao-quoc-n') !== false ||
+            strpos($className, 'sao-benh-phu') !== false || strpos($className, 'sao-phong-cao') !== false ||
+            strpos($className, 'sao-co-than') !== false || strpos($className, 'sao-thien-thuong') !== false ||
+            strpos($className, 'sao-thien-tru') !== false || strpos($className, 'sao-thien-tho') !== false ||
+            strpos($className, 'sao-thien-tai') !== false || strpos($className, 'sao-ta-phu') !== false ||
+            strpos($className, 'sao-loc-ton') !== false || strpos($className, 'sao-thien-quy') !== false ||
+            strpos($className, 'sao-ia-giai') !== false || strpos($className, 'sao-phuc-uc') !== false ||
+            strpos($className, 'sao-lloc-ton') !== false || strpos($className, 'sao-qua-tu') !== false ||
+            strpos($className, 'sao-phuong-cac') !== false) {
+            return $thoColor; // Màu nâu cam - #8F3200
+        }
+
+        if (strpos($className, 'sao-liem-trinh') !== false || strpos($className, 'sao-truc-phu') !== false ||
+            strpos($className, 'sao-thai-duong') !== false || strpos($className, 'sao-dieu-khach') !== false ||
+            strpos($className, 'sao-thien-viet') !== false || strpos($className, 'sao-ia-khong') !== false ||
+            strpos($className, 'sao-ia-kiep') !== false || strpos($className, 'sao-pha-toai') !== false ||
+            strpos($className, 'sao-phi-liem') !== false || strpos($className, 'sao-au-quan') !== false ||
+            strpos($className, 'sao-lthai-tue') !== false || strpos($className, 'sao-hy-than') !== false ||
+            strpos($className, 'sao-thai-tue') !== false || strpos($className, 'sao-thieu-duong') !== false ||
+            strpos($className, 'sao-thien-khong') !== false || strpos($className, 'sao-hoa-tinh') !== false ||
+            strpos($className, 'sao-thien-ma') !== false || strpos($className, 'sao-ai-hao') !== false ||
+            strpos($className, 'sao-linh-tinh') !== false || strpos($className, 'sao-phuc-binh') !== false ||
+            strpos($className, 'sao-van-tinh') !== false || strpos($className, 'sao-thien-quan') !== false ||
+            strpos($className, 'sao-quan-phu') !== false || strpos($className, 'sao-kiep-sat') !== false ||
+            strpos($className, 'sao-nguyet-uc') !== false || strpos($className, 'sao-lthien-ma') !== false ||
+            strpos($className, 'sao-tue-pha') !== false || strpos($className, 'sao-tieu-hao') !== false ||
+            strpos($className, 'sao-thien-khoi') !== false || strpos($className, 'sao-thien-giai') !== false ||
+            strpos($className, 'sao-thien-hinh') !== false || strpos($className, 'sao-ieu-khach') !== false) {
+            return $hoaColor; // Màu đỏ - #AE0202
+        }
+
+        if (strpos($className, 'sao-vu-khuc') !== false || strpos($className, 'sao-that-sat') !== false ||
+            strpos($className, 'sao-hoa-cai') !== false || strpos($className, 'sao-a-la') !== false ||
+            strpos($className, 'sao-ia-vong') !== false || strpos($className, 'sao-tu-phu') !== false ||
+            strpos($className, 'sao-kinh-duong') !== false || strpos($className, 'sao-thai-phu') !== false ||
+            strpos($className, 'sao-lbach-ho') !== false || strpos($className, 'sao-bach-ho') !== false ||
+            strpos($className, 'sao-la-la') !== false || strpos($className, 'sao-lnvan-tinh') !== false ||
+            strpos($className, 'sao-thien-la') !== false || strpos($className, 'sao-lkinh-duong') !== false ||
+            strpos($className, 'sao-van-xuong') !== false || strpos($className, 'sao-tau-thu') !== false ||
+            strpos($className, 'sao-tuong-tinh') !== false) {
+            return $kimColor; // Màu xám - #515151
+        }
+
+        // Những sao màu xanh dương (Thủy)
+        if (strpos($className, 'sao-pha-quan') !== false || strpos($className, 'sao-thai-m') !== false ||
+            strpos($className, 'sao-thien-tuong') !== false || strpos($className, 'sao-cu-mon') !== false ||
+            strpos($className, 'sao-thien-ong') !== false || strpos($className, 'sao-thien-y') !== false ||
+            strpos($className, 'sao-thien-dieu') !== false || strpos($className, 'sao-hong-loan') !== false ||
+            strpos($className, 'sao-thieu-m') !== false || strpos($className, 'sao-van-khuc') !== false ||
+            strpos($className, 'sao-long-tri') !== false || strpos($className, 'sao-tam-thai') !== false ||
+            strpos($className, 'sao-thien-su') !== false || strpos($className, 'sao-luu-ha') !== false ||
+            strpos($className, 'sao-lthien-hu') !== false || strpos($className, 'sao-bac-si') !== false ||
+            strpos($className, 'sao-thien-khoc') !== false || strpos($className, 'sao-thien-hu') !== false ||
+            strpos($className, 'sao-luc-sy') !== false || strpos($className, 'sao-lthien-khoc') !== false ||
+            strpos($className, 'sao-thanh-long') !== false || strpos($className, 'sao-long-uc') !== false ||
+            strpos($className, 'sao-thai-am') !== false || strpos($className, 'sao-hoa-ky') !== false ||
+            strpos($className, 'sao-thien-hy') !== false || strpos($className, 'sao-thien-dong') !== false ||
+            strpos($className, 'sao-huu-bat') !== false || strpos($className, 'sao-hoa-quyen') !== false ||
+            strpos($className, 'sao-hoa-khoa') !== false || strpos($className, 'sao-dao-hoa') !== false) {
+            return $thuyColor; // Màu xanh dương - #015F88
+        }
+
+        return $black; // Mặc định màu đen
+    }
+
+    // Tính toán Tuần/Triệt markers (tương tự template)
+    $tuanPalaces = [];
+    $trietPalaces = [];
+    if (isset($laSo['palaces']) && is_array($laSo['palaces'])) {
+        foreach ($laSo['palaces'] as $chi => $cung) {
+            if (isset($cung['special']) && is_array($cung['special'])) {
+                foreach ($cung['special'] as $sao) {
+                    if ($sao['name'] === 'Tuần') {
+                        $tuanPalaces[] = $chi;
+                    }
+                    if ($sao['name'] === 'Triệt') {
+                        $trietPalaces[] = $chi;
+                    }
+                }
+            }
+        }
+    }
+
+    for ($i = 0; $i < 16; $i++) {
+        $row = intval($i / 4);
+        $col = $i % 4;
+        $x = intval($startX + ($col * $cellWidth));
+        $y = intval($startY + ($row * $cellHeight));
+
+        $chi = $gridOrder[$i];
+
+        if ($chi === null) {
+            // Vẽ ô trung tâm (địa bàn) - không cần vẽ lại khung và background
+            if ($row == 1 && $col == 1) {
+
+                // Vẽ thông tin địa bàn theo layout template - căn giữa theo chiều dọc
+                $centerX = intval($x + $cellWidth); // Dùng cellWidth cho trung tâm 2x2
+                $centerAreaHeight = $cellHeight * 2; // Chiều cao khu vực 2x2
+                $totalContentHeight = 280; // Tổng chiều cao nội dung - điều chỉnh để phù hợp với style mẫu
+                $centerY = intval($y + ($centerAreaHeight - $totalContentHeight) / 2 - 120); // Căn giữa theo chiều dọc - dịch lên trên 20px
+
+                // Tiêu đề chính: căn giữa và tăng size
+                $title = "LÁ SỐ TỬ VI";
+                if ($fontPath && file_exists($fontPath)) {
+                    $bbox = imagettfbbox(18, 0, $fontPath, $title);
+                    $titleWidth = $bbox[4] - $bbox[0];
+                } else {
+                    $titleWidth = strlen($title) * 14;
+                }
+                drawText($image, 14, intval($centerX - $titleWidth/2), $centerY, $title, $darkred, $fontPath);
+
+                // Thông tin cá nhân theo format cột trái-phải như ảnh mẫu
+                $infoY = $centerY + 50; // Khoảng cách từ tiêu đề
+                $lineHeight = 22; // Line height phù hợp
+                $labelX = $centerX - 200; // Vị trí cột trái (dịch sang phải)
+                $valueX = $centerX - 40;  // Vị trí cột phải (dịch sang phải)
+
+                // Font sizes
+                $infoLabelColor = imagecolorallocate($image, 17, 17, 17);  // #111111
+                $infoValueColor = $darkred; // #740010
+
+                // Họ và tên
+                $name = $normalizedData['ho_ten'] ?? '';
+                $gender = $normalizedData['gioi_tinh'] ?? '';
+                drawText($image, 3, $labelX, $infoY, "Họ và tên:", $infoLabelColor, $fontPath);
+                drawText($image, 3, $valueX, $infoY, "$name ($gender)", $infoValueColor, $fontPath);
+
+                // Định nghĩa vị trí cột can chi và tuổi (thẳng hàng dọc)
+                $canChiX = $valueX + 160; // Vị trí can chi (dịch sang phải)
+                $tuoiX = $valueX + 160; // Vị trí tuổi (thẳng hàng dọc)
+
+                // Năm
+                $year = $normalizedData['duong_lich']['year'] ?? '';
+                $lunarCan = $normalizedData['lunar']['can'] ?? '';
+                $lunarChi = $normalizedData['lunar']['chi'] ?? '';
+                drawText($image, 3, $labelX, $infoY + $lineHeight, "Năm:", $infoLabelColor, $fontPath);
+                drawText($image, 3, $valueX, $infoY + $lineHeight, $year, $infoValueColor, $fontPath);
+                drawText($image, 3, $canChiX, $infoY + $lineHeight, "$lunarCan $lunarChi", $infoValueColor, $fontPath);
+
+                // Tháng
+                $month = $normalizedData['duong_lich']['month'] ?? '';
+                $lunarMonth = $normalizedData['lunar']['month'] ?? '';
+                $canChiThang = $normalizedData['can_chi_thang'] ?? '';
+                drawText($image, 3, $labelX, $infoY + $lineHeight*2, "Tháng:", $infoLabelColor, $fontPath);
+                drawText($image, 3, $valueX, $infoY + $lineHeight*2, "$month ($lunarMonth)", $infoValueColor, $fontPath);
+                drawText($image, 3, $canChiX, $infoY + $lineHeight*2, $canChiThang, $infoValueColor, $fontPath);
+
+                // Ngày
+                $day = $normalizedData['duong_lich']['day'] ?? '';
+                $lunarDay = $normalizedData['lunar']['day'] ?? '';
+                $canChiNgay = $normalizedData['can_chi_ngay'] ?? '';
+                drawText($image, 3, $labelX, $infoY + $lineHeight*3, "Ngày:", $infoLabelColor, $fontPath);
+                drawText($image, 3, $valueX, $infoY + $lineHeight*3, "$day ($lunarDay)", $infoValueColor, $fontPath);
+                drawText($image, 3, $canChiX, $infoY + $lineHeight*3, $canChiNgay, $infoValueColor, $fontPath);
+
+                // Giờ
+                $gioAmSinh = $normalizedData['gio_am_sinh_am'] ?? '';
+                $gioAmSinhChi = $normalizedData['gio_am_sinh_chi_am'] ?? '';
+                drawText($image, 3, $labelX, $infoY + $lineHeight*4, "Giờ:", $infoLabelColor, $fontPath);
+                drawText($image, 3, $valueX, $infoY + $lineHeight*4, $gioAmSinh, $infoValueColor, $fontPath);
+                drawText($image, 3, $canChiX, $infoY + $lineHeight*4, $gioAmSinhChi, $infoValueColor, $fontPath);
+
+                // Năm xem
+                $canChiNamXem = $normalizedData['can_chi_nam_xem'] ?? '';
+                $namXem = $normalizedData['nam_xem'] ?? '';
+                $tuoi = $normalizedData['tuoi'] ?? '';
+                drawText($image, 3, $labelX, $infoY + $lineHeight*5, "Năm xem:", $infoLabelColor, $fontPath);
+                drawText($image, 3, $valueX, $infoY + $lineHeight*5, "$canChiNamXem ($namXem)", $infoValueColor, $fontPath);
+                drawText($image, 3, $tuoiX, $infoY + $lineHeight*5, "$tuoi tuổi", $infoValueColor, $fontPath);
+
+                // Âm Dương - tăng khoảng cách và font size
+                $amDuong = $laSo['info']['am_duong'] ?? '';
+                $ketLuan = $laSo['info']['ket_luan'][0] ?? '';
+                $amDuongY = $infoY + $lineHeight*6 + 10; // Tăng khoảng cách 10px
+                drawText($image, 4, $labelX, $amDuongY, "Âm Dương:", $infoLabelColor, $fontPath);
+                drawText($image, 4, $valueX, $amDuongY, $amDuong, $infoValueColor, $fontPath);
+                if ($ketLuan) {
+                    drawText($image, 3, $valueX, $amDuongY + 18, $ketLuan, $infoValueColor, $fontPath);
+                }
+
+                // Bản Mệnh - điều chỉnh vị trí
+                $baseY = $amDuongY + 40; // Khoảng cách từ âm dương
+                $menh = $laSo['info']['menh'] ?? '';
+                drawText($image, 3, $labelX, $baseY, "Bản Mệnh:", $infoLabelColor, $fontPath);
+                drawText($image, 3, $valueX, $baseY, $menh, $infoValueColor, $fontPath);
+
+                // Cục - tăng khoảng cách và font size như âm dương
+                $cuc = $laSo['info']['cuc'] ?? '';
+                $cucMenhRelation = $laSo['info']['cuc_menh_relation'] ?? '';
+                $cucY = $baseY + $lineHeight + 10; // Tăng khoảng cách 10px
+                drawText($image, 4, $labelX, $cucY, "Cục:", $infoLabelColor, $fontPath);
+                drawText($image, 4, $valueX, $cucY, $cuc, $infoValueColor, $fontPath);
+                if ($cucMenhRelation) {
+                    drawText($image, 3, $valueX, $cucY + 18, $cucMenhRelation, $infoValueColor, $fontPath);
+                }
+
+                // Chủ Mệnh - điều chỉnh vị trí theo cục
+                $chuMenh = $laSo['info']['chu_menh'] ?? '';
+                $chuMenhY = $cucY + 40; // Khoảng cách từ cục
+                drawText($image, 3, $labelX, $chuMenhY, "Chủ Mệnh:", $infoLabelColor, $fontPath);
+                drawText($image, 3, $valueX, $chuMenhY, $chuMenh, $infoValueColor, $fontPath);
+
+                // Chủ Thân
+                $chuThan = $laSo['info']['chu_than'] ?? '';
+                drawText($image, 3, $labelX, $chuMenhY + $lineHeight, "Chủ Thân:", $infoLabelColor, $fontPath);
+                drawText($image, 3, $valueX, $chuMenhY + $lineHeight, $chuThan, $infoValueColor, $fontPath);
+
+                // Copyright - tăng padding top, tăng size và căn giữa chính xác
+                $copyright = "Bản quyền © PhongLich.com";
+                if ($fontPath && file_exists($fontPath)) {
+                    $bbox = imagettfbbox(4, 0, $fontPath, $copyright);
+                    $copyrightWidth = $bbox[4] - $bbox[0];
+                } else {
+                    $copyrightWidth = strlen($copyright) * 8;
+                }
+                // Căn giữa trong toàn bộ khu vực địa bàn 2x2 và tăng padding top - dịch sang trái chút
+                $realCenterX = intval($x + $cellWidth);
+                $copyrightY = $chuMenhY + $lineHeight*2 + 30; // Tăng padding top từ 15 lên 30
+                $copyrightX = intval($realCenterX - $copyrightWidth/2) - 70; // Dịch sang trái 20px
+                drawText($image, 6, $copyrightX, $copyrightY, $copyright, $infoLabelColor, $fontPath);
+
+                // Vẽ vòng tuổi chi theo đúng vị trí trong địa bàn 2x2 cell
+                // Dựa trên vị trí trung tâm 2x2 (từ cell [1,1] đến [2,2])
+                $vongTuoiChiPositions = [
+                    'Tý' => ['x' => 0.5, 'y' => 1.0],      // Dưới cùng (chính giữa)
+                    'Sửu' => ['x' => 0.2, 'y' => 0.95],    // Dưới góc trái
+                    'Dần' => ['x' => 0.05, 'y' => 0.8],    // Trái dưới
+                    'Mão' => ['x' => 0.05, 'y' => 0.5],    // Trái giữa
+                    'Thìn' => ['x' => 0.05, 'y' => 0.2],   // Trái trên
+                    'Tỵ' => ['x' => 0.2, 'y' => 0.05],     // Trên trái
+                    'Ngọ' => ['x' => 0.5, 'y' => 0.05],    // Trên giữa
+                    'Mùi' => ['x' => 0.8, 'y' => 0.05],    // Trên phải
+                    'Thân' => ['x' => 0.95, 'y' => 0.5],   // Phải trên
+                    'Dậu' => ['x' => 0.95, 'y' => 0.2],    // Phải giữa
+                    'Tuất' => ['x' => 0.8, 'y' => 0.95],   // Dưới góc phải
+                    'Hợi' => ['x' => 0.95, 'y' => 0.8],    // Phải dưới
+                ];
+
+                foreach ($vongTuoiChiPositions as $chi => $position) {
+                    if (isset($laSo['palaces'][$chi])) {
+                        $cung = $laSo['palaces'][$chi];
+                        $vongTuoi = $cung['vong_tuoi_chi'] ?? '';
+                        if ($vongTuoi) {
+                            $vongTuoiX = intval($x + ($position['x'] * $cellWidth * 2));
+                            $vongTuoiY = intval($y + ($position['y'] * $cellHeight * 2));
+                            drawText($image, 3, $vongTuoiX, $vongTuoiY, $vongTuoi, $textGray, $fontPath);
+                        }
+                    }
+                }
+            }
+        } else {
+            // Cung bình thường - không cần vẽ border riêng vì đã có grid lines
+
+            if (isset($laSo['palaces'][$chi])) {
+                $cung = $laSo['palaces'][$chi];
+                $padding = 8; // Tăng padding để content rộng hơn
+                $paddingTop = 12;
+
+                // Header section với padding tăng để rộng hơn
+                $headerTopPadding = 10; // Tăng top padding
+                $headerY = $y + $headerTopPadding;
+
+                // Content padding tăng
+                $contentTopPadding = 15;
+
+                // Can và Chi (header-left) với màu theo Ngũ Hành - tăng font
+                $canCung = explode('.', $cung['can_chi_cung'] ?? '..')[0];
+                $canInitial = mb_substr($canCung, 0, 1, 'UTF-8');
+                $chiColor = $chiColorMap[$chi] ?? $black;
+                drawText($image, 3, $x + $padding, $headerY, $canInitial . '.' . $chi, $chiColor, $fontPath);
+
+                // Tên cung chức năng (center) - căn giữa hoàn toàn
+                $cungName = $cung['cung_chuc_nang'] ?? '';
+                // Tính toán chính xác để căn giữa trong toàn bộ cell
+                if ($fontPath && file_exists($fontPath)) {
+                    // Nếu có TTF font, tính width chính xác
+                    $bbox = imagettfbbox(2 + 6, 0, $fontPath, $cungName);
+                    $textWidth = $bbox[4] - $bbox[0];
+                    $cungNameX = $x + ($cellWidth / 2) - ($textWidth / 2);
+                } else {
+                    // Fallback với ước tính
+                    $cungNameWidth = strlen($cungName) * 7;
+                    $cungNameX = $x + ($cellWidth / 2) - ($cungNameWidth / 2);
+                }
+                drawText($image, 3, intval($cungNameX), $headerY, $cungName, $black, $fontPath);
+
+                // Đại vận (header-right) - tăng font
+                $daiVan = $cung['dai_van'] ?? '';
+                if ($daiVan) {
+                    $daiVanWidth = strlen($daiVan) * 7;
+                    drawText($image, 3, intval($x + $cellWidth - $daiVanWidth - $padding), $headerY, $daiVan, $thuyColor, $fontPath);
+                }
+
+                // Content section với khoảng cách tăng
+                $contentStartY = $headerY + 20; // Tăng khoảng cách sau header
+                $chinhTinhY = $contentStartY;
+
+                // Chính tinh với font lớn hơn
+                if (!empty($cung['chinh_tinh'])) {
+                    foreach ($cung['chinh_tinh'] as $index => $sao) {
+                        if ($index >= 2) break; // Giới hạn 2 sao chính
+                        $saoName = $sao['name'] ?? '';
+                        $bright = !empty($sao['bright']) ? '(' . $sao['bright'] . ')' : '';
+                        $saoClass = $sao['class'] ?? '';
+                        $saoColor = getSaoColor($saoClass, $kimColor, $mocColor, $thuyColor, $hoaColor, $thoColor, $black);
+
+                        // Center align cho chính tinh - căn giữa chính xác hơn
+                        $saoText = $saoName . $bright;
+                        $saoTextWidth = strlen($saoText) * 7; // Tăng ước tính width để căn giữa chính xác với font size 4
+                        $saoX = $x + ($cellWidth / 2) - ($saoTextWidth / 2);
+
+                        drawText($image, 10, intval($saoX), $chinhTinhY + ($index * 32 ), $saoText, $saoColor, $fontPath);
+                    }
+                }
+
+                // Content grid với khoảng cách tăng để rộng hơn
+                $contentGridY = $contentStartY + 60; // Tăng space sau chính tinh để không bị sát
+                $leftColumnX = $x + $padding;
+                $rightColumnX = $x + ($cellWidth / 2) + $padding;
+                $lineHeightSmall = 22; // Tăng line height để dễ đọc hơn
+
+                // Left column: Phụ tinh cát
+                $leftY = $contentGridY;
+                if (!empty($cung['phu_tinh_cat'])) {
+                    foreach ($cung['phu_tinh_cat'] as $index => $sao) {
+                        if ($index >= 6) break; // Giới hạn để không tràn
+                        $saoName = $sao['name'] ?? '';
+                        $bright = !empty($sao['bright']) ? '(' . $sao['bright'] . ')' : '';
+                        $saoClass = $sao['class'] ?? '';
+                        $saoColor = getSaoColor($saoClass, $kimColor, $mocColor, $thuyColor, $hoaColor, $thoColor, $black);
+                        drawText($image, 6, $leftColumnX, $leftY + ($index * $lineHeightSmall), $saoName . $bright, $saoColor, $fontPath);
+                    }
+                }
+
+                // Right column: Phụ tinh sát + Special + Lưu tinh
+                $rightY = $contentGridY;
+                $rightIndex = 0;
+
+                // Phụ tinh sát
+                if (!empty($cung['phu_tinh_sat'])) {
+                    foreach ($cung['phu_tinh_sat'] as $sao) {
+                        if ($rightIndex >= 8) break;
+                        $saoName = $sao['name'] ?? '';
+                        $bright = !empty($sao['bright']) ? '(' . $sao['bright'] . ')' : '';
+                        $saoClass = $sao['class'] ?? '';
+                        $saoColor = getSaoColor($saoClass, $kimColor, $mocColor, $thuyColor, $hoaColor, $thoColor, $black);
+                        drawText($image, 6, $rightColumnX, $rightY + ($rightIndex * $lineHeightSmall), $saoName . $bright, $saoColor, $fontPath);
+                        $rightIndex++;
+                    }
+                }
+
+                // Special sao (loại trừ Tuần/Triệt)
+                if (!empty($cung['special'])) {
+                    foreach ($cung['special'] as $sao) {
+                        if (in_array($sao['name'], ['Tuần', 'Triệt'])) continue;
+                        if ($rightIndex >= 8) break;
+                        $saoName = $sao['name'] ?? '';
+                        $bright = !empty($sao['bright']) ? '(' . $sao['bright'] . ')' : '';
+                        $saoClass = $sao['class'] ?? '';
+                        $saoColor = getSaoColor($saoClass, $kimColor, $mocColor, $thuyColor, $hoaColor, $thoColor, $black);
+                        drawText($image, 6, $rightColumnX, $rightY + ($rightIndex * $lineHeightSmall), $saoName . $bright, $saoColor, $fontPath);
+                        $rightIndex++;
+                    }
+                }
+
+                // Lưu tinh (màu italic orange)
+                if (!empty($cung['luu'])) {
+                    foreach ($cung['luu'] as $sao) {
+                        if ($rightIndex >= 8) break;
+                        $saoName = $sao['name'] ?? '';
+                        $bright = !empty($sao['bright']) ? '(' . $sao['bright'] . ')' : '';
+                        $saoClass = $sao['class'] ?? '';
+                        $saoColor = getSaoColor($saoClass, $kimColor, $mocColor, $thuyColor, $hoaColor, $thoColor, $orangeText); // #c2410c
+                        drawText($image, 6, $rightColumnX, $rightY + ($rightIndex * $lineHeightSmall), $saoName . $bright, $saoColor, $fontPath);
+                        $rightIndex++;
+                    }
+                }
+
+                // Vòng tuổi chi theo template (dòng 955-959)
+                // .vong-tuoi-chi { position: absolute; bottom: 1.8rem; left: 0.5rem; font-size: 10px; color: #4b5563; }
+                // $vongTuoi = $cung['vong_tuoi_chi'] ?? '';
+                // if ($vongTuoi) {
+                //     drawText($image, 1, $x + $padding, intval($y + $cellHeight - 30), $vongTuoi, $textGray, $fontPath);
+                // }
+
+                // Footer theo template (dòng 960-964)
+                // .cung-footer { margin-top: auto; padding-top: 0.25rem; border-top: 1px solid #e5e7eb; font-size: 12px; color: #4b5563; }
+                $footerY = intval($y + $cellHeight - 35); // Cách bottom 20px
+
+                // Vẽ border-top cho footer
+                imageline($image, $x + $padding, $footerY - 5, $x + $cellWidth - $padding, $footerY - 5, $footerBorderGray);
+
+                // Left: DV chức năng - .text-primary (xanh dương)
+                $dvChucNang = $cung['dv_chuc_nang'] ?? '';
+                drawText($image, 1, $x + $padding, $footerY, $dvChucNang, $thuyColor, $fontPath);
+
+                // Center: Vòng trang sinh - .text-dark (đen, font-weight: 700)
+                $vongTrangSinh = $cung['vong_trang_sinh'] ?? '';
+                if ($vongTrangSinh) {
+                    $vtsWidth = strlen($vongTrangSinh) * 6;
+                    $vtsX = $x + ($cellWidth / 2) - ($vtsWidth / 2);
+                    drawText($image, 1, intval($vtsX), $footerY, $vongTrangSinh, $black, $fontPath);
+                }
+
+                // Right: Tháng âm - .text-success (xanh lá)
+                $thangAm = $cung['thang_am'] ?? '';
+                if ($thangAm) {
+                    $thangAmText = "Th.$thangAm";
+                    $thangAmWidth = strlen($thangAmText) * 6;
+                    drawText($image, 1, intval($x + $cellWidth - $thangAmWidth - $padding), $footerY, $thangAmText, $mocColor, $fontPath);
+                }
+            }
+        }
+    }
+
+    // Vẽ footer legend (không cần vẽ border vì đã có sẵn trong ảnh template)
+    $legendY = $height - 100; // Vị trí gần cuối ảnh
+
+    // Dòng 1: Chú thích độ sáng
+    $legendText1 = "M: Miếu  V: Vượng  Đ: Đắc  B: Bình hòa  H: Hãm  ĐV: Đại vận  LN: Lưu niên  NL: Lưu nguyệt";
+    drawText($image, 5, 10, $legendY + 10, $legendText1, $black, $fontPath);
+
+    // Dòng 2: Màu Ngũ Hành
+    $legend2Y = $legendY + 30;
+    drawText($image, 2, 10, $legend2Y, "Ngũ Hành:", $black, $fontPath);
+
+    // Kim
+    imagefilledrectangle($image, 80, $legend2Y - 2, 110, $legend2Y + 12, $kimColor);
+    drawText($image, 1, 85, $legend2Y, "Kim", $white, $fontPath);
+
+    // Mộc
+    imagefilledrectangle($image, 120, $legend2Y - 2, 150, $legend2Y + 12, $mocColor);
+    drawText($image, 1, 125, $legend2Y, "Mộc", $white, $fontPath);
+
+    // Thủy
+    imagefilledrectangle($image, 160, $legend2Y - 2, 190, $legend2Y + 12, $thuyColor);
+    drawText($image, 1, 165, $legend2Y, "Thủy", $white, $fontPath);
+
+    // Hỏa
+    imagefilledrectangle($image, 200, $legend2Y - 2, 230, $legend2Y + 12, $hoaColor);
+    drawText($image, 1, 205, $legend2Y, "Hỏa", $white, $fontPath);
+
+    // Thổ
+    imagefilledrectangle($image, 240, $legend2Y - 2, 270, $legend2Y + 12, $thoColor);
+    drawText($image, 1, 245, $legend2Y, "Thổ", $white, $fontPath);
+
+    // Copyright
+    if ($app_name === 'phonglich') {
+        drawText($image, 1, 10, $legendY + 60, "Bản quyền © PhongLich.com", $black, $fontPath);
+    } else {
+        drawText($image, 1, 10, $legendY + 60, "Bản quyền © PhongThuyDaiCat.vn", $black, $fontPath);
+    }
+
+    // Tạo borderMap cho Tuần/Triệt markers (theo template)
+    $borderMap = [
+        'ngo-ty' => ['top' => 12.5, 'left' => 25, 'orientation' => 'vertical'],
+        'mui-ngo' => ['top' => 25, 'left' => 50, 'orientation' => 'vertical'],
+        'mui-than' => ['top' => 12.5, 'left' => 75, 'orientation' => 'vertical'],
+        'dau-than' => ['top' => 24.3, 'left' => 87.5, 'orientation' => 'horizontal'],
+        'dau-tuat' => ['top' => 50, 'left' => 87.5, 'orientation' => 'horizontal'],
+        'hoi-tuat' => ['top' => 74.4, 'left' => 87.5, 'orientation' => 'horizontal'],
+        'hoi-ty' => ['top' => 87.5, 'left' => 75, 'orientation' => 'vertical'],
+        'suu-ty' => ['top' => 75, 'left' => 50, 'orientation' => 'vertical'],
+        'dan-suu' => ['top' => 87.5, 'left' => 25, 'orientation' => 'vertical'],
+        'dan-mao' => ['top' => 74.4, 'left' => 12.5, 'orientation' => 'horizontal'],
+        'mao-thin' => ['top' => 50, 'left' => 12.5, 'orientation' => 'horizontal'],
+        'thin-ty' => ['top' => 25.7, 'left' => 12.5, 'orientation' => 'horizontal']
+    ];
+
+    // Hàm slugify cho palace names (inline version)
+    $slugifyPalace = function($text) {
+        $map = [
+            'Tý' => 'ty', 'Sửu' => 'suu', 'Dần' => 'dan', 'Mão' => 'mao',
+            'Thìn' => 'thin', 'Tỵ' => 'ty', 'Ngọ' => 'ngo', 'Mùi' => 'mui',
+            'Thân' => 'than', 'Dậu' => 'dau', 'Tuất' => 'tuat', 'Hợi' => 'hoi'
+        ];
+        return $map[$text] ?? strtolower($text);
+    };
+
+    // Tạo keys cho Tuần và Triệt
+    $tuanKey = null;
+    if (count($tuanPalaces) === 2) {
+        sort($tuanPalaces);
+        $tuanKey = $slugifyPalace($tuanPalaces[0]) . '-' . $slugifyPalace($tuanPalaces[1]);
+    }
+
+    $trietKey = null;
+    if (count($trietPalaces) === 2) {
+        sort($trietPalaces);
+        $trietKey = $slugifyPalace($trietPalaces[0]) . '-' . $slugifyPalace($trietPalaces[1]);
+    }
+
+    // Tạo finalPositions cho Tuần/Triệt
+    $finalPositions = [];
+    if ($tuanKey && $trietKey && $tuanKey === $trietKey) {
+        // Trường hợp TRÙNG NHAU
+        if (isset($borderMap[$tuanKey])) {
+            $finalPositions['Triệt - Tuần'] = $borderMap[$tuanKey];
+        }
+    } else {
+        // Trường hợp KHÁC NHAU
+        if ($tuanKey && isset($borderMap[$tuanKey])) {
+            $finalPositions['Tuần'] = $borderMap[$tuanKey];
+        }
+        if ($trietKey && isset($borderMap[$trietKey])) {
+            $finalPositions['Triệt'] = $borderMap[$trietKey];
+        }
+    }
+
+    // Vẽ Tuần/Triệt markers với vị trí cải thiện
+    foreach ($finalPositions as $saoName => $position) {
+        $markerX = intval(($position['left'] / 100) * $width);
+        $markerY = intval(($position['top'] / 100) * $height);
+
+        // Kích thước marker lớn hơn và nổi bật hơn
+        $markerWidth = 80;  // Tăng từ 60 lên 80
+        $markerHeight = 30; // Tăng từ 25 lên 30
+
+        // Điều chỉnh vị trí dựa trên orientation để đặt chính giữa giữa 2 cung
+        if ($position['orientation'] === 'vertical') {
+            // Đặt marker giữa 2 cung theo chiều dọc
+            $markerX = intval($markerX - $markerWidth / 2);
+            $markerY = intval($markerY - $markerHeight / 2);
+        } else {
+            // Đặt marker giữa 2 cung theo chiều ngang
+            $markerX = intval($markerX - $markerWidth / 2);
+            $markerY = intval($markerY - $markerHeight / 2);
+        }
+
+        // Vẽ background với màu nổi bật hơn cho Triệt
+        $markerBgColor = (strpos($saoName, 'Triệt') !== false) ? $hoaColor : $black;
+        imagefilledrectangle($image, $markerX, $markerY,
+                           intval($markerX + $markerWidth), intval($markerY + $markerHeight), $markerBgColor);
+
+        // Vẽ border dày hơn
+        for ($borderThick = 0; $borderThick < 2; $borderThick++) {
+            imagerectangle($image,
+                $markerX - $borderThick, $markerY - $borderThick,
+                intval($markerX + $markerWidth) + $borderThick, intval($markerY + $markerHeight) + $borderThick,
+                $borderColor);
+        }
+
+        // Vẽ text màu trắng với font lớn hơn
+        $textX = intval($markerX + $markerWidth / 2 - (strlen($saoName) * 4));
+        $textY = intval($markerY + $markerHeight / 2 + 6);
+        drawText($image, 3, $textX, $textY, $saoName, $white, $fontPath);
+    }
+
+    // Lưu ảnh
+    if (!imagepng($image, $outputFile)) {
+        throw new Exception("Không thể lưu file ảnh: $outputFile");
+    }
+
+    // Giải phóng bộ nhớ
+    imagedestroy($image);
 }
 
 

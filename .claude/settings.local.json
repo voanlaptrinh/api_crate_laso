@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php:*)",
+      "Bash(del debug_font.php debug_font_test.png test_vietnamese.php test_vietnamese_output.png)",
+      "Bash(rm:*)",
+      "Read(//c/Users/RIVERNET/Downloads/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
