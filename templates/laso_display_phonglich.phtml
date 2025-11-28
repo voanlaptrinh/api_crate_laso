@@ -99,14 +99,16 @@ if (isset($laSo['palaces']) && is_array($laSo['palaces'])) {
     // Bước 1: Tìm Chi của 3 cung Mệnh, Quan, Tài
     foreach ($laSo['palaces'] as $chi => $cung) {
         $cungName = $cung['cung_chuc_nang'];
+
         if (str_contains($cungName, 'MỆNH')) {
             $tamHopPalaces['MỆNH'] = $chi;
-        } elseif ($cungName === 'QUAN LỘC') {
+        } elseif (str_contains($cungName, 'QUAN LỘC')) {
             $tamHopPalaces['QUAN LỘC'] = $chi;
-        } elseif ($cungName === 'TÀI BẠCH') {
+        } elseif (str_contains($cungName, 'TÀI BẠCH')) {
             $tamHopPalaces['TÀI BẠCH'] = $chi;
         }
     }
+
 
     if (count($tamHopPalaces) === 3) {
         foreach ($tamHopPalaces as $cungName => $chi) {

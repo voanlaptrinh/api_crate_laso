@@ -99,14 +99,16 @@ if (isset($laSo['palaces']) && is_array($laSo['palaces'])) {
     // Bước 1: Tìm Chi của 3 cung Mệnh, Quan, Tài
     foreach ($laSo['palaces'] as $chi => $cung) {
         $cungName = $cung['cung_chuc_nang'];
+
         if (str_contains($cungName, 'MỆNH')) {
             $tamHopPalaces['MỆNH'] = $chi;
-        } elseif ($cungName === 'QUAN LỘC') {
+        } elseif (str_contains($cungName, 'QUAN LỘC')) {
             $tamHopPalaces['QUAN LỘC'] = $chi;
-        } elseif ($cungName === 'TÀI BẠCH') {
+        } elseif (str_contains($cungName, 'TÀI BẠCH')) {
             $tamHopPalaces['TÀI BẠCH'] = $chi;
         }
     }
+
 
     if (count($tamHopPalaces) === 3) {
         foreach ($tamHopPalaces as $cungName => $chi) {
@@ -169,7 +171,7 @@ if (isset($laSo['palaces']) && is_array($laSo['palaces'])) {
             grid-template-rows: repeat(4, minmax(0, 1fr));
             border: 2px solid #333;
             aspect-ratio: 1 / 1;
-               max-width: 1150px;
+            max-width: 1150px;
             height: 1350px;
             margin: auto;
             font-family: sans-serif;
@@ -445,7 +447,7 @@ if (isset($laSo['palaces']) && is_array($laSo['palaces'])) {
 
         .sao-pha-quan,
         .sao-thai-m,
-  
+
         .sao-thien-tuong,
         .sao-cu-mon,
         .sao-thien-ong,
@@ -479,7 +481,7 @@ if (isset($laSo['palaces']) && is_array($laSo['palaces'])) {
         }
 
         .sao-liem-trinh,
-         .sao-truc-phu,
+        .sao-truc-phu,
         .sao-thai-duong,
         .sao-dieu-khach {
             color: #DD3A3A
@@ -487,7 +489,7 @@ if (isset($laSo['palaces']) && is_array($laSo['palaces'])) {
 
         .sao-vu-khuc,
         .sao-that-sat,
-       
+
         .sao-hoa-cai,
         .sao-a-la,
         .sao-ia-vong,
@@ -536,7 +538,7 @@ if (isset($laSo['palaces']) && is_array($laSo['palaces'])) {
         .sao-thien-hinh,
         .sao-ieu-khach {
             color: #DD3A3A
-        }   
+        }
 
         .sao-ia-khong,
         .sao-ia-kiep,
@@ -566,14 +568,13 @@ if (isset($laSo['palaces']) && is_array($laSo['palaces'])) {
         .sao-phuc-uc,
         .sao-lloc-ton,
         .sao-qua-tu,
-        .sao-phuong-cac
-          {
+        .sao-phuong-cac {
             color: #DB8A42;
         }
 
         .sao-ltang-mon,
         .sao-tang-mon,
-         .sao-tham-lang,
+        .sao-tham-lang,
         .sao-n-quang,
         .sao-tuong-quan,
         .sao-ao-hoa,
@@ -828,19 +829,31 @@ if (isset($laSo['palaces']) && is_array($laSo['palaces'])) {
         .cung-fotter-center {
             float: center;
         }
-        .tyj-class, .ngo-class{
+
+        .tyj-class,
+        .ngo-class {
             color: #DD3A3A;
         }
-        .mui-class, .tuat-class, .suu-class, .thin-class{
+
+        .mui-class,
+        .tuat-class,
+        .suu-class,
+        .thin-class {
             color: #DB8A42;
         }
-        .than-class, .dau-class{
+
+        .than-class,
+        .dau-class {
             color: #9C9C9C;
         }
-        .ty-class, .hoi-class{
+
+        .ty-class,
+        .hoi-class {
             color: #328EAF;
         }
-        .dan-class, .mao-class{
+
+        .dan-class,
+        .mao-class {
             color: #3E8C22;
         }
     </style>
