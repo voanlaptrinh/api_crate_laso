@@ -588,7 +588,7 @@ function createLasoImageWithGD($outputFile, $templateData)
     $app_name = $templateData['app_name'] ?? 'phongthuydaicat';
 
     // Đường dẫn đến ảnh template có sẵn
-    $templateImagePath = __DIR__ . '/public/images/La_so.png';
+    $templateImagePath = __DIR__ . '/public/images/la_so_news.png';
 chmod($templateImagePath, 0755);  
     // Kiểm tra xem file template có tồn tại không
     if (!file_exists($templateImagePath)) {
