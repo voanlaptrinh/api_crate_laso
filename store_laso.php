@@ -589,7 +589,7 @@ function createLasoImageWithGD($outputFile, $templateData)
 
     // Đường dẫn đến ảnh template có sẵn
     $templateImagePath = __DIR__ . '/public/images/la_so_news.png';
-chmod($templateImagePath, 0755);  
+// chmod($templateImagePath, 0755);  
     // Kiểm tra xem file template có tồn tại không
     if (!file_exists($templateImagePath)) {
         throw new Exception("Template image not found: $templateImagePath");
