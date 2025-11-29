@@ -608,13 +608,6 @@ function createLasoImageWithGD($outputFile, $templateData)
     // Font path (thử nhiều font khác nhau)
     $possibleFonts = [
         __DIR__ . '/fonts/arial.ttf',
-        __DIR__ . '/fonts/DejaVuSans.ttf',
-        __DIR__ . '/fonts/NotoSans-Regular.ttf',
-        __DIR__ . '/fonts/Roboto-Regular.ttf',
-        // Font hệ thống Windows
-        'C:/Windows/Fonts/arial.ttf',
-        'C:/Windows/Fonts/calibri.ttf',
-        'C:/Windows/Fonts/tahoma.ttf',
     ];
 
     $fontPath = null;
