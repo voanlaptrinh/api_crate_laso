@@ -607,7 +607,7 @@ function createLasoImageWithGD($outputFile, $templateData)
 
     // Font path (thử nhiều font khác nhau)
     $possibleFonts = [
-        __DIR__ . '/fonts/arial.ttf',
+        __DIR__ . '/fonts/sfpro.otf',
     ];
 
     $fontPath = null;
@@ -1072,7 +1072,7 @@ function createLasoImageWithGD($outputFile, $templateData)
                                                     $textY -= $textHeight / 2;
                                                     break;
                                             }
-                                            drawText($image, 8, $textX, $textY, $vongTuoi, $textGray, $fontPath);
+                                            drawText($image, 6, $textX, $textY, $vongTuoi, $textGray, $fontPath);
                                         }
                                     }
                                 }
@@ -1096,7 +1096,7 @@ function createLasoImageWithGD($outputFile, $templateData)
                 $canCung = explode('.', $cung['can_chi_cung'] ?? '..')[0];
                 $canInitial = mb_substr($canCung, 0, 1, 'UTF-8');
                 $chiColor = $chiColorMap[$chi] ?? $black;
-                drawText($image, 3, $x + $padding, $headerY, $canInitial . '.' . $chi, $chiColor, $fontPath);
+                drawText($image, 5, $x + $padding, $headerY, $canInitial . '.' . $chi, $chiColor, $fontPath);
 
                 // Tên cung chức năng (center) - căn giữa hoàn toàn
                 $cungName = $cung['cung_chuc_nang'] ?? '';
@@ -1111,17 +1111,17 @@ function createLasoImageWithGD($outputFile, $templateData)
                     $cungNameWidth = strlen($cungName) * 7;
                     $cungNameX = $x + ($cellWidth / 2) - ($cungNameWidth / 2);
                 }
-                drawText($image, 3, intval($cungNameX), $headerY, $cungName, $black, $fontPath);
+                drawText($image, 5, intval($cungNameX), $headerY, $cungName, $black, $fontPath);
 
                 // Đại vận (header-right) - tăng font
                 $daiVan = $cung['dai_van'] ?? '';
                 if ($daiVan) {
                     $daiVanWidth = strlen($daiVan) * 7;
-                    drawText($image, 3, intval($x + $cellWidth - $daiVanWidth - $padding), $headerY, $daiVan, $thuyColor, $fontPath);
+                    drawText($image, 5, intval($x + $cellWidth - $daiVanWidth - $padding), $headerY, $daiVan, $thuyColor, $fontPath);
                 }
 
                 // Content section với khoảng cách tăng
-                $contentStartY = $headerY + 30; // Tăng khoảng cách sau header
+                $contentStartY = $headerY + 40; // Tăng khoảng cách sau header
                 $chinhTinhY = $contentStartY;
 
                 // Chính tinh với font lớn hơn
@@ -1157,7 +1157,7 @@ function createLasoImageWithGD($outputFile, $templateData)
                         $bright = !empty($sao['bright']) ? '(' . $sao['bright'] . ')' : '';
                         $saoClass = $sao['class'] ?? '';
                         $saoColor = getSaoColor($saoClass, $kimColor, $mocColor, $thuyColor, $hoaColor, $thoColor, $black);
-                        drawText($image, 6, $leftColumnX, $leftY + ($index * $lineHeightSmall), $saoName . $bright, $saoColor, $fontPath);
+                        drawText($image, 7, $leftColumnX, $leftY + ($index * $lineHeightSmall), $saoName . $bright, $saoColor, $fontPath);
                     }
                 }
 
@@ -1214,14 +1214,14 @@ function createLasoImageWithGD($outputFile, $templateData)
 
                 // Left: DV chức năng - .text-primary (xanh dương)
                 $dvChucNang = $cung['dv_chuc_nang'] ?? '';
-                drawText($image, 2, $x + $padding, $footerY, $dvChucNang, $thuyColor, $fontPath);
+                drawText($image, 4, $x + $padding, $footerY, $dvChucNang, $thuyColor, $fontPath);
 
                 // Center: Vòng trang sinh - .text-dark (đen, font-weight: 700)
                 $vongTrangSinh = $cung['vong_trang_sinh'] ?? '';
                 if ($vongTrangSinh) {
                     $vtsWidth = strlen($vongTrangSinh) * 6;
                     $vtsX = $x + ($cellWidth / 2) - ($vtsWidth / 2);
-                    drawText($image, 2, intval($vtsX), $footerY, $vongTrangSinh, $black, $fontPath);
+                    drawText($image, 4, intval($vtsX), $footerY, $vongTrangSinh, $black, $fontPath);
                 }
 
                 // Right: Tháng âm - .text-success (xanh lá)
@@ -1229,7 +1229,7 @@ function createLasoImageWithGD($outputFile, $templateData)
                 if ($thangAm) {
                     $thangAmText = "Th.$thangAm";
                     $thangAmWidth = strlen($thangAmText) * 6;
-                    drawText($image, 2, intval($x + $cellWidth - $thangAmWidth - $padding), $footerY, $thangAmText, $mocColor, $fontPath);
+                    drawText($image, 4, intval($x + $cellWidth - $thangAmWidth - $padding), $footerY, $thangAmText, $mocColor, $fontPath);
                 }
             }
         }
