@@ -882,22 +882,22 @@ function createLasoImageWithGD($outputFile, $templateData)
                 // Vẽ thông tin địa bàn theo layout template - căn giữa theo chiều dọc
                 $centerX = intval($x + $cellWidth); // Dùng cellWidth cho trung tâm 2x2
                 $centerAreaHeight = $cellHeight * 2; // Chiều cao khu vực 2x2
-                $totalContentHeight = 280; // Tổng chiều cao nội dung - điều chỉnh để phù hợp với style mẫu
+                $totalContentHeight = 350; // Tăng tổng chiều cao nội dung để phù hợp với font lớn hơn
                 $centerY = intval($y + ($centerAreaHeight - $totalContentHeight) / 2 - 120); // Căn giữa theo chiều dọc - dịch lên trên 20px
 
                 // Tiêu đề chính: căn giữa và tăng size
                 $title = "LÁ SỐ TỬ VI";
                 if ($fontPath && file_exists($fontPath)) {
-                    $bbox = imagettfbbox(18, 0, $fontPath, $title);
+                    $bbox = imagettfbbox(20, 0, $fontPath, $title);
                     $titleWidth = $bbox[4] - $bbox[0];
                 } else {
-                    $titleWidth = strlen($title) * 14;
+                    $titleWidth = strlen($title) * 16;
                 }
-                drawText($image, 18, intval($centerX - $titleWidth / 2), $centerY, $title, $darkred, $fontPath);
+                drawText($image, 20, intval($centerX - $titleWidth / 2), $centerY, $title, $darkred, $fontPath);
 
                 // Thông tin cá nhân theo format cột trái-phải như ảnh mẫu
-                $infoY = $centerY + 50; // Khoảng cách từ tiêu đề
-                $lineHeight = 22; // Line height phù hợp
+                $infoY = $centerY + 80; // Khoảng cách từ tiêu đề
+                $lineHeight = 30; // Line height phù hợp
                 $labelX = $centerX - 200; // Vị trí cột trái (dịch sang phải)
                 $valueX = $centerX - 40;  // Vị trí cột phải (dịch sang phải)
 
@@ -908,8 +908,8 @@ function createLasoImageWithGD($outputFile, $templateData)
                 // Họ và tên
                 $name = $normalizedData['ho_ten'] ?? '';
                 $gender = $normalizedData['gioi_tinh'] ?? '';
-                drawText($image, 6, $labelX, $infoY, "Họ và tên:", $infoLabelColor, $fontPath);
-                drawText($image, 6, $valueX, $infoY, "$name ($gender)", $infoValueColor, $fontPath);
+                drawText($image, 8, $labelX, $infoY, "Họ và tên:", $infoLabelColor, $fontPath);
+                drawText($image, 8, $valueX, $infoY, "$name ($gender)", $infoValueColor, $fontPath);
 
                 // Định nghĩa vị trí cột can chi và tuổi (thẳng hàng dọc)
                 $canChiX = $valueX + 160; // Vị trí can chi (dịch sang phải)
@@ -919,77 +919,77 @@ function createLasoImageWithGD($outputFile, $templateData)
                 $year = $normalizedData['duong_lich']['year'] ?? '';
                 $lunarCan = $normalizedData['lunar']['can'] ?? '';
                 $lunarChi = $normalizedData['lunar']['chi'] ?? '';
-                drawText($image, 6, $labelX, $infoY + $lineHeight, "Năm:", $infoLabelColor, $fontPath);
-                drawText($image, 6, $valueX, $infoY + $lineHeight, $year, $infoValueColor, $fontPath);
-                drawText($image, 6, $canChiX, $infoY + $lineHeight, "$lunarCan $lunarChi", $infoValueColor, $fontPath);
+                drawText($image, 8, $labelX, $infoY + $lineHeight, "Năm:", $infoLabelColor, $fontPath);
+                drawText($image, 8, $valueX, $infoY + $lineHeight, $year, $infoValueColor, $fontPath);
+                drawText($image, 8, $canChiX, $infoY + $lineHeight, "$lunarCan $lunarChi", $infoValueColor, $fontPath);
 
                 // Tháng
                 $month = $normalizedData['duong_lich']['month'] ?? '';
                 $lunarMonth = $normalizedData['lunar']['month'] ?? '';
                 $canChiThang = $normalizedData['can_chi_thang'] ?? '';
-                drawText($image, 6, $labelX, $infoY + $lineHeight * 2, "Tháng:", $infoLabelColor, $fontPath);
-                drawText($image, 6, $valueX, $infoY + $lineHeight * 2, "$month ($lunarMonth)", $infoValueColor, $fontPath);
-                drawText($image, 6, $canChiX, $infoY + $lineHeight * 2, $canChiThang, $infoValueColor, $fontPath);
+                drawText($image, 8, $labelX, $infoY + $lineHeight * 2, "Tháng:", $infoLabelColor, $fontPath);
+                drawText($image, 8, $valueX, $infoY + $lineHeight * 2, "$month ($lunarMonth)", $infoValueColor, $fontPath);
+                drawText($image, 8, $canChiX, $infoY + $lineHeight * 2, $canChiThang, $infoValueColor, $fontPath);
 
                 // Ngày
                 $day = $normalizedData['duong_lich']['day'] ?? '';
                 $lunarDay = $normalizedData['lunar']['day'] ?? '';
                 $canChiNgay = $normalizedData['can_chi_ngay'] ?? '';
-                drawText($image, 6, $labelX, $infoY + $lineHeight * 3, "Ngày:", $infoLabelColor, $fontPath);
-                drawText($image, 6, $valueX, $infoY + $lineHeight * 3, "$day ($lunarDay)", $infoValueColor, $fontPath);
-                drawText($image, 6, $canChiX, $infoY + $lineHeight * 3, $canChiNgay, $infoValueColor, $fontPath);
+                drawText($image, 8, $labelX, $infoY + $lineHeight * 3, "Ngày:", $infoLabelColor, $fontPath);
+                drawText($image, 8, $valueX, $infoY + $lineHeight * 3, "$day ($lunarDay)", $infoValueColor, $fontPath);
+                drawText($image, 8, $canChiX, $infoY + $lineHeight * 3, $canChiNgay, $infoValueColor, $fontPath);
 
                 // Giờ
                 $gioAmSinh = $normalizedData['gio_am_sinh_am'] ?? '';
                 $gioAmSinhChi = $normalizedData['gio_am_sinh_chi_am'] ?? '';
-                drawText($image, 6, $labelX, $infoY + $lineHeight * 4, "Giờ:", $infoLabelColor, $fontPath);
-                drawText($image, 6, $valueX, $infoY + $lineHeight * 4, $gioAmSinh, $infoValueColor, $fontPath);
-                drawText($image, 6, $canChiX, $infoY + $lineHeight * 4, $gioAmSinhChi, $infoValueColor, $fontPath);
+                drawText($image, 8, $labelX, $infoY + $lineHeight * 4, "Giờ:", $infoLabelColor, $fontPath);
+                drawText($image, 8, $valueX, $infoY + $lineHeight * 4, $gioAmSinh, $infoValueColor, $fontPath);
+                drawText($image, 8, $canChiX, $infoY + $lineHeight * 4, $gioAmSinhChi, $infoValueColor, $fontPath);
 
                 // Năm xem
                 $canChiNamXem = $normalizedData['can_chi_nam_xem'] ?? '';
                 $namXem = $normalizedData['nam_xem'] ?? '';
                 $tuoi = $normalizedData['tuoi'] ?? '';
-                drawText($image, 6, $labelX, $infoY + $lineHeight * 5, "Năm xem:", $infoLabelColor, $fontPath);
-                drawText($image, 6, $valueX, $infoY + $lineHeight * 5, "$canChiNamXem ($namXem)", $infoValueColor, $fontPath);
-                drawText($image, 6, $tuoiX, $infoY + $lineHeight * 5, "$tuoi tuổi", $infoValueColor, $fontPath);
+                drawText($image, 8, $labelX, $infoY + $lineHeight * 5, "Năm xem:", $infoLabelColor, $fontPath);
+                drawText($image, 8, $valueX, $infoY + $lineHeight * 5, "$canChiNamXem ($namXem)", $infoValueColor, $fontPath);
+                drawText($image, 8, $tuoiX, $infoY + $lineHeight * 5, "$tuoi tuổi", $infoValueColor, $fontPath);
 
                 // Âm Dương - tăng khoảng cách và font size
                 $amDuong = $laSo['info']['am_duong'] ?? '';
                 $ketLuan = $laSo['info']['ket_luan'][0] ?? '';
-                $amDuongY = $infoY + $lineHeight * 6 + 10; // Tăng khoảng cách 10px
-                drawText($image, 7, $labelX, $amDuongY, "Âm Dương:", $infoLabelColor, $fontPath);
-                drawText($image, 7, $valueX, $amDuongY, $amDuong, $infoValueColor, $fontPath);
+                $amDuongY = $infoY + $lineHeight * 6 + 15; // Tăng khoảng cách 15px
+                drawText($image, 9, $labelX, $amDuongY, "Âm Dương:", $infoLabelColor, $fontPath);
+                drawText($image, 9, $valueX, $amDuongY, $amDuong, $infoValueColor, $fontPath);
                 if ($ketLuan) {
-                    drawText($image, 6, $valueX, $amDuongY + 18, $ketLuan, $infoValueColor, $fontPath);
+                    drawText($image, 8, $valueX, $amDuongY + 22, $ketLuan, $infoValueColor, $fontPath);
                 }
 
                 // Bản Mệnh - điều chỉnh vị trí
-                $baseY = $amDuongY + 40; // Khoảng cách từ âm dương
+                $baseY = $amDuongY + 45; // Khoảng cách từ âm dương
                 $menh = $laSo['info']['menh'] ?? '';
-                drawText($image, 6, $labelX, $baseY, "Bản Mệnh:", $infoLabelColor, $fontPath);
-                drawText($image, 6, $valueX, $baseY, $menh, $infoValueColor, $fontPath);
+                drawText($image, 8, $labelX, $baseY, "Bản Mệnh:", $infoLabelColor, $fontPath);
+                drawText($image, 8, $valueX, $baseY, $menh, $infoValueColor, $fontPath);
 
                 // Cục - tăng khoảng cách và font size như âm dương
                 $cuc = $laSo['info']['cuc'] ?? '';
                 $cucMenhRelation = $laSo['info']['cuc_menh_relation'] ?? '';
-                $cucY = $baseY + $lineHeight + 10; // Tăng khoảng cách 10px
-                drawText($image, 7, $labelX, $cucY, "Cục:", $infoLabelColor, $fontPath);
-                drawText($image, 7, $valueX, $cucY, $cuc, $infoValueColor, $fontPath);
+                $cucY = $baseY + $lineHeight + 15; // Tăng khoảng cách 15px
+                drawText($image, 9, $labelX, $cucY, "Cục:", $infoLabelColor, $fontPath);
+                drawText($image, 9, $valueX, $cucY, $cuc, $infoValueColor, $fontPath);
                 if ($cucMenhRelation) {
-                    drawText($image, 6, $valueX, $cucY + 18, $cucMenhRelation, $infoValueColor, $fontPath);
+                    drawText($image, 8, $valueX, $cucY + 22, $cucMenhRelation, $infoValueColor, $fontPath);
                 }
 
                 // Chủ Mệnh - điều chỉnh vị trí theo cục
                 $chuMenh = $laSo['info']['chu_menh'] ?? '';
-                $chuMenhY = $cucY + 40; // Khoảng cách từ cục
-                drawText($image, 6, $labelX, $chuMenhY, "Chủ Mệnh:", $infoLabelColor, $fontPath);
-                drawText($image, 6, $valueX, $chuMenhY, $chuMenh, $infoValueColor, $fontPath);
+                $chuMenhY = $cucY + 45; // Khoảng cách từ cục
+                drawText($image, 8, $labelX, $chuMenhY, "Chủ Mệnh:", $infoLabelColor, $fontPath);
+                drawText($image, 8, $valueX, $chuMenhY, $chuMenh, $infoValueColor, $fontPath);
 
                 // Chủ Thân
                 $chuThan = $laSo['info']['chu_than'] ?? '';
-                drawText($image, 6, $labelX, $chuMenhY + $lineHeight, "Chủ Thân:", $infoLabelColor, $fontPath);
-                drawText($image, 6, $valueX, $chuMenhY + $lineHeight, $chuThan, $infoValueColor, $fontPath);
+                drawText($image, 8, $labelX, $chuMenhY + $lineHeight, "Chủ Thân:", $infoLabelColor, $fontPath);
+                drawText($image, 8, $valueX, $chuMenhY + $lineHeight, $chuThan, $infoValueColor, $fontPath);
 
                 // Copyright - tăng padding top, tăng size và căn giữa chính xác
                   if ($app_name === 'phonglich') {
@@ -999,16 +999,16 @@ function createLasoImageWithGD($outputFile, $templateData)
     }
              
                 if ($fontPath && file_exists($fontPath)) {
-                    $bbox = imagettfbbox(4, 0, $fontPath, $copyright);
+                    $bbox = imagettfbbox(10, 0, $fontPath, $copyright);
                     $copyrightWidth = $bbox[4] - $bbox[0];
                 } else {
-                    $copyrightWidth = strlen($copyright) * 8;
+                    $copyrightWidth = strlen($copyright) * 10;
                 }
                 // Căn giữa trong toàn bộ khu vực địa bàn 2x2 và tăng padding top - dịch sang trái chút
                 $realCenterX = intval($x + $cellWidth);
-                $copyrightY = $chuMenhY + $lineHeight * 2 + 30; // Tăng padding top từ 15 lên 30
+                $copyrightY = $chuMenhY + $lineHeight * 2 + 35; // Tăng padding top từ 15 lên 35
                 $copyrightX = intval($realCenterX - $copyrightWidth / 2) - 70; // Dịch sang trái 20px
-                                drawText($image, 9, $copyrightX, $copyrightY, $copyright, $infoLabelColor, $fontPath);
+                                drawText($image, 10, $copyrightX, $copyrightY, $copyright, $infoLabelColor, $fontPath);
                 
                                 // Vẽ vòng tuổi chi (vong_tuoi_chi) bên trong địa bàn
                                 foreach ($gridOrder as $chi) {
@@ -1018,16 +1018,16 @@ function createLasoImageWithGD($outputFile, $templateData)
                                     if ($vongTuoi) {
                                         $anchorPoint = $getPalaceAnchorPoint($chi, $gridOrder, $cellWidth, $cellHeight, $startX, $startY);
                                         if ($anchorPoint) {
-                                            $padding = 10;
+                                            $padding = 12;
                                             $textWidth = 0; $textHeight = 0;
                                             
                                             // Calculate text box size for accurate positioning
                                             if ($fontPath && file_exists($fontPath)) {
-                                                $bbox = imagettfbbox(3 + 6, 0, $fontPath, $vongTuoi);
+                                                $bbox = imagettfbbox(5 + 6, 0, $fontPath, $vongTuoi);
                                                 $textWidth = $bbox[2] - $bbox[0];
                                                 $textHeight = $bbox[1] - $bbox[7];
                                             } else {
-                                                $textWidth = strlen($vongTuoi) * 8; $textHeight = 15;
+                                                $textWidth = strlen($vongTuoi) * 10; $textHeight = 18;
                                             }
                 
                                             $textX = $anchorPoint['x'] -1;
@@ -1072,7 +1072,7 @@ function createLasoImageWithGD($outputFile, $templateData)
                                                     $textY -= $textHeight / 2;
                                                     break;
                                             }
-                                            drawText($image, 6, $textX, $textY, $vongTuoi, $textGray, $fontPath);
+                                            drawText($image, 8, $textX, $textY, $vongTuoi, $textGray, $fontPath);
                                         }
                                     }
                                 }
@@ -1121,7 +1121,7 @@ function createLasoImageWithGD($outputFile, $templateData)
                 }
 
                 // Content section với khoảng cách tăng
-                $contentStartY = $headerY + 20; // Tăng khoảng cách sau header
+                $contentStartY = $headerY + 30; // Tăng khoảng cách sau header
                 $chinhTinhY = $contentStartY;
 
                 // Chính tinh với font lớn hơn
@@ -1136,16 +1136,16 @@ function createLasoImageWithGD($outputFile, $templateData)
                         // Center align cho chính tinh - căn giữa chính xác hơn
                         $saoText = $saoName . $bright;
                         $saoTextWidth = strlen($saoText) * 7; // Tăng ước tính width để căn giữa chính xác với font size 4
-                        $saoX = $x + ($cellWidth / 2) - ($saoTextWidth / 2);
+                        $saoX = $x + ($cellWidth / 2) - ($saoTextWidth / 2) -10;
 
-                        drawText($image, 10, intval($saoX), $chinhTinhY + ($index * 32), $saoText, $saoColor, $fontPath);
+                        drawText($image, 12, intval($saoX), $chinhTinhY + ($index * 32) -10, $saoText, $saoColor, $fontPath);
                     }
                 }
 
                 // Content grid với khoảng cách tăng để rộng hơn
                 $contentGridY = $contentStartY + 60; // Tăng space sau chính tinh để không bị sát
                 $leftColumnX = $x + $padding;
-                $rightColumnX = $x + ($cellWidth / 2) + $padding;
+                $rightColumnX = $x + ($cellWidth / 2) + $padding ;
                 $lineHeightSmall = 22; // Tăng line height để dễ đọc hơn
 
                 // Left column: Phụ tinh cát
