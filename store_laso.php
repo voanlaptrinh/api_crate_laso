@@ -588,8 +588,8 @@ function createLasoImageWithGD($outputFile, $templateData)
     $app_name = $templateData['app_name'] ?? 'phongthuydaicat';
 
     // Đường dẫn đến ảnh template có sẵn
-    $templateImagePath = __DIR__ . '/public/images/la_so_news.png';
-// chmod($templateImagePath, 0755);  
+    $templateImagePath = __DIR__ . '/public/images/la_so_news1.png';
+    // chmod($templateImagePath, 0755);  
     // Kiểm tra xem file template có tồn tại không
     if (!file_exists($templateImagePath)) {
         throw new Exception("Template image not found: $templateImagePath");
@@ -820,27 +820,31 @@ function createLasoImageWithGD($outputFile, $templateData)
 
         switch ($chi) {
             // Corner Palaces
-            case 'Tỵ': return ['x' => $x + $cellWidth, 'y' => $y + $cellHeight]; // Bottom-right anchor
-            case 'Thân': return ['x' => $x, 'y' => $y + $cellHeight];           // Bottom-left anchor
-            case 'Dần': return ['x' => $x + $cellWidth, 'y' => $y];             // Top-right anchor
-            case 'Hợi': return ['x' => $x, 'y' => $y];                         // Top-left anchor
+            case 'Tỵ':
+                return ['x' => $x + $cellWidth, 'y' => $y + $cellHeight]; // Bottom-right anchor
+            case 'Thân':
+                return ['x' => $x, 'y' => $y + $cellHeight];           // Bottom-left anchor
+            case 'Dần':
+                return ['x' => $x + $cellWidth, 'y' => $y];             // Top-right anchor
+            case 'Hợi':
+                return ['x' => $x, 'y' => $y];                         // Top-left anchor
 
-            // Side Palaces (Top Row)
+                // Side Palaces (Top Row)
             case 'Ngọ':
             case 'Mùi':
                 return ['x' => $x + $cellWidth / 2, 'y' => $y + $cellHeight]; // Midpoint of bottom edge
 
-            // Side Palaces (Bottom Row)
+                // Side Palaces (Bottom Row)
             case 'Sửu':
             case 'Tý':
                 return ['x' => $x + $cellWidth / 2, 'y' => $y];             // Midpoint of top edge
 
-            // Side Palaces (Left Column)
+                // Side Palaces (Left Column)
             case 'Thìn':
             case 'Mão':
                 return ['x' => $x + $cellWidth, 'y' => $y + $cellHeight / 2]; // Midpoint of right edge
 
-            // Side Palaces (Right Column)
+                // Side Palaces (Right Column)
             case 'Dậu':
             case 'Tuất':
                 return ['x' => $x, 'y' => $y + $cellHeight / 2];             // Midpoint of left edge
@@ -893,13 +897,13 @@ function createLasoImageWithGD($outputFile, $templateData)
                 } else {
                     $titleWidth = strlen($title) * 16;
                 }
-                drawText($image, 20, intval($centerX - $titleWidth / 2), $centerY, $title, $darkred, $fontPath);
+                drawText($image, 20, intval($centerX - $titleWidth / 2) - 38, $centerY, $title, $darkred, $fontPath);
 
                 // Thông tin cá nhân theo format cột trái-phải như ảnh mẫu
                 $infoY = $centerY + 80; // Khoảng cách từ tiêu đề
                 $lineHeight = 30; // Line height phù hợp
-                $labelX = $centerX - 200; // Vị trí cột trái (dịch sang phải)
-                $valueX = $centerX - 40;  // Vị trí cột phải (dịch sang phải)
+                $labelX = $centerX - 230; // Vị trí cột trái (dịch sang phải)
+                $valueX = $centerX - 100;  // Vị trí cột phải (dịch sang phải)
 
                 // Font sizes
                 $infoLabelColor = imagecolorallocate($image, 17, 17, 17);  // #111111
@@ -958,14 +962,14 @@ function createLasoImageWithGD($outputFile, $templateData)
                 $amDuong = $laSo['info']['am_duong'] ?? '';
                 $ketLuan = $laSo['info']['ket_luan'][0] ?? '';
                 $amDuongY = $infoY + $lineHeight * 6 + 15; // Tăng khoảng cách 15px
-                drawText($image, 9, $labelX, $amDuongY, "Âm Dương:", $infoLabelColor, $fontPath);
-                drawText($image, 9, $valueX, $amDuongY, $amDuong, $infoValueColor, $fontPath);
+                drawText($image, 8, $labelX, $amDuongY, "Âm Dương:", $infoLabelColor, $fontPath);
+                drawText($image, 8, $valueX, $amDuongY, $amDuong, $infoValueColor, $fontPath);
                 if ($ketLuan) {
-                    drawText($image, 8, $valueX, $amDuongY + 22, $ketLuan, $infoValueColor, $fontPath);
+                    drawText($image, 8, $valueX, $amDuongY + 26, $ketLuan, $infoValueColor, $fontPath);
                 }
 
                 // Bản Mệnh - điều chỉnh vị trí
-                $baseY = $amDuongY + 45; // Khoảng cách từ âm dương
+                $baseY = $amDuongY + 60; // Khoảng cách từ âm dương
                 $menh = $laSo['info']['menh'] ?? '';
                 drawText($image, 8, $labelX, $baseY, "Bản Mệnh:", $infoLabelColor, $fontPath);
                 drawText($image, 8, $valueX, $baseY, $menh, $infoValueColor, $fontPath);
@@ -977,12 +981,12 @@ function createLasoImageWithGD($outputFile, $templateData)
                 drawText($image, 9, $labelX, $cucY, "Cục:", $infoLabelColor, $fontPath);
                 drawText($image, 9, $valueX, $cucY, $cuc, $infoValueColor, $fontPath);
                 if ($cucMenhRelation) {
-                    drawText($image, 8, $valueX, $cucY + 22, $cucMenhRelation, $infoValueColor, $fontPath);
+                    drawText($image, 8, $valueX, $cucY + 26, $cucMenhRelation, $infoValueColor, $fontPath);
                 }
 
                 // Chủ Mệnh - điều chỉnh vị trí theo cục
                 $chuMenh = $laSo['info']['chu_menh'] ?? '';
-                $chuMenhY = $cucY + 45; // Khoảng cách từ cục
+                $chuMenhY = $cucY + 60; // Khoảng cách từ cục
                 drawText($image, 8, $labelX, $chuMenhY, "Chủ Mệnh:", $infoLabelColor, $fontPath);
                 drawText($image, 8, $valueX, $chuMenhY, $chuMenh, $infoValueColor, $fontPath);
 
@@ -992,12 +996,12 @@ function createLasoImageWithGD($outputFile, $templateData)
                 drawText($image, 8, $valueX, $chuMenhY + $lineHeight, $chuThan, $infoValueColor, $fontPath);
 
                 // Copyright - tăng padding top, tăng size và căn giữa chính xác
-                  if ($app_name === 'phonglich') {
-        $copyright = "Bản quyền © PhongLich.com";
-    } else {
-        $copyright = "Bản quyền © phongthuydaicat.vn";
-    }
-             
+                if ($app_name === 'phonglich') {
+                    $copyright = "Bản quyền © PhongLich.com";
+                } else {
+                    $copyright = "Bản quyền © phongthuydaicat.vn";
+                }
+
                 if ($fontPath && file_exists($fontPath)) {
                     $bbox = imagettfbbox(10, 0, $fontPath, $copyright);
                     $copyrightWidth = $bbox[4] - $bbox[0];
@@ -1008,76 +1012,78 @@ function createLasoImageWithGD($outputFile, $templateData)
                 $realCenterX = intval($x + $cellWidth);
                 $copyrightY = $chuMenhY + $lineHeight * 2 + 35; // Tăng padding top từ 15 lên 35
                 $copyrightX = intval($realCenterX - $copyrightWidth / 2) - 70; // Dịch sang trái 20px
-                                drawText($image, 10, $copyrightX, $copyrightY, $copyright, $infoLabelColor, $fontPath);
-                
-                                // Vẽ vòng tuổi chi (vong_tuoi_chi) bên trong địa bàn
-                                foreach ($gridOrder as $chi) {
-                                    if ($chi === null) continue;
-                
-                                    $vongTuoi = $laSo['palaces'][$chi]['vong_tuoi_chi'] ?? '';
-                                    if ($vongTuoi) {
-                                        $anchorPoint = $getPalaceAnchorPoint($chi, $gridOrder, $cellWidth, $cellHeight, $startX, $startY);
-                                        if ($anchorPoint) {
-                                            $padding = 12;
-                                            $textWidth = 0; $textHeight = 0;
-                                            
-                                            // Calculate text box size for accurate positioning
-                                            if ($fontPath && file_exists($fontPath)) {
-                                                $bbox = imagettfbbox(5 + 6, 0, $fontPath, $vongTuoi);
-                                                $textWidth = $bbox[2] - $bbox[0];
-                                                $textHeight = $bbox[1] - $bbox[7];
-                                            } else {
-                                                $textWidth = strlen($vongTuoi) * 10; $textHeight = 18;
-                                            }
-                
-                                            $textX = $anchorPoint['x'] -1;
-                                            $textY = $anchorPoint['y'];
-                
-                                            // Adjust position to be *inside* the địa bàn, offset from the anchor point
-                                            switch ($chi) {
-                                                case 'Tỵ':   // Palace TL, Anchor BR -> Text goes into TR of địa bàn from anchor
-                                                    $textX += $padding;
-                                                    $textY += $padding;
-                                                    break;
-                                                case 'Thân': // Palace TR, Anchor BL -> Text goes into TL of địa bàn from anchor
-                                                    $textX -= ($textWidth + $padding);
-                                                    $textY += $padding;
-                                                    break;
-                                                case 'Dần':  // Palace BL, Anchor TR -> Text goes into BR of địa bàn from anchor
-                                                    $textX += $padding;
-                                                    $textY -= ($textHeight + $padding);
-                                                    break;
-                                                case 'Hợi':  // Palace BR, Anchor TL -> Text goes into BL of địa bàn from anchor
-                                                    $textX -= ($textWidth + $padding);
-                                                    $textY -= ($textHeight + $padding);
-                                                    break;
-                                                case 'Ngọ':
-                                                case 'Mùi':  // Palace Top, Anchor on Top edge of địa bàn
-                                                    $textX -= $textWidth / 2;
-                                                    $textY += $padding;
-                                                    break;
-                                                case 'Sửu':
-                                                case 'Tý':   // Palace Bottom, Anchor on Bottom edge of địa bàn
-                                                    $textX -= $textWidth / 2;
-                                                    $textY -= ($textHeight + $padding);
-                                                    break;
-                                                case 'Thìn':
-                                                case 'Mão':  // Palace Left, Anchor on Left edge of địa bàn
-                                                    $textX += $padding;
-                                                    $textY -= $textHeight / 2;
-                                                    break;
-                                                case 'Dậu':
-                                                case 'Tuất': // Palace Right, Anchor on Right edge of địa bàn
-                                                    $textX -= ($textWidth + $padding);
-                                                    $textY -= $textHeight / 2;
-                                                    break;
-                                            }
-                                            drawText($image, 6, $textX, $textY, $vongTuoi, $textGray, $fontPath);
-                                        }
-                                    }
-                                }
+                drawText($image, 10, $copyrightX, $copyrightY, $copyright, $infoLabelColor, $fontPath);
+
+                // Vẽ vòng tuổi chi (vong_tuoi_chi) bên trong địa bàn
+                foreach ($gridOrder as $chi) {
+                    if ($chi === null) continue;
+
+                    $vongTuoi = $laSo['palaces'][$chi]['vong_tuoi_chi'] ?? '';
+                    if ($vongTuoi) {
+                        $anchorPoint = $getPalaceAnchorPoint($chi, $gridOrder, $cellWidth, $cellHeight, $startX, $startY);
+                        if ($anchorPoint) {
+                            $padding = 12;
+                            $textWidth = 0;
+                            $textHeight = 0;
+
+                            // Calculate text box size for accurate positioning
+                            if ($fontPath && file_exists($fontPath)) {
+                                $bbox = imagettfbbox(5 + 6, 0, $fontPath, $vongTuoi);
+                                $textWidth = $bbox[2] - $bbox[0];
+                                $textHeight = $bbox[1] - $bbox[7];
+                            } else {
+                                $textWidth = strlen($vongTuoi) * 10;
+                                $textHeight = 18;
                             }
-                        } else {
+
+                            $textX = $anchorPoint['x'] - 1;
+                            $textY = $anchorPoint['y'];
+
+                            // Adjust position to be *inside* the địa bàn, offset from the anchor point
+                            switch ($chi) {
+                                case 'Tỵ':   // Palace TL, Anchor BR -> Text goes into TR of địa bàn from anchor
+                                    $textX += $padding;
+                                    $textY += $padding;
+                                    break;
+                                case 'Thân': // Palace TR, Anchor BL -> Text goes into TL of địa bàn from anchor
+                                    $textX -= ($textWidth + $padding);
+                                    $textY += $padding;
+                                    break;
+                                case 'Dần':  // Palace BL, Anchor TR -> Text goes into BR of địa bàn from anchor
+                                    $textX += $padding;
+                                    $textY -= ($textHeight + $padding);
+                                    break;
+                                case 'Hợi':  // Palace BR, Anchor TL -> Text goes into BL of địa bàn from anchor
+                                    $textX -= ($textWidth + $padding);
+                                    $textY -= ($textHeight + $padding);
+                                    break;
+                                case 'Ngọ':
+                                case 'Mùi':  // Palace Top, Anchor on Top edge of địa bàn
+                                    $textX -= $textWidth / 2;
+                                    $textY += $padding;
+                                    break;
+                                case 'Sửu':
+                                case 'Tý':   // Palace Bottom, Anchor on Bottom edge of địa bàn
+                                    $textX -= $textWidth / 2;
+                                    $textY -= ($textHeight + $padding);
+                                    break;
+                                case 'Thìn':
+                                case 'Mão':  // Palace Left, Anchor on Left edge of địa bàn
+                                    $textX += $padding;
+                                    $textY -= $textHeight / 2;
+                                    break;
+                                case 'Dậu':
+                                case 'Tuất': // Palace Right, Anchor on Right edge of địa bàn
+                                    $textX -= ($textWidth + $padding);
+                                    $textY -= $textHeight / 2;
+                                    break;
+                            }
+                            drawText($image, 6, $textX, $textY, $vongTuoi, $textGray, $fontPath);
+                        }
+                    }
+                }
+            }
+        } else {
             // Cung bình thường - không cần vẽ border riêng vì đã có grid lines
 
             if (isset($laSo['palaces'][$chi])) {
@@ -1136,17 +1142,17 @@ function createLasoImageWithGD($outputFile, $templateData)
                         // Center align cho chính tinh - căn giữa chính xác hơn
                         $saoText = $saoName . $bright;
                         $saoTextWidth = strlen($saoText) * 7; // Tăng ước tính width để căn giữa chính xác với font size 4
-                        $saoX = $x + ($cellWidth / 2) - ($saoTextWidth / 2) -10;
+                        $saoX = $x + ($cellWidth / 2) - ($saoTextWidth / 2) - 10;
 
-                        drawText($image, 12, intval($saoX), $chinhTinhY + ($index * 32) -10, $saoText, $saoColor, $fontPath);
+                        drawText($image, 12, intval($saoX), $chinhTinhY + ($index * 32) - 10, $saoText, $saoColor, $fontPath);
                     }
                 }
 
                 // Content grid với khoảng cách tăng để rộng hơn
                 $contentGridY = $contentStartY + 60; // Tăng space sau chính tinh để không bị sát
                 $leftColumnX = $x + $padding;
-                $rightColumnX = $x + ($cellWidth / 2) + $padding ;
-                $lineHeightSmall = 22; // Tăng line height để dễ đọc hơn
+                $rightColumnX = $x + ($cellWidth / 2) + $padding;
+                $lineHeightSmall = 24; // Tăng line height để dễ đọc hơn
 
                 // Left column: Phụ tinh cát
                 $leftY = $contentGridY;
@@ -1157,7 +1163,7 @@ function createLasoImageWithGD($outputFile, $templateData)
                         $bright = !empty($sao['bright']) ? '(' . $sao['bright'] . ')' : '';
                         $saoClass = $sao['class'] ?? '';
                         $saoColor = getSaoColor($saoClass, $kimColor, $mocColor, $thuyColor, $hoaColor, $thoColor, $black);
-                        drawText($image, 7, $leftColumnX, $leftY + ($index * $lineHeightSmall), $saoName . $bright, $saoColor, $fontPath);
+                        drawText($image, 8, $leftColumnX, $leftY + ($index * $lineHeightSmall), $saoName . $bright, $saoColor, $fontPath);
                     }
                 }
 
@@ -1173,7 +1179,7 @@ function createLasoImageWithGD($outputFile, $templateData)
                         $bright = !empty($sao['bright']) ? '(' . $sao['bright'] . ')' : '';
                         $saoClass = $sao['class'] ?? '';
                         $saoColor = getSaoColor($saoClass, $kimColor, $mocColor, $thuyColor, $hoaColor, $thoColor, $black);
-                        drawText($image, 6, $rightColumnX, $rightY + ($rightIndex * $lineHeightSmall), $saoName . $bright, $saoColor, $fontPath);
+                        drawText($image, 8, $rightColumnX, $rightY + ($rightIndex * $lineHeightSmall), $saoName . $bright, $saoColor, $fontPath);
                         $rightIndex++;
                     }
                 }
@@ -1187,7 +1193,7 @@ function createLasoImageWithGD($outputFile, $templateData)
                         $bright = !empty($sao['bright']) ? '(' . $sao['bright'] . ')' : '';
                         $saoClass = $sao['class'] ?? '';
                         $saoColor = getSaoColor($saoClass, $kimColor, $mocColor, $thuyColor, $hoaColor, $thoColor, $black);
-                        drawText($image, 6, $rightColumnX, $rightY + ($rightIndex * $lineHeightSmall), $saoName . $bright, $saoColor, $fontPath);
+                        drawText($image, 7, $rightColumnX, $rightY + ($rightIndex * $lineHeightSmall), $saoName . $bright, $saoColor, $fontPath);
                         $rightIndex++;
                     }
                 }
@@ -1258,52 +1264,67 @@ function createLasoImageWithGD($outputFile, $templateData)
     $currentBoxX = 80;
 
     // Kim
-    $kimText = "Kim"; $kimTextWidth = strlen($kimText) * $estimatedCharWidth;
-    $kimBoxX1 = $currentBoxX; $kimBoxY1 = $legend2Y - 2;
-    $kimBoxX2 = $kimBoxX1 + $boxWidth; $kimBoxY2 = $kimBoxY1 + $boxHeight;
+    $kimText = "Kim";
+    $kimTextWidth = strlen($kimText) * $estimatedCharWidth;
+    $kimBoxX1 = $currentBoxX;
+    $kimBoxY1 = $legend2Y - 2;
+    $kimBoxX2 = $kimBoxX1 + $boxWidth;
+    $kimBoxY2 = $kimBoxY1 + $boxHeight;
     imagefilledrectangle($image, $kimBoxX1, $kimBoxY1, $kimBoxX2, $kimBoxY2, $kimColor);
     $kimTextX = intval($kimBoxX1 + ($boxWidth / 2) - ($kimTextWidth / 2) + 2);
     $kimTextY = intval($kimBoxY1 + ($boxHeight / 2) - ($estimatedTextHeight / 2) + 4);
     drawText($image, $textFontSize, $kimTextX, $kimTextY, $kimText, $white, $fontPath);
-    $currentBoxX = $kimBoxX2 + 5; // 5px gap
+    $currentBoxX = $kimBoxX2 + 7; // 5px gap
 
     // Mộc
-    $mocText = "Mộc"; $mocTextWidth = strlen($mocText) * $estimatedCharWidth;
-    $mocBoxX1 = $currentBoxX; $mocBoxY1 = $legend2Y - 2;
-    $mocBoxX2 = $mocBoxX1 + $boxWidth; $mocBoxY2 = $mocBoxY1 + $boxHeight;
+    $mocText = "Mộc";
+    $mocTextWidth = strlen($mocText) * $estimatedCharWidth;
+    $mocBoxX1 = $currentBoxX;
+    $mocBoxY1 = $legend2Y - 2;
+    $mocBoxX2 = $mocBoxX1 + $boxWidth;
+    $mocBoxY2 = $mocBoxY1 + $boxHeight;
     imagefilledrectangle($image, $mocBoxX1, $mocBoxY1, $mocBoxX2, $mocBoxY2, $mocColor);
-        $mocTextX = intval($mocBoxX1 + ($boxWidth / 2) - ($mocTextWidth / 2) + 6);
-        $mocTextY = intval($mocBoxY1 + ($boxHeight / 2) - ($estimatedTextHeight / 2) + 4);
+    $mocTextX = intval($mocBoxX1 + ($boxWidth / 2) - ($mocTextWidth / 2) + 6);
+    $mocTextY = intval($mocBoxY1 + ($boxHeight / 2) - ($estimatedTextHeight / 2) + 4);
     drawText($image, $textFontSize, $mocTextX, $mocTextY, $mocText, $white, $fontPath);
-    $currentBoxX = $mocBoxX2 + 5;
+    $currentBoxX = $mocBoxX2 + 7;
 
     // Thủy
-    $thuyText = "Thủy"; $thuyTextWidth = strlen($thuyText) * $estimatedCharWidth;
-    $thuyBoxX1 = $currentBoxX; $thuyBoxY1 = $legend2Y - 2;
-    $thuyBoxX2 = $thuyBoxX1 + $boxWidth; $thuyBoxY2 = $thuyBoxY1 + $boxHeight;
+    $thuyText = "Thủy";
+    $thuyTextWidth = strlen($thuyText) * $estimatedCharWidth;
+    $thuyBoxX1 = $currentBoxX;
+    $thuyBoxY1 = $legend2Y - 2;
+    $thuyBoxX2 = $thuyBoxX1 + $boxWidth;
+    $thuyBoxY2 = $thuyBoxY1 + $boxHeight;
     imagefilledrectangle($image, $thuyBoxX1, $thuyBoxY1, $thuyBoxX2, $thuyBoxY2, $thuyColor);
-        $thuyTextX = intval($thuyBoxX1 + ($boxWidth / 2) - ($thuyTextWidth / 2) + 6);
-        $thuyTextY = intval($thuyBoxY1 + ($boxHeight / 2) - ($estimatedTextHeight / 2)+4);
+    $thuyTextX = intval($thuyBoxX1 + ($boxWidth / 2) - ($thuyTextWidth / 2) + 6);
+    $thuyTextY = intval($thuyBoxY1 + ($boxHeight / 2) - ($estimatedTextHeight / 2) + 4);
     drawText($image, $textFontSize, $thuyTextX, $thuyTextY, $thuyText, $white, $fontPath);
-    $currentBoxX = $thuyBoxX2 + 5;
+    $currentBoxX = $thuyBoxX2 + 7;
 
     // Hỏa
-    $hoaText = "Hỏa"; $hoaTextWidth = strlen($hoaText) * $estimatedCharWidth;
-    $hoaBoxX1 = $currentBoxX; $hoaBoxY1 = $legend2Y - 2;
-    $hoaBoxX2 = $hoaBoxX1 + $boxWidth; $hoaBoxY2 = $hoaBoxY1 + $boxHeight;
+    $hoaText = "Hỏa";
+    $hoaTextWidth = strlen($hoaText) * $estimatedCharWidth;
+    $hoaBoxX1 = $currentBoxX;
+    $hoaBoxY1 = $legend2Y - 2;
+    $hoaBoxX2 = $hoaBoxX1 + $boxWidth;
+    $hoaBoxY2 = $hoaBoxY1 + $boxHeight;
     imagefilledrectangle($image, $hoaBoxX1, $hoaBoxY1, $hoaBoxX2, $hoaBoxY2, $hoaColor);
-        $hoaTextX = intval($hoaBoxX1 + ($boxWidth / 2) - ($hoaTextWidth / 2) + 6);
-        $hoaTextY = intval($hoaBoxY1 + ($boxHeight / 2) - ($estimatedTextHeight / 2)+4);
+    $hoaTextX = intval($hoaBoxX1 + ($boxWidth / 2) - ($hoaTextWidth / 2) + 6);
+    $hoaTextY = intval($hoaBoxY1 + ($boxHeight / 2) - ($estimatedTextHeight / 2) + 4);
     drawText($image, $textFontSize, $hoaTextX, $hoaTextY, $hoaText, $white, $fontPath);
-    $currentBoxX = $hoaBoxX2 + 5;
+    $currentBoxX = $hoaBoxX2 + 7;
 
     // Thổ
-    $thoText = "Thổ"; $thoTextWidth = strlen($thoText) * $estimatedCharWidth;
-    $thoBoxX1 = $currentBoxX; $thoBoxY1 = $legend2Y - 2;
-    $thoBoxX2 = $thoBoxX1 + $boxWidth; $thoBoxY2 = $thoBoxY1 + $boxHeight;
+    $thoText = "Thổ";
+    $thoTextWidth = strlen($thoText) * $estimatedCharWidth;
+    $thoBoxX1 = $currentBoxX;
+    $thoBoxY1 = $legend2Y - 2;
+    $thoBoxX2 = $thoBoxX1 + $boxWidth;
+    $thoBoxY2 = $thoBoxY1 + $boxHeight;
     imagefilledrectangle($image, $thoBoxX1, $thoBoxY1, $thoBoxX2, $thoBoxY2, $thoColor);
-    $thoTextX = intval($thoBoxX1 + ($boxWidth / 2) - ($thoTextWidth / 2)+6);
-    $thoTextY = intval($thoBoxY1 + ($boxHeight / 2) - ($estimatedTextHeight / 2)+4);
+    $thoTextX = intval($thoBoxX1 + ($boxWidth / 2) - ($thoTextWidth / 2) + 6);
+    $thoTextY = intval($thoBoxY1 + ($boxHeight / 2) - ($estimatedTextHeight / 2) + 4);
     drawText($image, $textFontSize, $thoTextX, $thoTextY, $thoText, $white, $fontPath);
 
     // Copyright
