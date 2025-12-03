@@ -607,7 +607,7 @@ function createLasoImageWithGD($outputFile, $templateData)
 
     // Font path (thử nhiều font khác nhau)
     $possibleFonts = [
-        __DIR__ . '/fonts/sfpro.otf',
+        __DIR__ . '/fonts/inter_bold.ttf',
     ];
 
     $fontPath = null;
@@ -1192,6 +1192,7 @@ function createLasoImageWithGD($outputFile, $templateData)
                         $saoName = $sao['name'] ?? '';
                         $bright = !empty($sao['bright']) ? '(' . $sao['bright'] . ')' : '';
                         $saoClass = $sao['class'] ?? '';
+
                         $saoColor = getSaoColor($saoClass, $kimColor, $mocColor, $thuyColor, $hoaColor, $thoColor, $black);
                         drawText($image, 7, $rightColumnX, $rightY + ($rightIndex * $lineHeightSmall), $saoName . $bright, $saoColor, $fontPath);
                         $rightIndex++;
@@ -1387,50 +1388,43 @@ function createLasoImageWithGD($outputFile, $templateData)
     if ($tuanKey && $trietKey && $tuanKey === $trietKey) {
         // Trường hợp TRÙNG NHAU
         if (isset($borderMap[$tuanKey])) {
-            $finalPositions['Triệt - Tuần'] = $borderMap[$tuanKey];
+            $finalPositions['TRIỆT - TUẦN'] = $borderMap[$tuanKey];
         }
     } else {
         // Trường hợp KHÁC NHAU
         if ($tuanKey && isset($borderMap[$tuanKey])) {
-            $finalPositions['Tuần'] = $borderMap[$tuanKey];
+            $finalPositions['TUẦN'] = $borderMap[$tuanKey];
         }
         if ($trietKey && isset($borderMap[$trietKey])) {
-            $finalPositions['Triệt'] = $borderMap[$trietKey];
+            $finalPositions['TRIỆT'] = $borderMap[$trietKey];
         }
     }
 
-    // Vẽ Tuần/Triệt markers với vị trí cải thiện
+    // Vẽ Tuần/Triệt markers
     foreach ($finalPositions as $saoName => $position) {
+
         $markerX = intval(($position['left'] / 100) * $width);
         $markerY = intval(($position['top'] / 100) * $height);
 
-        // Kích thước marker lớn hơn và nổi bật hơn
-        $markerWidth = 70;  // Tăng từ 60 lên 80
-        $markerHeight = 25; // Tăng từ 25 lên 30
+        // Kích thước marker
+        $markerWidth = 110;
+        $markerHeight = 25;
 
-        // Điều chỉnh vị trí dựa trên orientation để đặt chính giữa giữa 2 cung
-        if ($position['orientation'] === 'vertical') {
-            // Đặt marker giữa 2 cung theo chiều dọc
-            $markerX = intval($markerX - $markerWidth / 2);
-            $markerY = intval($markerY - $markerHeight / 2);
-        } else {
-            // Đặt marker giữa 2 cung theo chiều ngang
-            $markerX = intval($markerX - $markerWidth / 2);
-            $markerY = intval($markerY - $markerHeight / 2);
-        }
+        // Căn giữa marker theo orientation
+        $markerX = intval($markerX - $markerWidth / 2);
+        $markerY = intval($markerY - $markerHeight / 2);
 
-        // Vẽ background với màu nổi bật hơn cho Triệt
-        $markerBgColor = (strpos($saoName, 'Triệt') !== false) ? $black : $black;
+        // Background
         imagefilledrectangle(
             $image,
             $markerX,
             $markerY,
             intval($markerX + $markerWidth),
             intval($markerY + $markerHeight),
-            $markerBgColor
+            $black
         );
 
-        // Vẽ border dày hơn
+        // Border
         for ($borderThick = 0; $borderThick < 2; $borderThick++) {
             imagerectangle(
                 $image,
@@ -1442,11 +1436,20 @@ function createLasoImageWithGD($outputFile, $templateData)
             );
         }
 
-        // Vẽ text màu trắng với font lớn hơn
-        $textX = intval($markerX + $markerWidth / 2 - (strlen($saoName) * 2));
-        $textY = intval($markerY + $markerHeight / 2 - 2);
-        drawText($image, 3, $textX, $textY, $saoName, $white, $fontPath);
+        // ===== CĂN GIỮA TEXT CHUẨN =====
+        $fontSize = 12; // tương ứng drawText size 6
+        $bbox = imagettfbbox($fontSize, 0, $fontPath, $saoName);
+        $textWidth  = $bbox[2] - $bbox[0];
+        $textHeight = $bbox[1] - $bbox[7];
+
+        // Căn giữa tuyệt đối
+        $textX = intval($markerX + ($markerWidth - $textWidth) / 2);
+        $textY = intval($markerY + ($markerHeight + $textHeight) / 2) - 2;
+
+        // Vẽ text
+        imagettftext($image, $fontSize, 0, $textX, $textY, $white, $fontPath, $saoName);
     }
+
 
     // Lưu ảnh
     if (!imagepng($image, $outputFile)) {
