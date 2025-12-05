@@ -95,11 +95,11 @@ if (!$check_required('dl_gio') || !$check_integer('dl_gio', 0, 23)) $errors['dl_
 if (!$check_required('dl_phut') || !$check_integer('dl_phut', 0, 59)) $errors['dl_phut'] = 'Phút dương lịch là số nguyên từ 0 đến 59.';
 
 $year = (int)($input['dl_nam'] ?? 0);
-if ($year >= 1945 && $year <= 1975) {
-    if (!$check_required('location') || !$check_in('location', ['north', 'south'])) {
-        $errors['location'] = 'Nơi sinh là bắt buộc (north/south) cho năm sinh từ 1945-1975.';
-    }
-}
+// if ($year >= 1945 && $year <= 1975) {
+//     if (!$check_required('location') || !$check_in('location', ['north', 'south'])) {
+//         $errors['location'] = 'Nơi sinh là bắt buộc (north/south) cho năm sinh từ 1945-1975.';
+//     }
+// }
 
 if (empty($errors) && !checkdate($input['dl_thang'], $input['dl_ngay'], $input['dl_nam'])) {
     $errors['dl_ngay'] = 'Ngày dương lịch không hợp lệ.';
@@ -237,10 +237,22 @@ function createImageIfNotExists($templateFile, $prefix, $dataHash, $outputDir, $
     }
 
     // ============================
-    // 3. Tạo đường dẫn file
+    // 3. Tạo thư mục theo ngày_tháng_năm và file
     // ============================
+    $normalizedData = $templateData['normalizedData'] ?? [];
+    $day =  date('j'); // j = ngày không có số 0 đằng trước
+    $month = date('n'); // n = tháng không có số 0 đằng trước
+    $year =  date('Y');
+
+    $dateFolder = "{$day}_{$month}_{$year}";
+    $dateFolderPath = $appDir . '/' . $dateFolder;
+
+    if (!is_dir($dateFolderPath)) {
+        mkdir($dateFolderPath, 0775, true);
+    }
+
     $fileName = "{$prefix}_{$dataHash}.png";
-    $outputPngFile = $appDir . '/' . $fileName;
+    $outputPngFile = $dateFolderPath . '/' . $fileName;
 
     // Nếu file đã có → trả về URL ngay
     if (file_exists($outputPngFile)) {
@@ -249,7 +261,7 @@ function createImageIfNotExists($templateFile, $prefix, $dataHash, $outputDir, $
             'seconds' => 0,
             'created' => false
         ];
-        return generate_public_url($app . '/' . $fileName);
+        return generate_public_url($app . '/' . $dateFolder . '/' . $fileName);
     }
 
     try {
@@ -270,7 +282,7 @@ function createImageIfNotExists($templateFile, $prefix, $dataHash, $outputDir, $
         ];
 
         // URL đúng
-        return generate_public_url($app . '/' . $fileName);
+        return generate_public_url($app . '/' . $dateFolder . '/' . $fileName);
     } catch (Exception $e) {
 
         send_json_response([
@@ -1457,7 +1469,7 @@ function createLasoImageWithGD($outputFile, $templateData)
     }
 
     // Giải phóng bộ nhớ
-    imagedestroy($image);
+    
 }
 
 
