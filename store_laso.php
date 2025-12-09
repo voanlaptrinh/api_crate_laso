@@ -602,7 +602,9 @@ function createLasoImageWithGD($outputFile, $templateData)
     // Đường dẫn đến ảnh template có sẵn
     if ($app_name === 'phonglich') {
         $templateImagePath = __DIR__ . '/public/images/la_so_phonglich.png';
-    } else {
+    }else if ($app_name === 'app') {
+         $templateImagePath = __DIR__ . '/public/images/la_so_phonglich_noboder.png';
+     }else {
           $templateImagePath = __DIR__ . '/public/images/la_so_daicat.png';
     }
 
@@ -1269,7 +1271,7 @@ function createLasoImageWithGD($outputFile, $templateData)
 
     // Dòng 2: Màu Ngũ Hành
     $legend2Y = $legendY + 40; // Increased spacing
-    drawText($image, 5, 10, $legend2Y, "Ngũ Hành:", $black, $fontPath); // Larger font size
+    drawText($image, 5, 10, $legend2Y, "Ngũ Hành: ", $black, $fontPath); // Larger font size
 
     // Define common box dimensions and offsets
     $boxWidth = 40;
@@ -1285,7 +1287,7 @@ function createLasoImageWithGD($outputFile, $templateData)
     // Kim
     $kimText = "Kim";
     $kimTextWidth = strlen($kimText) * $estimatedCharWidth;
-    $kimBoxX1 = $currentBoxX;
+    $kimBoxX1 = $currentBoxX +10;
     $kimBoxY1 = $legend2Y - 2;
     $kimBoxX2 = $kimBoxX1 + $boxWidth;
     $kimBoxY2 = $kimBoxY1 + $boxHeight;
@@ -1347,11 +1349,11 @@ function createLasoImageWithGD($outputFile, $templateData)
     drawText($image, $textFontSize, $thoTextX, $thoTextY, $thoText, $white, $fontPath);
 
     // Copyright
-    if ($app_name === 'phonglich') {
-        drawText($image, 3, 10, $legendY + 70, "Bản quyền © PhongLich.com", $black, $fontPath);
-    } else {
-        drawText($image, 3, 10, $legendY + 70, "Bản quyền © phongthuydaicat.vn", $black, $fontPath);
-    }
+    // if ($app_name === 'phonglich') {
+    //     drawText($image, 3, 10, $legendY + 70, "Bản quyền © PhongLich.com", $black, $fontPath);
+    // } else {
+    //     drawText($image, 3, 10, $legendY + 70, "Bản quyền © phongthuydaicat.vn", $black, $fontPath);
+    // }
 
     // Tạo borderMap cho Tuần/Triệt markers (theo template)
     $borderMap = [
