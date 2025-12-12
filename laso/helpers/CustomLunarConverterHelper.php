@@ -89,7 +89,7 @@ class CustomLunarConverterHelper
 
         // Trường hợp đặc biệt cho giờ Tý
         if ($hour == 23) {
-            return 'Tý muộn'; // 23:00-23:59
+            return 'Tý khuya'; // 23:00-23:59
         } elseif ($hour == 0) {
             return 'Tý sớm'; // 00:00-00:59
         }
