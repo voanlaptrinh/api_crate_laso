@@ -89,9 +89,9 @@ class CustomLunarConverterHelper
 
         // Trường hợp đặc biệt cho giờ Tý
         if ($hour == 23) {
-            return 'Tý sớm'; // 23:00-23:59
+            return 'Tý muộn'; // 23:00-23:59
         } elseif ($hour == 0) {
-            return 'Tý muộn'; // 00:00-00:59
+            return 'Tý sớm'; // 00:00-00:59
         }
 
         // Công thức tính cho các giờ còn lại (1h - 22h)
