@@ -1053,7 +1053,7 @@ function createLasoImageWithGD($outputFile, $templateData)
                             $noteX = $diaBanRight - $noteWidth - 10; // Margin 10px từ cạnh phải
                         }
 
-                        drawText($image, 7, $noteX, $noteY, $copyrightnote, $infoValueColor, $fontPath);
+                        drawText($image, 7, $noteX +19, $noteY, $copyrightnote, $infoValueColor, $fontPath);
                         drawText($image, 7, $noteX + 20, $noteY + 26, $copyrightnote2, $infoValueColor, $fontPath);
                     }
 
