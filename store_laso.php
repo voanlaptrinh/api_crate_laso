@@ -149,10 +149,15 @@ try {
     $canChiNamXem = TuViHelper::canchiNam($validated['nam_xem']);
 
     $birthHour = (int)$validated['dl_gio']; // Lấy giờ dương lịch số nguyên đã được validate
+    $birthMinute = (int)$validated['dl_phut']; // Lấy phút dương lịch
     $zodiacHourRangeString = '';
 
     if ($birthHour >= 23 || $birthHour < 1) { // 23:00 - 00:59
-        $zodiacHourRangeString = '23:00 - 01:00';
+        if ($birthHour == 23) {
+            $zodiacHourRangeString = '23h00 - 23h59';
+        } else { // $birthHour == 0
+            $zodiacHourRangeString = '00h00 - 00h59';
+        }
     } elseif ($birthHour >= 1 && $birthHour < 3) { // 01:00 - 02:59
         $zodiacHourRangeString = '01:00 - 03:00';
     } elseif ($birthHour >= 3 && $birthHour < 5) { // 03:00 - 04:59
@@ -602,13 +607,13 @@ function createLasoImageWithGD($outputFile, $templateData)
     // Đường dẫn đến ảnh template có sẵn
     if ($app_name === 'phonglich') {
         $templateImagePath = __DIR__ . '/public/images/la_so_phonglich.png';
-    }else if ($app_name === 'app') {
-         $templateImagePath = __DIR__ . '/public/images/la_so_phonglich_noboder.png';
-     }else {
-          $templateImagePath = __DIR__ . '/public/images/la_so_daicat.png';
+    } else if ($app_name === 'app') {
+        $templateImagePath = __DIR__ . '/public/images/la_so_phonglich_noboder.png';
+    } else {
+        $templateImagePath = __DIR__ . '/public/images/la_so_daicat.png';
     }
 
-  
+
     // chmod($templateImagePath, 0755);  
     // Kiểm tra xem file template có tồn tại không
     if (!file_exists($templateImagePath)) {
@@ -1015,6 +1020,50 @@ function createLasoImageWithGD($outputFile, $templateData)
                 drawText($image, 8, $labelX, $chuMenhY + $lineHeight, "Chủ Thân:", $infoLabelColor, $fontPath);
                 drawText($image, 8, $valueX, $chuMenhY + $lineHeight, $chuThan, $infoValueColor, $fontPath);
 
+                // Lưu ý giờ Tý - hiển thị trên bản quyền trong địa bàn
+                $realCenterX = intval($x + $cellWidth);
+                $copyrightBaseY = $chuMenhY + $lineHeight * 2 + 35; // Vị trí cơ sở
+
+                if ($templateData['dl_gio'] === 23) {
+                    $copyrightnote = 'Lưu ý giờ Tý: Người sinh từ 23:00 – 23:59 ';
+                    $copyrightnote2 = 'được tính sang ngày hôm sau theo Tử Vi.';
+                    $noteY = $copyrightBaseY -20; // Vị trí trên bản quyền
+
+                    // Kiểm tra ranh giới địa bàn (khu vực 2x2 ở giữa)
+                    $diaBanLeft = $x;
+                    $diaBanRight = $x + ($cellWidth * 2);
+                    $diaBanBottom = $y + ($cellHeight * 2);
+
+                    // Kiểm tra xem note có vượt quá ranh giới địa bàn không
+                    if ($noteY + 50 <= $diaBanBottom) { // 50px cho 2 dòng text
+                        // Tính toán để căn giữa dòng lưu ý trong địa bàn
+                        if ($fontPath && file_exists($fontPath)) {
+                            $bbox = imagettfbbox(7, 0, $fontPath, $copyrightnote);
+                            $noteWidth = $bbox[4] - $bbox[0];
+                        } else {
+                            $noteWidth = strlen($copyrightnote) * 6;
+                        }
+
+                        // Đảm bảo text không vượt quá ranh giới trái/phải của địa bàn
+                        $noteX = intval($realCenterX - $noteWidth / 2) - 110;
+                        if ($noteX < $diaBanLeft + 10) {
+                            $noteX = $diaBanLeft + 10; // Margin 10px từ cạnh trái
+                        }
+                        if ($noteX + $noteWidth > $diaBanRight - 10) {
+                            $noteX = $diaBanRight - $noteWidth - 10; // Margin 10px từ cạnh phải
+                        }
+
+                        drawText($image, 7, $noteX, $noteY, $copyrightnote, $infoValueColor, $fontPath);
+                        drawText($image, 7, $noteX + 20, $noteY + 26, $copyrightnote2, $infoValueColor, $fontPath);
+                    }
+
+                    // Copyright được đặt sau lưu ý (vị trí thấp hơn)
+                    $copyrightY = $copyrightBaseY;
+                } else {
+                    // Không có lưu ý, copyright ở vị trí cơ sở
+                    $copyrightY = $copyrightBaseY;
+                }
+
                 // Copyright - tăng padding top, tăng size và căn giữa chính xác
                 if ($app_name === 'phonglich') {
                     $copyright = "Bản quyền © PhongLich.com";
@@ -1029,11 +1078,8 @@ function createLasoImageWithGD($outputFile, $templateData)
                     $copyrightWidth = strlen($copyright) * 10;
                 }
                 // Căn giữa trong toàn bộ khu vực địa bàn 2x2 và tăng padding top - dịch sang trái chút
-                $realCenterX = intval($x + $cellWidth);
-                $copyrightY = $chuMenhY + $lineHeight * 2 + 35; // Tăng padding top từ 15 lên 35
-                $copyrightX = intval($realCenterX - $copyrightWidth / 2) - 70; // Dịch sang trái 20px
-                drawText($image, 10, $copyrightX, $copyrightY, $copyright, $infoLabelColor, $fontPath);
-
+                $copyrightX = intval($realCenterX  - $copyrightWidth / 2) - 70; // Dịch sang trái 20px
+                drawText($image, 10, $copyrightX, $copyrightY +40, $copyright, $infoLabelColor, $fontPath);
                 // Vẽ vòng tuổi chi (vong_tuoi_chi) bên trong địa bàn
                 foreach ($gridOrder as $chi) {
                     if ($chi === null) continue;
@@ -1287,7 +1333,7 @@ function createLasoImageWithGD($outputFile, $templateData)
     // Kim
     $kimText = "Kim";
     $kimTextWidth = strlen($kimText) * $estimatedCharWidth;
-    $kimBoxX1 = $currentBoxX +10;
+    $kimBoxX1 = $currentBoxX + 10;
     $kimBoxY1 = $legend2Y - 2;
     $kimBoxX2 = $kimBoxX1 + $boxWidth;
     $kimBoxY2 = $kimBoxY1 + $boxHeight;
@@ -1487,7 +1533,7 @@ $imageUrl = createImageIfNotExists(
     'laso',
     $dataHash,
     $outputDir,
-    ['normalizedData' => $normalizedData, 'laSo' => $laSo, 'app_name' => $validated['app_name']]
+    ['normalizedData' => $normalizedData, 'laSo' => $laSo, 'app_name' => $validated['app_name'], 'dl_gio' => $validated['dl_gio']]
 );
 $time = $GLOBALS['render_time'];
 
