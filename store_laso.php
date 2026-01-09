@@ -1027,7 +1027,7 @@ function createLasoImageWithGD($outputFile, $templateData)
                 if ($templateData['dl_gio'] === 23) {
                     $copyrightnote = 'Lưu ý giờ Tý: Người sinh từ 23:00 – 23:59 ';
                     $copyrightnote2 = 'được tính sang ngày hôm sau theo Tử Vi.';
-                    $noteY = $copyrightBaseY -20; // Vị trí trên bản quyền
+                    $noteY = $copyrightBaseY - 20; // Vị trí trên bản quyền
 
                     // Kiểm tra ranh giới địa bàn (khu vực 2x2 ở giữa)
                     $diaBanLeft = $x;
@@ -1053,7 +1053,7 @@ function createLasoImageWithGD($outputFile, $templateData)
                             $noteX = $diaBanRight - $noteWidth - 10; // Margin 10px từ cạnh phải
                         }
 
-                        drawText($image, 7, $noteX +19, $noteY, $copyrightnote, $infoValueColor, $fontPath);
+                        drawText($image, 7, $noteX + 19, $noteY, $copyrightnote, $infoValueColor, $fontPath);
                         drawText($image, 7, $noteX + 20, $noteY + 26, $copyrightnote2, $infoValueColor, $fontPath);
                     }
 
@@ -1067,6 +1067,8 @@ function createLasoImageWithGD($outputFile, $templateData)
                 // Copyright - tăng padding top, tăng size và căn giữa chính xác
                 if ($app_name === 'phonglich') {
                     $copyright = "Bản quyền © PhongLich.com";
+                } elseif ($app_name === 'tuvidaicat') {
+                    $copyright = "Bản quyền © Tuvidaicat.vn";
                 } else {
                     $copyright = "Bản quyền © phongthuydaicat.vn";
                 }
@@ -1079,7 +1081,7 @@ function createLasoImageWithGD($outputFile, $templateData)
                 }
                 // Căn giữa trong toàn bộ khu vực địa bàn 2x2 và tăng padding top - dịch sang trái chút
                 $copyrightX = intval($realCenterX  - $copyrightWidth / 2) - 70; // Dịch sang trái 20px
-                drawText($image, 10, $copyrightX, $copyrightY +40, $copyright, $infoLabelColor, $fontPath);
+                drawText($image, 10, $copyrightX, $copyrightY + 40, $copyright, $infoLabelColor, $fontPath);
                 // Vẽ vòng tuổi chi (vong_tuoi_chi) bên trong địa bàn
                 foreach ($gridOrder as $chi) {
                     if ($chi === null) continue;
