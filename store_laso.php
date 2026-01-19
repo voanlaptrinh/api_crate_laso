@@ -607,7 +607,10 @@ function createLasoImageWithGD($outputFile, $templateData)
     // Đường dẫn đến ảnh template có sẵn
     if ($app_name === 'phonglich') {
         $templateImagePath = __DIR__ . '/public/images/la_so_phonglich.png';
-    } else if ($app_name === 'app') {
+    } else if ($app_name === 'tuvidaicat') {
+        $templateImagePath = __DIR__ . '/public/images/la_so_tuvidaicat.png';
+    }
+     else if ($app_name === 'app') {
         $templateImagePath = __DIR__ . '/public/images/la_so_phonglich_noboder.png';
     } else {
         $templateImagePath = __DIR__ . '/public/images/la_so_daicat.png';
