@@ -33,6 +33,7 @@ class TuViHelper
     private $data_tuan_khong_vong;
     private $data_nap_am;
     private $data_sao_ngu_hanh;
+    private $data_can_luong;
     public function __construct()
     {
         // === KHỞI TẠO CÁC CLASS NHÓM (GROUP) CHO SAO (TÙY CHỌN) ===
@@ -71,6 +72,7 @@ class TuViHelper
         $this->data_triet = require ROOT_PATH . '/data/triet.php';
         $this->data_tuan_khong_vong = require ROOT_PATH . '/data/tuan_khong_vong.php';
         $this->data_sao_ngu_hanh = require ROOT_PATH . '/data/sao_ngu_hanh.php';
+        $this->data_can_luong = require ROOT_PATH . '/data/can_luong.php';
     }
 
 
@@ -100,6 +102,7 @@ class TuViHelper
         $this->anTieuVanThang();
         $this->anTenCacVanHan();
         $this->tinhChuMenhThan();
+        $this->tinhCanLuong();
         $this->tinhLuanGiaiCoBan();
         $this->tinhCucMenhRelation();
         // $this->anDoSangSao();
@@ -1349,6 +1352,87 @@ class TuViHelper
         // $this->laSo['info']['chu_than'] = config("tuvi_data.chu_menh_than.ChuThan.{$diaChiNamSinh}");
         $this->laSo['info']['chu_menh'] = $this->data_chu_menh_than['ChuMenh'][$diaChiNamSinh] ?? null;
         $this->laSo['info']['chu_than'] = $this->data_chu_menh_than['ChuThan'][$diaChiNamSinh] ?? null;
+    }
+
+    private function tinhCanLuong()
+    {
+        // Kiểm tra dữ liệu đầu vào
+        if (empty($this->input['lunar']['can']) || empty($this->input['lunar']['chi']) ||
+            empty($this->input['lunar']['month']) || empty($this->input['lunar']['day']) ||
+            empty($this->input['lunar']['hour_chi'])) {
+            $this->laSo['info']['can_luong'] = 'Không đủ dữ liệu';
+            return;
+        }
+
+        $canNamSinh = $this->input['lunar']['can'];
+        $chiNamSinh = $this->input['lunar']['chi'];
+        $thangAmSinh = $this->input['lunar']['month'];
+        $ngayAmSinh = $this->input['lunar']['day'];
+        $gioSinhChi = $this->input['lunar']['hour_chi'];
+
+        // 1. Tính trọng lượng theo năm sinh (Can + Chi)
+        $canChiNamSinh = $canNamSinh . ' ' . $chiNamSinh;
+        $trongLuongNam = $this->data_can_luong['TheoNamSinh'][$canChiNamSinh] ?? 0;
+
+        // 2. Tính trọng lượng theo tháng sinh âm lịch
+        $trongLuongThang = $this->data_can_luong['TheoThangSinh'][$thangAmSinh] ?? 0;
+
+        // 3. Tính trọng lượng theo ngày sinh âm lịch
+        $trongLuongNgay = $this->data_can_luong['TheoNgaySinh'][$ngayAmSinh] ?? 0;
+
+        // 4. Tính trọng lượng theo giờ sinh (địa chi)
+        $trongLuongGio = $this->data_can_luong['TheoGioSinh'][$gioSinhChi] ?? 0;
+
+        // Tổng trọng lượng
+        $tongTrongLuong = $trongLuongNam + $trongLuongThang + $trongLuongNgay + $trongLuongGio;
+
+        // Chuyển đổi sang lạng và tiền (1 lạng = 10 tiền)
+        $lang = floor($tongTrongLuong);
+        $tien = round(($tongTrongLuong - $lang) * 10);
+
+        // Format kết quả
+        $canLuongText = '';
+        if ($lang > 0) {
+            $canLuongText .= $lang . ' lượng';
+            if ($tien > 0) {
+                $canLuongText .= ' ' . $tien . ' chỉ';
+            }
+        } else {
+            $canLuongText = $tien . ' chỉ';
+        }
+
+        // Tìm mô tả luận giải theo tổng trọng lượng
+        $luanGiai = '';
+        $tongLuongFormatted = number_format($tongTrongLuong, 1);
+        if (isset($this->data_can_luong['GiaiThichTrongLuong'][$tongLuongFormatted])) {
+            $luanGiai = $this->data_can_luong['GiaiThichTrongLuong'][$tongLuongFormatted];
+        } else {
+            // Tìm mô tả gần nhất nếu không có chính xác
+            $minDiff = 999;
+            $closestKey = '';
+            foreach ($this->data_can_luong['GiaiThichTrongLuong'] as $key => $desc) {
+                $diff = abs((float)$key - $tongTrongLuong);
+                if ($diff < $minDiff) {
+                    $minDiff = $diff;
+                    $closestKey = $key;
+                }
+            }
+            if ($closestKey) {
+                $luanGiai = $this->data_can_luong['GiaiThichTrongLuong'][$closestKey];
+            }
+        }
+
+        // Lưu kết quả chi tiết
+        $this->laSo['info']['can_luong'] = $canLuongText;
+        $this->laSo['info']['can_luong_chi_tiet'] = [
+            'nam_sinh' => $trongLuongNam . ' lượng (' . $canChiNamSinh . ')',
+            'thang_sinh' => $trongLuongThang . ' lượng (tháng ' . $thangAmSinh . ')',
+            'ngay_sinh' => $trongLuongNgay . ' lượng (ngày ' . $ngayAmSinh . ')',
+            'gio_sinh' => $trongLuongGio . ' lượng (giờ ' . $gioSinhChi . ')',
+            'tong_so' => $tongTrongLuong . ' lượng',
+            'ket_qua' => $canLuongText,
+            'luan_giai' => $luanGiai
+        ];
     }
     private function anCungMenhThan()
     {

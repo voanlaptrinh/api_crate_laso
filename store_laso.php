@@ -1023,9 +1023,14 @@ function createLasoImageWithGD($outputFile, $templateData)
                 drawText($image, 8, $labelX, $chuMenhY + $lineHeight, "Chủ Thân:", $infoLabelColor, $fontPath);
                 drawText($image, 8, $valueX, $chuMenhY + $lineHeight, $chuThan, $infoValueColor, $fontPath);
 
+                // Cân lường
+                $canLuong = $laSo['info']['can_luong'] ?? '';
+                drawText($image, 8, $labelX, $chuMenhY + $lineHeight * 2, "Cân lượng:", $infoLabelColor, $fontPath);
+                drawText($image, 8, $valueX, $chuMenhY + $lineHeight * 2, $canLuong, $infoValueColor, $fontPath);
+
                 // Lưu ý giờ Tý - hiển thị trên bản quyền trong địa bàn
                 $realCenterX = intval($x + $cellWidth);
-                $copyrightBaseY = $chuMenhY + $lineHeight * 2 + 35; // Vị trí cơ sở
+                $copyrightBaseY = $chuMenhY + $lineHeight * 3 + 35; // Vị trí cơ sở - tăng thêm 1 lineHeight cho Cân lường
 
                 if ($templateData['dl_gio'] === 23) {
                     $copyrightnote = 'Lưu ý giờ Tý: Người sinh từ 23:00 – 23:59 ';
