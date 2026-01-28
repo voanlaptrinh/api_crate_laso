@@ -4,7 +4,11 @@
       "Bash(php:*)",
       "Bash(del debug_font.php debug_font_test.png test_vietnamese.php test_vietnamese_output.png)",
       "Bash(rm:*)",
-      "Read(//c/Users/RIVERNET/Downloads/**)"
+      "Read(//c/Users/RIVERNET/Downloads/**)",
+      "Bash(curl -X POST http://localhost:8000/store_laso.php -H \"Content-Type: application/json\" -d '{\n    \"\"\"\"ho_ten\"\"\"\": \"\"\"\"Nguyễn Văn A\"\"\"\",\n    \"\"\"\"gioi_tinh\"\"\"\": \"\"\"\"Nam\"\"\"\", \n    \"\"\"\"nam_xem\"\"\"\": 2024,\n    \"\"\"\"dl_ngay\"\"\"\": 15,\n    \"\"\"\"dl_thang\"\"\"\": 6,\n    \"\"\"\"dl_nam\"\"\"\": 1990,\n    \"\"\"\"dl_gio\"\"\"\": 10,\n    \"\"\"\"dl_phut\"\"\"\": 30,\n    \"\"\"\"app_name\"\"\"\": \"\"\"\"phongthuydaicat\"\"\"\"\n  }')",
+      "Bash(curl -X POST http://localhost:8000/store_laso.php -H \"Content-Type: application/json\" -d \"{\"\"ho_ten\"\": \"\"Nguyen Van A\"\", \"\"gioi_tinh\"\": \"\"Nam\"\", \"\"nam_xem\"\": 2024, \"\"dl_ngay\"\": 15, \"\"dl_thang\"\": 6, \"\"dl_nam\"\": 1990, \"\"dl_gio\"\": 10, \"\"dl_phut\"\": 30, \"\"app_name\"\": \"\"phongthuydaicat\"\"}\")",
+      "Bash(curl -s -X POST http://localhost:8000/store_laso.php -H \"Content-Type: application/json\" -d \"{\"\"ho_ten\"\": \"\"Nguyen Van A\"\", \"\"gioi_tinh\"\": \"\"Nam\"\", \"\"nam_xem\"\": 2024, \"\"dl_ngay\"\": 15, \"\"dl_thang\"\": 6, \"\"dl_nam\"\": 1990, \"\"dl_gio\"\": 10, \"\"dl_phut\"\": 30, \"\"app_name\"\": \"\"phongthuydaicat\"\"}\")",
+      "Bash(curl -s -X POST http://localhost:8000/store_laso.php -H \"Content-Type: application/json\" -d \"{\"\"ho_ten\"\": \"\"Nguyen Van B\"\", \"\"gioi_tinh\"\": \"\"Nam\"\", \"\"nam_xem\"\": 2024, \"\"dl_ngay\"\": 15, \"\"dl_thang\"\": 6, \"\"dl_nam\"\": 1990, \"\"dl_gio\"\": 10, \"\"dl_phut\"\": 30, \"\"app_name\"\": \"\"phongthuydaicat\"\"}\")"
     ],
     "deny": [],
     "ask": []

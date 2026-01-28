@@ -1,0 +1,1105 @@
+{
+    "success": true,
+    "message": "Tạo lá số thành công.",
+    "create": "có tạo mới",
+    "time_create": "Thời gian: 302.35 ms (0.3s)",
+    "data": {
+        "input_summary": {
+            "ho_ten": "Test User",
+            "gioi_tinh": "Nam",
+            "nam_xem": 2024,
+            "tuoi": 35,
+            "duong_lich_str": "10:30 ngày 15\/06\/1990",
+            "duong_lich_hieu_chinh_str": "",
+            "am_lich_str": "Giờ Tỵ, ngày 23\/5\/1990 (Năm Canh Ngọ)",
+            "gio_am_sinh_chi_am": "Tỵ",
+            "gio_am_sinh_am": "09:00 - 11:00",
+            "can_chi_thang": "Nhâm Ngọ",
+            "can_chi_ngay": "Tân Hợi",
+            "can_chi_nam_xem": "Giáp Thìn",
+            "duong_lich": {
+                "day": "15",
+                "month": "06",
+                "year": "1990"
+            },
+            "lunar": {
+                "year": 1990,
+                "month": 5,
+                "day": 23,
+                "can": "Canh",
+                "chi": "Ngọ",
+                "hour_chi": "Tỵ",
+                "hour_chi_display": "Tỵ",
+                "is_leap": false
+            }
+        },
+        "laso_details": {
+            "palaces": {
+                "Tý": {
+                    "ten_cung": "Tý",
+                    "dv_chuc_nang": "ĐV.TỬ",
+                    "vong_tuoi_chi": "Dần",
+                    "ln_chuc_nang": "LN.THÊ",
+                    "thang_am": 10,
+                    "can_chi_cung": "Mậu.Tý",
+                    "cung_chuc_nang": "HUYNH ĐỆ",
+                    "dai_van": 116,
+                    "chinh_tinh": [
+                        {
+                            "name": "Thiên Phủ",
+                            "bright": "M",
+                            "class": "la-chinh-tinh sao-thien-phu",
+                            "cung": "Tý",
+                            "hanh": "Thổ"
+                        },
+                        {
+                            "name": "Vũ Khúc",
+                            "bright": "V",
+                            "class": "la-chinh-tinh sao-vu-khuc",
+                            "cung": "Tý",
+                            "hanh": "Kim"
+                        }
+                    ],
+                    "phu_tinh_cat": [
+                        {
+                            "name": "Thiên Giải",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-thien-giai",
+                            "cung": "Tý",
+                            "hanh": "Hỏa"
+                        },
+                        {
+                            "name": "Thiên Quý",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-thien-quy",
+                            "cung": "Tý",
+                            "hanh": "Thổ"
+                        }
+                    ],
+                    "phu_tinh_sat": [
+                        {
+                            "name": "Tướng Quân",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-tuong-quan",
+                            "cung": "Tý",
+                            "hanh": "Mộc"
+                        },
+                        {
+                            "name": "Tuế Phá",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-tue-pha",
+                            "cung": "Tý",
+                            "hanh": "Hỏa"
+                        },
+                        {
+                            "name": "Thiên Khốc",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-thien-khoc",
+                            "cung": "Tý",
+                            "hanh": "Thuỷ"
+                        },
+                        {
+                            "name": "Thiên Hư",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-thien-hu",
+                            "cung": "Tý",
+                            "hanh": "Thuỷ"
+                        },
+                        {
+                            "name": "L.Bạch Hổ",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-lbach-ho",
+                            "cung": "Tý",
+                            "hanh": "Kim"
+                        }
+                    ],
+                    "phu_tinh": [],
+                    "vong_trang_sinh": "Thai",
+                    "special": [
+                        {
+                            "name": "Hóa Quyền",
+                            "bright": null,
+                            "class": "la-special sao-hoa-quyen sao-nhom-tu-hoa",
+                            "cung": "Tý",
+                            "hanh": "Thuỷ"
+                        }
+                    ],
+                    "luu": [],
+                    "do_sang_sao": []
+                },
+                "Sửu": {
+                    "ten_cung": "Sửu",
+                    "dv_chuc_nang": "ĐV.THÊ",
+                    "vong_tuoi_chi": "Mão",
+                    "ln_chuc_nang": "LN.HUYNH",
+                    "thang_am": 11,
+                    "can_chi_cung": "Kỷ.Sửu",
+                    "cung_chuc_nang": "MỆNH",
+                    "dai_van": 6,
+                    "chinh_tinh": [
+                        {
+                            "name": "Thái Dương",
+                            "bright": "Đ",
+                            "class": "la-chinh-tinh sao-thai-duong",
+                            "cung": "Sửu",
+                            "hanh": "Hỏa"
+                        },
+                        {
+                            "name": "Thái Âm",
+                            "bright": "Đ",
+                            "class": "la-chinh-tinh sao-thai-m",
+                            "cung": "Sửu",
+                            "hanh": "Thủy"
+                        }
+                    ],
+                    "phu_tinh_cat": [
+                        {
+                            "name": "Đường Phù",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-uong-phu",
+                            "cung": "Sửu",
+                            "hanh": "Mộc"
+                        },
+                        {
+                            "name": "Tấu Thư",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-tau-thu",
+                            "cung": "Sửu",
+                            "hanh": "Kim"
+                        },
+                        {
+                            "name": "Long Đức",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-long-uc",
+                            "cung": "Sửu",
+                            "hanh": "Thủy"
+                        }
+                    ],
+                    "phu_tinh_sat": [
+                        {
+                            "name": "Thiên Hình",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-thien-hinh",
+                            "cung": "Sửu",
+                            "hanh": "Hỏa"
+                        },
+                        {
+                            "name": "L.Đà La",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-la-la",
+                            "cung": "Sửu",
+                            "hanh": "Kim"
+                        }
+                    ],
+                    "phu_tinh": [],
+                    "vong_trang_sinh": "Dưỡng",
+                    "special": [
+                        {
+                            "name": "Hóa Lộc",
+                            "bright": "V",
+                            "class": "la-special sao-hoa-loc sao-nhom-tu-hoa",
+                            "cung": "Sửu",
+                            "hanh": "Mộc"
+                        },
+                        {
+                            "name": "Hóa Khoa",
+                            "bright": null,
+                            "class": "la-special sao-hoa-khoa sao-nhom-tu-hoa",
+                            "cung": "Sửu",
+                            "hanh": "Thuỷ"
+                        }
+                    ],
+                    "luu": [],
+                    "do_sang_sao": []
+                },
+                "Dần": {
+                    "ten_cung": "Dần",
+                    "dv_chuc_nang": "ĐV.HUYNH",
+                    "vong_tuoi_chi": "Thìn",
+                    "ln_chuc_nang": "LN.MỆNH",
+                    "thang_am": 12,
+                    "can_chi_cung": "Mậu.Dần",
+                    "cung_chuc_nang": "PHỤ MẪU",
+                    "dai_van": 16,
+                    "chinh_tinh": [
+                        {
+                            "name": "Tham Lang",
+                            "bright": "Đ",
+                            "class": "la-chinh-tinh sao-tham-lang",
+                            "cung": "Dần",
+                            "hanh": "Mộc"
+                        }
+                    ],
+                    "phu_tinh_cat": [
+                        {
+                            "name": "Thiên Việt",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-thien-viet sao-nhom-luc-cat",
+                            "cung": "Dần",
+                            "hanh": "Hỏa"
+                        },
+                        {
+                            "name": "Thiên Trù",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-thien-tru",
+                            "cung": "Dần",
+                            "hanh": "Thổ"
+                        },
+                        {
+                            "name": "Ân Quang",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-n-quang",
+                            "cung": "Dần",
+                            "hanh": "Thổ"
+                        },
+                        {
+                            "name": "L.Thiên Mã",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-lthien-ma",
+                            "cung": "Dần",
+                            "hanh": "Hỏa"
+                        },
+                        {
+                            "name": "L.Lộc Tồn",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-lloc-ton",
+                            "cung": "Dần",
+                            "hanh": "Thổ"
+                        }
+                    ],
+                    "phu_tinh_sat": [
+                        {
+                            "name": "Phi Liêm",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-phi-liem",
+                            "cung": "Dần",
+                            "hanh": "Hỏa"
+                        },
+                        {
+                            "name": "Bạch Hổ",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-bach-ho",
+                            "cung": "Dần",
+                            "hanh": "Kim"
+                        },
+                        {
+                            "name": "L.Thiên Khốc",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-lthien-khoc",
+                            "cung": "Dần",
+                            "hanh": "Thuỷ"
+                        }
+                    ],
+                    "phu_tinh": [],
+                    "vong_trang_sinh": "Trường Sinh",
+                    "special": [],
+                    "luu": [],
+                    "do_sang_sao": []
+                },
+                "Mão": {
+                    "ten_cung": "Mão",
+                    "dv_chuc_nang": "ĐV.MỆNH",
+                    "vong_tuoi_chi": "Tỵ",
+                    "ln_chuc_nang": "LN.PHỤ",
+                    "thang_am": 1,
+                    "can_chi_cung": "Kỷ.Mão",
+                    "cung_chuc_nang": "PHÚC ĐỨC",
+                    "dai_van": 26,
+                    "chinh_tinh": [
+                        {
+                            "name": "Thiên Cơ",
+                            "bright": "M",
+                            "class": "la-chinh-tinh sao-thien-co",
+                            "cung": "Mão",
+                            "hanh": "Mộc"
+                        },
+                        {
+                            "name": "Cự Môn",
+                            "bright": "M",
+                            "class": "la-chinh-tinh sao-cu-mon",
+                            "cung": "Mão",
+                            "hanh": "Thủy"
+                        }
+                    ],
+                    "phu_tinh_cat": [
+                        {
+                            "name": "Hỷ Thần",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-hy-than",
+                            "cung": "Mão",
+                            "hanh": "Hỏa"
+                        },
+                        {
+                            "name": "Phúc Đức",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-phuc-uc",
+                            "cung": "Mão",
+                            "hanh": "Thổ"
+                        },
+                        {
+                            "name": "Thiên Đức",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-thien-uc",
+                            "cung": "Mão",
+                            "hanh": "Thổ"
+                        },
+                        {
+                            "name": "Đào Hoa",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-ao-hoa",
+                            "cung": "Mão",
+                            "hanh": "Mộc"
+                        },
+                        {
+                            "name": "Thiên Hỷ",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-thien-hy",
+                            "cung": "Mão",
+                            "hanh": "Thuỷ"
+                        }
+                    ],
+                    "phu_tinh_sat": [
+                        {
+                            "name": "Lưu Hà",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-luu-ha",
+                            "cung": "Mão",
+                            "hanh": "Thủy"
+                        },
+                        {
+                            "name": "L.Kình Dương",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-lkinh-duong",
+                            "cung": "Mão",
+                            "hanh": "Kim"
+                        }
+                    ],
+                    "phu_tinh": [],
+                    "vong_trang_sinh": "Mộc Dục",
+                    "special": [],
+                    "luu": [],
+                    "do_sang_sao": []
+                },
+                "Thìn": {
+                    "ten_cung": "Thìn",
+                    "dv_chuc_nang": "ĐV.PHỤ",
+                    "vong_tuoi_chi": "Ngọ",
+                    "ln_chuc_nang": "LN.PHÚC",
+                    "thang_am": 2,
+                    "can_chi_cung": "Canh.Thìn",
+                    "cung_chuc_nang": "ĐIỀN TRẠCH",
+                    "dai_van": 36,
+                    "chinh_tinh": [
+                        {
+                            "name": "Tử Vi",
+                            "bright": "V",
+                            "class": "la-chinh-tinh sao-tu-vi",
+                            "cung": "Thìn",
+                            "hanh": "Thổ"
+                        },
+                        {
+                            "name": "Thiên Tướng",
+                            "bright": "V",
+                            "class": "la-chinh-tinh sao-thien-tuong",
+                            "cung": "Thìn",
+                            "hanh": "Thủy"
+                        }
+                    ],
+                    "phu_tinh_cat": [
+                        {
+                            "name": "Quốc Ấn",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-quoc-n",
+                            "cung": "Thìn",
+                            "hanh": "Thổ"
+                        },
+                        {
+                            "name": "Phượng Các",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-phuong-cac",
+                            "cung": "Thìn",
+                            "hanh": "Thổ"
+                        },
+                        {
+                            "name": "Giải Thần",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-giai-than",
+                            "cung": "Thìn",
+                            "hanh": "Mộc"
+                        }
+                    ],
+                    "phu_tinh_sat": [
+                        {
+                            "name": "Bệnh Phù",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-benh-phu",
+                            "cung": "Thìn",
+                            "hanh": "Thổ"
+                        },
+                        {
+                            "name": "Điếu Khách",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-ieu-khach",
+                            "cung": "Thìn",
+                            "hanh": "Hoả"
+                        },
+                        {
+                            "name": "Quả Tú",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-qua-tu",
+                            "cung": "Thìn",
+                            "hanh": "Kim"
+                        },
+                        {
+                            "name": "Địa Kiếp",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-ia-kiep sao-nhom-luc-sat",
+                            "cung": "Thìn",
+                            "hanh": "Hỏa"
+                        },
+                        {
+                            "name": "Thiên La",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-thien-la",
+                            "cung": "Thìn",
+                            "hanh": "Thổ"
+                        },
+                        {
+                            "name": "L.Thái Tuế",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-lthai-tue",
+                            "cung": "Thìn",
+                            "hanh": "Hoả"
+                        }
+                    ],
+                    "phu_tinh": [],
+                    "vong_trang_sinh": "Quan Đới",
+                    "special": [],
+                    "luu": [],
+                    "do_sang_sao": []
+                },
+                "Tỵ": {
+                    "ten_cung": "Tỵ",
+                    "dv_chuc_nang": "ĐV.PHÚC",
+                    "vong_tuoi_chi": "Mùi",
+                    "ln_chuc_nang": "LN.ĐIỀN",
+                    "thang_am": 3,
+                    "can_chi_cung": "Tân.Tỵ",
+                    "cung_chuc_nang": "QUAN LỘC",
+                    "dai_van": 46,
+                    "chinh_tinh": [
+                        {
+                            "name": "Thiên Lương",
+                            "bright": "H",
+                            "class": "la-chinh-tinh sao-thien-luong",
+                            "cung": "Tỵ",
+                            "hanh": "Mộc"
+                        }
+                    ],
+                    "phu_tinh_cat": [
+                        {
+                            "name": "Thiên Thọ",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-thien-tho",
+                            "cung": "Tỵ",
+                            "hanh": "Thổ"
+                        },
+                        {
+                            "name": "Thiên Y",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-thien-y",
+                            "cung": "Tỵ",
+                            "hanh": "Thuỷ"
+                        },
+                        {
+                            "name": "Văn Xương",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-van-xuong sao-nhom-luc-cat",
+                            "cung": "Tỵ",
+                            "hanh": "Kim"
+                        }
+                    ],
+                    "phu_tinh_sat": [
+                        {
+                            "name": "Đại Hao",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-ai-hao",
+                            "cung": "Tỵ",
+                            "hanh": "Hỏa"
+                        },
+                        {
+                            "name": "Trực Phù",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-truc-phu",
+                            "cung": "Tỵ",
+                            "hanh": "Hoả"
+                        },
+                        {
+                            "name": "Phá Toái",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-pha-toai",
+                            "cung": "Tỵ",
+                            "hanh": "Hoả"
+                        },
+                        {
+                            "name": "Thiên Diêu",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-thien-dieu",
+                            "cung": "Tỵ",
+                            "hanh": "Thủy"
+                        }
+                    ],
+                    "phu_tinh": [],
+                    "vong_trang_sinh": "Lâm Quan",
+                    "special": [],
+                    "luu": [],
+                    "do_sang_sao": []
+                },
+                "Ngọ": {
+                    "ten_cung": "Ngọ",
+                    "dv_chuc_nang": "ĐV.ĐIỀN",
+                    "vong_tuoi_chi": "Thân",
+                    "ln_chuc_nang": "LN.QUAN",
+                    "thang_am": 4,
+                    "can_chi_cung": "Nhâm.Ngọ",
+                    "cung_chuc_nang": "NÔ BỘC",
+                    "dai_van": 56,
+                    "chinh_tinh": [
+                        {
+                            "name": "Thất Sát",
+                            "bright": "M",
+                            "class": "la-chinh-tinh sao-that-sat",
+                            "cung": "Ngọ",
+                            "hanh": "Kim"
+                        }
+                    ],
+                    "phu_tinh_cat": [
+                        {
+                            "name": "Thiên Khôi",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-thien-khoi sao-nhom-luc-cat",
+                            "cung": "Ngọ",
+                            "hanh": "Hỏa"
+                        },
+                        {
+                            "name": "Thiên Phúc",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-thien-phuc",
+                            "cung": "Ngọ",
+                            "hanh": "Thổ"
+                        },
+                        {
+                            "name": "Hữu Bật",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-huu-bat sao-nhom-luc-cat",
+                            "cung": "Ngọ",
+                            "hanh": "Thủy"
+                        },
+                        {
+                            "name": "Tam Thai",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-tam-thai",
+                            "cung": "Ngọ",
+                            "hanh": "Mộc"
+                        },
+                        {
+                            "name": "Tướng Tinh",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-tuong-tinh",
+                            "cung": "Ngọ",
+                            "hanh": "Thổ"
+                        }
+                    ],
+                    "phu_tinh_sat": [
+                        {
+                            "name": "Phục Binh",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-phuc-binh",
+                            "cung": "Ngọ",
+                            "hanh": "Hoả"
+                        },
+                        {
+                            "name": "Thái Tuế",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-thai-tue",
+                            "cung": "Ngọ",
+                            "hanh": "Hoả"
+                        },
+                        {
+                            "name": "Địa Không",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-ia-khong sao-nhom-luc-sat",
+                            "cung": "Ngọ",
+                            "hanh": "Hỏa"
+                        },
+                        {
+                            "name": "Thiên Thương",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-thien-thuong",
+                            "cung": "Ngọ",
+                            "hanh": "Thổ"
+                        },
+                        {
+                            "name": "L.Tang Môn",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-ltang-mon",
+                            "cung": "Ngọ",
+                            "hanh": "Mộc"
+                        }
+                    ],
+                    "phu_tinh": [],
+                    "vong_trang_sinh": "Đế Vượng",
+                    "special": [
+                        {
+                            "name": "Triệt",
+                            "bright": null,
+                            "class": "la-special sao-triet",
+                            "cung": "Ngọ",
+                            "hanh": "Hỏa"
+                        }
+                    ],
+                    "luu": [],
+                    "do_sang_sao": []
+                },
+                "Mùi": {
+                    "ten_cung": "Mùi",
+                    "dv_chuc_nang": "ĐV.QUAN",
+                    "vong_tuoi_chi": "Dậu",
+                    "ln_chuc_nang": "LN.NÔ",
+                    "thang_am": 5,
+                    "can_chi_cung": "Quý.Mùi",
+                    "cung_chuc_nang": "THIÊN DI",
+                    "dai_van": 66,
+                    "chinh_tinh": [],
+                    "phu_tinh_cat": [
+                        {
+                            "name": "Thiếu Dương",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-thieu-duong",
+                            "cung": "Mùi",
+                            "hanh": "Hỏa"
+                        },
+                        {
+                            "name": "Thiên Tài",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-thien-tai",
+                            "cung": "Mùi",
+                            "hanh": "Thổ"
+                        },
+                        {
+                            "name": "Phong Cáo",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-phong-cao",
+                            "cung": "Mùi",
+                            "hanh": "Thổ"
+                        }
+                    ],
+                    "phu_tinh_sat": [
+                        {
+                            "name": "Đà La",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-a-la sao-nhom-luc-sat",
+                            "cung": "Mùi",
+                            "hanh": "Kim"
+                        },
+                        {
+                            "name": "Quan Phủ",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-quan-phu",
+                            "cung": "Mùi",
+                            "hanh": "Thổ"
+                        },
+                        {
+                            "name": "Thiên Không",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-thien-khong",
+                            "cung": "Mùi",
+                            "hanh": "Hỏa"
+                        },
+                        {
+                            "name": "Đẩu Quân",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-au-quan",
+                            "cung": "Mùi",
+                            "hanh": "Hỏa"
+                        }
+                    ],
+                    "phu_tinh": [],
+                    "vong_trang_sinh": "Suy",
+                    "special": [
+                        {
+                            "name": "Triệt",
+                            "bright": null,
+                            "class": "la-special sao-triet",
+                            "cung": "Mùi",
+                            "hanh": "Hỏa"
+                        }
+                    ],
+                    "luu": [],
+                    "do_sang_sao": []
+                },
+                "Thân": {
+                    "ten_cung": "Thân",
+                    "dv_chuc_nang": "ĐV.NÔ",
+                    "vong_tuoi_chi": "Tuất",
+                    "ln_chuc_nang": "LN.DI",
+                    "thang_am": 6,
+                    "can_chi_cung": "Giáp.Thân",
+                    "cung_chuc_nang": "TẬT ÁCH",
+                    "dai_van": 76,
+                    "chinh_tinh": [
+                        {
+                            "name": "Liêm Trinh",
+                            "bright": "V",
+                            "class": "la-chinh-tinh sao-liem-trinh",
+                            "cung": "Thân",
+                            "hanh": "Hỏa"
+                        }
+                    ],
+                    "phu_tinh_cat": [
+                        {
+                            "name": "Lộc Tồn",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-loc-ton",
+                            "cung": "Thân",
+                            "hanh": "Thổ"
+                        },
+                        {
+                            "name": "Bác Sĩ",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-bac-si",
+                            "cung": "Thân",
+                            "hanh": "Thủy"
+                        },
+                        {
+                            "name": "Thiên Mã",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-thien-ma",
+                            "cung": "Thân",
+                            "hanh": "Hỏa"
+                        },
+                        {
+                            "name": "Tả Phù",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-ta-phu sao-nhom-luc-cat",
+                            "cung": "Thân",
+                            "hanh": "Thổ"
+                        },
+                        {
+                            "name": "Bát Tọa",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-bat-toa",
+                            "cung": "Thân",
+                            "hanh": "Mộc"
+                        }
+                    ],
+                    "phu_tinh_sat": [
+                        {
+                            "name": "Tang Môn",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-tang-mon",
+                            "cung": "Thân",
+                            "hanh": "Mộc"
+                        },
+                        {
+                            "name": "Cô Thần",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-co-than",
+                            "cung": "Thân",
+                            "hanh": "Thổ"
+                        },
+                        {
+                            "name": "Hỏa Tinh",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-hoa-tinh sao-nhom-luc-sat",
+                            "cung": "Thân",
+                            "hanh": "Hỏa"
+                        },
+                        {
+                            "name": "Linh Tinh",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-linh-tinh sao-nhom-luc-sat",
+                            "cung": "Thân",
+                            "hanh": "Hỏa"
+                        },
+                        {
+                            "name": "Thiên Sứ",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-thien-su",
+                            "cung": "Thân",
+                            "hanh": "Thuỷ"
+                        }
+                    ],
+                    "phu_tinh": [],
+                    "vong_trang_sinh": "Bệnh",
+                    "special": [],
+                    "luu": [],
+                    "do_sang_sao": []
+                },
+                "Dậu": {
+                    "ten_cung": "Dậu",
+                    "dv_chuc_nang": "ĐV.DI",
+                    "vong_tuoi_chi": "Hợi",
+                    "ln_chuc_nang": "LN.TẬT",
+                    "thang_am": 7,
+                    "can_chi_cung": "Ất.Dậu",
+                    "cung_chuc_nang": "TÀI BẠCH",
+                    "dai_van": 86,
+                    "chinh_tinh": [],
+                    "phu_tinh_cat": [
+                        {
+                            "name": "Lực Sỹ",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-luc-sy",
+                            "cung": "Dậu",
+                            "hanh": "Thổ"
+                        },
+                        {
+                            "name": "Thiếu Âm",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-thieu-m",
+                            "cung": "Dậu",
+                            "hanh": "Thuỷ"
+                        },
+                        {
+                            "name": "Hồng Loan",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-hong-loan",
+                            "cung": "Dậu",
+                            "hanh": "Thủy"
+                        },
+                        {
+                            "name": "Văn Khúc",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-van-khuc sao-nhom-luc-cat",
+                            "cung": "Dậu",
+                            "hanh": "Thủy"
+                        }
+                    ],
+                    "phu_tinh_sat": [
+                        {
+                            "name": "Kình Dương",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-kinh-duong sao-nhom-luc-sat",
+                            "cung": "Dậu",
+                            "hanh": "Kim"
+                        }
+                    ],
+                    "phu_tinh": [],
+                    "vong_trang_sinh": "Tử",
+                    "special": [],
+                    "luu": [],
+                    "do_sang_sao": []
+                },
+                "Tuất": {
+                    "ten_cung": "Tuất",
+                    "dv_chuc_nang": "ĐV.TẬT",
+                    "vong_tuoi_chi": "Tý",
+                    "ln_chuc_nang": "LN.TÀI",
+                    "thang_am": 8,
+                    "can_chi_cung": "Bính.Tuất",
+                    "cung_chuc_nang": "TỬ TỨC",
+                    "dai_van": 96,
+                    "chinh_tinh": [
+                        {
+                            "name": "Phá Quân",
+                            "bright": "Đ",
+                            "class": "la-chinh-tinh sao-pha-quan",
+                            "cung": "Tuất",
+                            "hanh": "Thủy"
+                        }
+                    ],
+                    "phu_tinh_cat": [
+                        {
+                            "name": "Thanh Long",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-thanh-long",
+                            "cung": "Tuất",
+                            "hanh": "Mộc"
+                        },
+                        {
+                            "name": "Long Trì",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-long-tri",
+                            "cung": "Tuất",
+                            "hanh": "Thủy"
+                        },
+                        {
+                            "name": "Hoa Cái",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-hoa-cai",
+                            "cung": "Tuất",
+                            "hanh": "Kim"
+                        }
+                    ],
+                    "phu_tinh_sat": [
+                        {
+                            "name": "Quan Phù",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-quan-phu",
+                            "cung": "Tuất",
+                            "hanh": "Hoả"
+                        },
+                        {
+                            "name": "Địa Võng",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-ia-vong",
+                            "cung": "Tuất",
+                            "hanh": "Thổ"
+                        },
+                        {
+                            "name": "L.Thiên Hư",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-lthien-hu",
+                            "cung": "Tuất",
+                            "hanh": "Thuỷ"
+                        }
+                    ],
+                    "phu_tinh": [],
+                    "vong_trang_sinh": "Mộ",
+                    "special": [
+                        {
+                            "name": "Tuần",
+                            "bright": null,
+                            "class": "la-special sao-tuan",
+                            "cung": "Tuất",
+                            "hanh": "Thổ"
+                        }
+                    ],
+                    "luu": [],
+                    "do_sang_sao": []
+                },
+                "Hợi": {
+                    "ten_cung": "Hợi",
+                    "dv_chuc_nang": "ĐV.TÀI",
+                    "vong_tuoi_chi": "Sửu",
+                    "ln_chuc_nang": "LN.TỬ",
+                    "thang_am": 9,
+                    "can_chi_cung": "Đinh.Hợi",
+                    "cung_chuc_nang": "PHU THÊ (THÂN)",
+                    "dai_van": 106,
+                    "chinh_tinh": [
+                        {
+                            "name": "Thiên Đồng",
+                            "bright": "Đ",
+                            "class": "la-chinh-tinh sao-thien-ong",
+                            "cung": "Hợi",
+                            "hanh": "Thủy"
+                        }
+                    ],
+                    "phu_tinh_cat": [
+                        {
+                            "name": "L.N.Văn Tinh",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-lnvan-tinh",
+                            "cung": "Hợi",
+                            "hanh": "Kim"
+                        },
+                        {
+                            "name": "Thiên Quan",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-thien-quan",
+                            "cung": "Hợi",
+                            "hanh": "Hỏa"
+                        },
+                        {
+                            "name": "Nguyệt Đức",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-nguyet-uc",
+                            "cung": "Hợi",
+                            "hanh": "Hoả"
+                        },
+                        {
+                            "name": "Địa Giải",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-ia-giai",
+                            "cung": "Hợi",
+                            "hanh": "Thổ"
+                        },
+                        {
+                            "name": "Thai Phụ",
+                            "bright": null,
+                            "class": "la-phu-tinh-cat sao-thai-phu",
+                            "cung": "Hợi",
+                            "hanh": "Kim"
+                        }
+                    ],
+                    "phu_tinh_sat": [
+                        {
+                            "name": "Tiểu Hao",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-tieu-hao",
+                            "cung": "Hợi",
+                            "hanh": "Hỏa"
+                        },
+                        {
+                            "name": "Tử Phù",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-tu-phu",
+                            "cung": "Hợi",
+                            "hanh": "Kim"
+                        },
+                        {
+                            "name": "Kiếp Sát",
+                            "bright": null,
+                            "class": "la-phu-tinh-sat sao-kiep-sat",
+                            "cung": "Hợi",
+                            "hanh": "Hỏa"
+                        }
+                    ],
+                    "phu_tinh": [],
+                    "vong_trang_sinh": "Tuyệt",
+                    "special": [
+                        {
+                            "name": "Tuần",
+                            "bright": null,
+                            "class": "la-special sao-tuan",
+                            "cung": "Hợi",
+                            "hanh": "Thổ"
+                        },
+                        {
+                            "name": "Hóa Kỵ",
+                            "bright": null,
+                            "class": "la-special sao-hoa-ky sao-nhom-tu-hoa",
+                            "cung": "Hợi",
+                            "hanh": "Thuỷ"
+                        }
+                    ],
+                    "luu": [],
+                    "do_sang_sao": []
+                }
+            },
+            "info": {
+                "ho_ten": "Test User",
+                "gioi_tinh": "Nam",
+                "duong_lich_str": "10:30 ngày 15\/06\/1990",
+                "am_lich_str": "Giờ Tỵ, ngày 23\/5\/1990 (Năm Canh Ngọ)",
+                "nam_xem": 2024,
+                "tuoi": 35,
+                "am_duong": "Dương Nam",
+                "menh": "Lộ Bàng Thổ",
+                "hanh_menh": "Thổ",
+                "am_duong_nam_sinh": "Dương",
+                "cuc": "Hỏa Lục Cục",
+                "hanh_cuc": "Hỏa",
+                "tieu_van_cung": "Dần",
+                "chu_menh": "Phá Quân",
+                "chu_than": "Hỏa Tinh",
+                "can_luong": "3 lạng 8 tiền",
+                "can_luong_chi_tiet": {
+                    "nam_sinh": "0.9 lạng (Canh Ngọ)",
+                    "thang_sinh": "0.5 lạng (tháng 5)",
+                    "ngay_sinh": "0.8 lạng (ngày 23)",
+                    "gio_sinh": "1.6 lạng (giờ Tỵ)",
+                    "tong_so": "3.8 lạng",
+                    "ket_qua": "3 lạng 8 tiền"
+                },
+                "ket_luan": [
+                    "Âm Dương nghịch lý"
+                ],
+                "cuc_menh_relation": "Cục Sinh Bản Mệnh"
+            }
+        },
+        "image_url": "http:\/\/localhost:8000\/public\/storage\/phongthuydaicat\/20_1_2026\/laso_04e074782e707fee19983b5ccc60a26e.png"
+    }
+}
